@@ -1,5 +1,5 @@
 {
-  "name": "jam_cam",
+  "name": "jam_cams",
   "version": "0.0.1",
   "description": "",
   "main": "app.js",
@@ -25,6 +25,7 @@
     "mongoose": "^5.7.1",
     "path": "^0.12.7",
     "s3": "^4.4.0",
+    "socket.io": "^2.3.0",
     "styled-components": "^5.0.1"
   },
   "devDependencies": {
