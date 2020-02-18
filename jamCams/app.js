@@ -39,7 +39,7 @@ mongoose.connect('mongodb://localhost:27017/jam_cams',{useNewUrlParser: true, us
     console.log(`
       DB connected...
       `);
-    app.listen(10000);
+    app.listen(15000);
   })
   .catch(err => {
     console.log(err);
