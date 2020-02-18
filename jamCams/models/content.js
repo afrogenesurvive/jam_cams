@@ -6,9 +6,13 @@ const contentSchema = new Schema({
   date: {type: Date},
   type: {type: String},
   title: {type: String},
-  fileType: {type: String},
-  fileSize: {type: String},
-  filePath: {type: String},
+  file: {
+    fileName: {type: String},
+    fileType: {type: String},
+    fileSize: {type: String},
+    filePath: {type: String},
+  },
+  creator: {type: Schema.Types.ObjectId,ref: 'Model'}
   models: [
     {type: Schema.Types.ObjectId,ref: 'Model'}
   ],
