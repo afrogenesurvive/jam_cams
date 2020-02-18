@@ -45,27 +45,15 @@ const modelSchema = new Schema({
   fans: [
     {type: Schema.Types.ObjectId,ref: 'User'}
   ],
-  friends: [
-    {type: Schema.Types.ObjectId,ref: 'Model'}
-  ],
+  friends: [{type: Schema.Types.ObjectId,ref: 'Model'}],
   tags: [{type: String}],
   categories: [{type: String}],
-  shows: [{
-    ref: {type: Schema.Types.ObjectId,ref: 'Show'}
-  }],
-  content: [{
-    ref: {type: Schema.Types.ObjectId,ref: 'Content'}
-  }],
+  shows: [{type: Schema.Types.ObjectId,ref: 'Show'}],
+  content: [{type: Schema.Types.ObjectId,ref: 'Content'}],
   comments: [{type: Schema.Types.ObjectId,ref: 'Comment'}],
   comments: [{type: Schema.Types.ObjectId,ref: 'Comment'}],
   messages: [{{type: Schema.Types.ObjectId,ref: 'Message'],
-  transactions: [{
-    date: {type: Date},
-    type: {type: String},
-    reciever: {type: Schema.Types.ObjectId,ref: 'Model'},
-    amount: {type: Number},
-    description: {type: String}
-  }]
+  transactions: [{type: Schema.Types.ObjectId,ref: 'Transaction'}]
 },
   { timestamps: true }
 );

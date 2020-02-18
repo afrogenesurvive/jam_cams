@@ -54,14 +54,8 @@ const userSchema = new Schema({
     ref: {type: Schema.Types.ObjectId,ref: 'Content'}
   }],
   comments: [{type: Schema.Types.ObjectId,ref: 'Comment'}],
-  messages: [{{type: Schema.Types.ObjectId,ref: 'Message'],
-  transactions: [{
-    date: {type: Date},
-    type: {type: String},
-    reciever: {type: Schema.Types.ObjectId,ref: 'Model'},
-    amount: {type: Number},
-    description: {type: String}
-  }],
+  messages: [{type: Schema.Types.ObjectId,ref: 'Message'}],
+  transactions: [{type: Schema.Types.ObjectId,ref: 'Transaction'}],
   billing: [{
     date: {type: Date},
     type: {type: String},
@@ -73,7 +67,8 @@ const userSchema = new Schema({
   complaints: [{
     date: {type: Date},
     type: {type: String},
-    description: {type: String}
+    description: {type: String},
+    complainant: {type: Schema.Types.ObjectId,ref: 'Model'}
   }]
 },
   { timestamps: true }
