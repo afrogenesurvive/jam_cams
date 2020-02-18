@@ -49,10 +49,6 @@ const userSchema = new Schema({
     date: {type: Date},
     query: {type: String}
   }],
-  likes: [{
-    date: {type: Date},
-    ref: {type: Schema.Types.ObjectId,ref: 'Content'}
-  }],
   comments: [{type: Schema.Types.ObjectId,ref: 'Comment'}],
   messages: [{type: Schema.Types.ObjectId,ref: 'Message'}],
   transactions: [{type: Schema.Types.ObjectId,ref: 'Transaction'}],

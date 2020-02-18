@@ -51,7 +51,6 @@ const modelSchema = new Schema({
   shows: [{type: Schema.Types.ObjectId,ref: 'Show'}],
   content: [{type: Schema.Types.ObjectId,ref: 'Content'}],
   comments: [{type: Schema.Types.ObjectId,ref: 'Comment'}],
-  comments: [{type: Schema.Types.ObjectId,ref: 'Comment'}],
   messages: [{{type: Schema.Types.ObjectId,ref: 'Message'],
   transactions: [{type: Schema.Types.ObjectId,ref: 'Transaction'}]
 },

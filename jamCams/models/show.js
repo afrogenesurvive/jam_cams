@@ -11,6 +11,7 @@ const showSchema = new Schema({
   scheduledTime: {type: String},
   airedDate: {type: Date},
   airedTime: {type: String},
+  length: {type: String},
   creator: {type: Schema.Types.ObjectId,ref: 'Model'},
   models: [{type: Schema.Types.ObjectId,ref: 'Model'}],
   viewers: [{type: Schema.Types.ObjectId,ref: 'User'}],
