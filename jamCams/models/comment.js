@@ -8,6 +8,7 @@ const commentSchema = new Schema({
   type: {type: String},
   content: {type: Schema.Types.ObjectId,ref: 'Content'},
   user: {type: Schema.Types.ObjectId,ref: 'User'},
+  model: {type: Schema.Types.ObjectId,ref: 'Model'},
   comment: {type: String},
   parent: {type: Schema.Types.ObjectId,ref: 'Comment'},
   children: [{type: Schema.Types.ObjectId,ref: 'Comment'}]

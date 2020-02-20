@@ -1,3 +1,4 @@
+
 const pocketVariables = {
     token: null,
     userId: null,

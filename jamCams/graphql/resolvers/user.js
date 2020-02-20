@@ -28,9 +28,7 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-
       const users = await User.find({});
-
       return users.map(user => {
         return transformUser(user,);
       });
@@ -38,47 +36,50 @@ module.exports = {
       throw err;
     }
   },
-
   updateUser: async (args, req) => {
-
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
 
       const hashedPassword = await bcrypt.hash(args.userInput.password, 12);
-      const user = await User.findOneAndUpdate({_id:args.selectedUserId},{
-        email: args.userInput.email,
+      const user = await User.findOneAndUpdate({_id:args.userId},{
         password: hashedPassword,
         name: args.userInput.name,
+        username: args.userInput.username,
         dob: args.userInput.dob,
+        contact: {
+          email: args.userInput.contactEmail,
+          phone: args.userInput.contactPhone
+        },
         address: {
           number: args.userInput.addressNumber,
           street: args.userInput.addressStreet,
           town: args.userInput.addressTown,
           parish: args.userInput.addressParish,
-          postOffice: args.userInput.addressPostOffice,
+          postOffice: args.userInput.addressPostOffice
         },
-        phone: args.userInput.phone,
-        role: args.userInput.role,
-        employmentDate: args.userInput.employmentDate,
-        terminationDate: args.userInput.terminationDate,
+        bio: args.userInput.bio
         },{new: true});
 
         return {
           ...user._doc,
           _id: user.id,
-          email: user.email,
           name: user.name,
+          username: user.username,
           dob: user.dob,
-          address: user.address,
-          phone: user.phone,
-          role: user.role,
-          employmentDate: user.employmentDate,
-          terminationDate: user.terminationDate,
-          attachments: user.attachments,
-          attendance: user.attendance,
-          leave: user.leave,
+          contact: {
+            email: user.contact.email,
+            phone: user.contact.phone
+          },
+          address: {
+            number: user.address.number,
+            street: user.address.street,
+            town: user.address.town,
+            parish: user.address.parish,
+            postOffice: user.address.postOffice
+          },
+          bio: user.bio,
         };
     } catch (err) {
       throw err;
@@ -94,115 +95,94 @@ module.exports = {
       const resolverField = args.field;
       const resolverQuery = args.query;
       const query = {[resolverField]:resolverQuery};
-      const user = await User.findOneAndUpdate({_id:args.selectedUserId},query,{new: true})
+      const user = await User.findOneAndUpdate({_id:args.userId},query,{new: true})
 
       return {
         ...user._doc,
         _id: user.id,
-        email: user.email,
         name: user.name,
+        username: user.username,
         dob: user.dob,
-        address: user.address,
-        phone: user.phone,
-        role: user.role,
-        employmentDate: user.employmentDate,
-        terminationDate: user.terminationDate,
-        attachments: user.attachments,
-        attendance: user.attendance,
-        leave: user.leave,
+        contact: {
+          email: user.contact.email,
+          phone: user.contact.phone
+        },
+        address: {
+          number: user.address.number,
+          street: user.address.street,
+          town: user.address.town,
+          parish: user.address.parish,
+          postOffice: user.address.postOffice
+        },
+        bio: user.bio,
       };
     } catch (err) {
       throw err;
     }
   },
-
-  updateUserAttendanceToday: async (args, req) => {
+  addUserInterest: async (args, req) => {
 
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
+      const interest = args.userInput.interest;
+      const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { interests: interest }},{new: true, useFindAndModify: false})
+        return {
+          ...user._doc,
+          _id: user.id,
+          email: user.email,
+          name: user.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteUserInterest: async (args, req) => {
 
-      const today = new Date();
-      const status = "Present";
-      const userAttendanceObject = {
-        date: today,
-        status: status,
-      }
-      const user = await User.findOneAndUpdate({_id:args.selectedUserId},{$addToSet: { attendance: userAttendanceObject}},{new: true, useFindAndModify: false})
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const interest = args.userInput.interest;
+        const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { interests: interest }},{new: true});
+        // const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { interest: { date: new Date(attendanceDate) }}},{new: true})
 
         return {
           ...user._doc,
           _id: user.id,
           email: user.email,
           name: user.name,
-          dob: user.dob,
-          address: user.address,
-          phone: user.phone,
-          role: user.role,
-          employmentDate: user.employmentDate,
-          terminationDate: user.terminationDate,
-          attachments: user.attachments,
-          attendance: user.attendance,
-          leave: user.leave,
         };
     } catch (err) {
       throw err;
     }
   },
-
-
-  deleteUserAttendance: async (args, req) => {
-
-    if (!req.isAuth) {
-      throw new Error('Unauthenticated!');
-    }
-    try {
-
-        const attendanceDate = args.attendanceDate;
-        const user = await User.findOneAndUpdate({_id:args.selectedUserId},{$pull: { attendance: { date: new Date(attendanceDate) }}},{new: true})
-
-        return {
-          ...user._doc,
-          _id: user.id,
-          email: user.email,
-          name: user.name,
-          dob: user.dob,
-          address: user.address,
-          phone: user.phone,
-          role: user.role,
-          employmentDate: user.employmentDate,
-          terminationDate: user.terminationDate,
-          attachments: user.attachments,
-          attendance: user.attendance,
-          leave: user.leave,
-        };
-    } catch (err) {
-      throw err;
-    }
-  },
-
   deleteUser: async (args, req) => {
 
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
-      const user = await User.findByIdAndRemove(args.selectedUserId);
+      const user = await User.findByIdAndRemove(args.userId);
         return {
           ...user._doc,
           _id: user.id,
-          email: user.email,
           name: user.name,
+          username: user.username,
           dob: user.dob,
-          address: user.address,
-          phone: user.phone,
-          role: user.role,
-          employmentDate: user.employmentDate,
-          terminationDate: user.terminationDate,
-          attachments: user.attachments,
-          attendance: user.attendance,
-          leave: user.leave,
+          contact: {
+            email: user.contact.email,
+            phone: user.contact.phone
+          },
+          address: {
+            number: user.address.number,
+            street: user.address.street,
+            town: user.address.town,
+            parish: user.address.parish,
+            postOffice: user.address.postOffice
+          },
+          bio: user.bio,
         };
     } catch (err) {
       throw err;
@@ -211,43 +191,28 @@ module.exports = {
   createUser: async (args, req) => {
 
     try {
-      const existingUserName = await User.findOne({ name: args.userInput.name});
+      const existingUserName = await User.findOne({ name: args.userInput.name, username: args.userInput.username});
       if (existingUserName) {
-        throw new Error('User w/ that name exists already.');
+        throw new Error('User w/ that name & username exists already.');
       }
       const hashedPassword = await bcrypt.hash(args.userInput.password, 12);
       const user = new User({
-        email: args.userInput.email,
         password: hashedPassword,
         name: args.userInput.name,
+        username: args.userInput.username,
         dob: args.userInput.dob,
+        contact: {
+          email: args.userInput.contactEmail,
+          phone: args.userInput.contactPhone
+        },
         address: {
           number: args.userInput.addressNumber,
           street: args.userInput.addressStreet,
           town: args.userInput.addressTown,
           parish: args.userInput.addressParish,
-          postOffice: args.userInput.addressPostOffice,
+          postOffice: args.userInput.addressPostOffice
         },
-        phone: args.userInput.phone,
-        role: args.userInput.role,
-        employmentDate: args.userInput.employmentDate,
-        terminationDate: args.userInput.terminationDate,
-        attachments: [{
-              name: "",
-              format: "",
-              path: "",
-            }],
-        attendance: [{
-            date: 0,
-            status: "",
-            description: "",
-          }],
-        leave: [{
-            type: "",
-            title: "",
-            startDate: 0,
-            endDate: 0,
-          }],
+        bio: args.userInput.bio
       });
 
       const result = await user.save();
@@ -256,17 +221,21 @@ module.exports = {
         ...result._doc,
         password: hashedPassword,
         _id: result.id,
-        email: result.email,
         name: result.name,
+        username: result.username,
         dob: result.dob,
-        address: result.address,
-        phone: result.phone,
-        role: result.role,
-        employmentDate: result.employmentDate,
-        terminationDate: result.terminationDate,
-        attachments: result.attachments,
-        attendance: result.attendance,
-        leave: result.leave,
+        content: {
+          email: result.contact.email,
+          phone: result.contact.phone
+        },
+        address: {
+          number: result.address.number,
+          street: result.address.street,
+          town: result.address.town,
+          parish: result.address.parish,
+          postOffice: result.address.postOffice
+        },
+        bio: result.bio
       };
     } catch (err) {
       throw err;

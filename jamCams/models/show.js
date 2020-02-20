@@ -11,8 +11,6 @@ const showSchema = new Schema({
   scheduledTime: {type: String},
   airedDate: {type: Date},
   airedTime: {type: String},
-  startDate: {type: String},
-  startTime: {type: String},
   endDate: {type: String},
   endTime: {type: String},
   length: {type: String},

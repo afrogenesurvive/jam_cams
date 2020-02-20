@@ -84,15 +84,13 @@ module.exports = buildSchema(`
     name: String
     username: String
     dob: String
-    address: String
-    number:Int
-    street: String
-    town: String
-    city: String
-    country: String
-    contact: String
-    phone: String
-    email: String
+    addressNumber: Int
+    addressStreet: String
+    addressTown: String
+    addressCity: String
+    addressCountry: String
+    contactPhone: String
+    contactEmail: String
     bio: String
     profileImagenName: String
     profileImageType: String
@@ -228,8 +226,6 @@ module.exports = buildSchema(`
     scheduledTime: String
     airedDate: String
     airedTime: String
-    startDate: String
-    startTime: String
     endDate: String
     endTime: String
     length: String
@@ -247,6 +243,8 @@ module.exports = buildSchema(`
     status: String
     scheduledDate: String
     scheduledTime: String
+    endDate: String
+    endTime: String
     airedDate: String
     airedTime: String
     length: String
@@ -260,6 +258,7 @@ module.exports = buildSchema(`
     type: String
     content: Content
     user: User
+    model: Model
     comment: String
     parent: Comment
     children: [Comment]
@@ -468,7 +467,7 @@ module.exports = buildSchema(`
     addModelTransaction(modelId: ID!, transactionId: ID!): Model
     deleteModel(modelId: ID!): Model
 
-    createContent(modelId: ID!, contentInput: ContentInput!): Content
+    createContent(creatorId: ID!, contentInput: ContentInput!): Content
     updateContent(contentId: ID!, contentInput: ContentInput!): Content
     updateContentField(modelId: ID!, field: String!, query: String!): Content
     addContentModel(contentId: ID!, modelId: ID!): Content
@@ -487,8 +486,7 @@ module.exports = buildSchema(`
     addShowTags(showId: ID!, tag: String!): Show
     deleteShow(showId: ID!): Show
 
-    createComment(userId: ID, modelId: ID, contentId: ID, parentId: ID, commentInput: CommentInput!): Comment
-    addCommentChild(commentId: ID!, childId: ID!): Comment
+    createComment(contentId: ID!, userId: ID, modelId: ID, contentId: ID, parentId: ID, commentInput: CommentInput!): Comment
     deleteComment(commentId: ID!): Comment
 
     createChat(senderId: ID!, receiverId: ID!, showId: ID!, chatInput: ChatInput!): Chat
