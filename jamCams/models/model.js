@@ -24,7 +24,7 @@ const modelSchema = new Schema({
   socialMedia: [{
     platform: {type:String},
     handle: {type:String}
-  }]
+  }],
   bio: {type: String},
   traits: [{
     key: {type:String},
@@ -51,7 +51,7 @@ const modelSchema = new Schema({
   shows: [{type: Schema.Types.ObjectId,ref: 'Show'}],
   content: [{type: Schema.Types.ObjectId,ref: 'Content'}],
   comments: [{type: Schema.Types.ObjectId,ref: 'Comment'}],
-  messages: [{{type: Schema.Types.ObjectId,ref: 'Message'],
+  messages: [{type: Schema.Types.ObjectId,ref: 'Message'}],
   transactions: [{type: Schema.Types.ObjectId,ref: 'Transaction'}]
 },
   { timestamps: true }

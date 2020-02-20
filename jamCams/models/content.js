@@ -12,7 +12,7 @@ const contentSchema = new Schema({
     fileSize: {type: String},
     filePath: {type: String},
   },
-  creator: {type: Schema.Types.ObjectId,ref: 'Model'}
+  creator: {type: Schema.Types.ObjectId,ref: 'Model'},
   models: [
     {type: Schema.Types.ObjectId,ref: 'Model'}
   ],
@@ -23,6 +23,7 @@ const contentSchema = new Schema({
       user: {type: Schema.Types.ObjectId,ref: 'User'}
     }
   ],
+  likeCount: {type: Number},
   comments: [
     {type: Schema.Types.ObjectId,ref: 'Comment'}
   ],

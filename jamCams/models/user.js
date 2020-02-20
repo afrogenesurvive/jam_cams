@@ -32,7 +32,9 @@ const userSchema = new Schema({
   }],
   models:[{type: Schema.Types.ObjectId,ref: 'Model'}],
   tokens: {type: Number},
-  tags: [{type: String}]
+  tags: [{type: String}],
+  loggedin: {type: Boolean},
+  activity:[{type: String}],
   viewedShows: [{
     date: {type: Date},
     ref: {type: Schema.Types.ObjectId,ref: 'Show'}

@@ -11,6 +11,7 @@ const chatSchema = new Schema({
   receiverUser: {type: Schema.Types.ObjectId,ref: 'User'},
   receiverModel: {type: Schema.Types.ObjectId,ref: 'Model'},
   message: {type: String},
+  read: {type: Boolean},
   show: {type: Schema.Types.ObjectId,ref: 'Show'}
 },
   { timestamps: true }
