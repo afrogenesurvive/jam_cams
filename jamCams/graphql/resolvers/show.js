@@ -155,7 +155,17 @@ module.exports = {
         scheduledDate: args.showInput.scheduledDate,
         scheduledTime: args.showInput.scheduledTime,
         creator: creator,
-        models:  [creator]
+        models:  [creator],
+        airedDate: "",
+        airedTime: "",
+        endDate: "",
+        endTime: "",
+        length: 0,
+        content:[],
+        models:[],
+        viewers:[],
+        chat:[],
+        tags:[""],
       });
 
       const result = await show.save();

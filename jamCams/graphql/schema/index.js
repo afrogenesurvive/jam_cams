@@ -79,7 +79,7 @@ module.exports = buildSchema(`
     description: String
     complainant: Model
   }
-  type UserInput {
+  input UserInput {
     password: String
     name: String
     username: String
@@ -149,7 +149,7 @@ module.exports = buildSchema(`
     key: String
     value: String
   }
-  type ModelInput {
+  input ModelInput {
     password: String
     name: String
     username: String
@@ -203,7 +203,7 @@ module.exports = buildSchema(`
     date: String
     user: User
   }
-  type ContentInput {
+  input ContentInput {
     date: String
     type: String
     title: String
@@ -236,7 +236,7 @@ module.exports = buildSchema(`
     chat: [Chat]
     tags: [String]
   }
-  type ShowInput {
+  input ShowInput {
     type: String
     title: String
     description: String
@@ -263,7 +263,7 @@ module.exports = buildSchema(`
     parent: Comment
     children: [Comment]
   }
-  type CommentInput {
+  input CommentInput {
     date: String
     time: String
     type: String
@@ -283,7 +283,7 @@ module.exports = buildSchema(`
     message: String
     read: Boolean
   }
-  type MessageInput {
+  input MessageInput {
     date: String
     time: String
     type: String
@@ -305,7 +305,7 @@ module.exports = buildSchema(`
     read: Boolean
     show: Show
   }
-  type ChatInput {
+  input ChatInput {
     date: String
     time: String
     type: String
@@ -325,7 +325,7 @@ module.exports = buildSchema(`
     description: String
     show: Show
   }
-  type TransactionInput {
+  input TransactionInput {
     date: String
     time: String
     type: String
@@ -489,11 +489,11 @@ module.exports = buildSchema(`
     createComment(contentId: ID!, userId: ID, modelId: ID, contentId: ID, parentId: ID, commentInput: CommentInput!): Comment
     deleteComment(commentId: ID!): Comment
 
-    createChat(senderId: ID!, receiverId: ID!, showId: ID!, chatInput: ChatInput!): Chat
+    createChat(sender: String!,receiver: String!, senderId: ID!, receiverId: ID!, showId: ID!, chatInput: ChatInput!): Chat
     updateChatRead(chatId: ID!): Chat
     deleteChat(chatId: ID!): Chat
 
-    createMessage(sender: String!,receiver: String!, modelId: ID!, senderId: ID!, receiverId: ID!, messageInput: MessageInput!): Message
+    createMessage(sender: String!,receiver: String!, senderId: ID!, receiverId: ID!, messageInput: MessageInput!): Message
     updateMessageRead(messageId: ID!): Message
     deleteMessage(messageId: ID!): Message
 

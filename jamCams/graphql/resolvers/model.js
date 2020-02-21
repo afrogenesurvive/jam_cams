@@ -170,7 +170,36 @@ module.exports = {
           parish: args.modelInput.addressParish,
           postOffice: args.modelInput.addressPostOffice
         },
-        bio: args.modelInput.bio
+        bio: args.modelInput.bio,
+        socialMedia: [{
+          platform: "",
+          handle: "",
+        }],
+        traits: [{
+          key: "",
+          value: "",
+        }],
+        profileImages: [{
+          name: "",
+          type: "",
+          path: "",
+        }],
+        interests: [""],
+        perks: [{
+          date: "",
+          name: "",
+          description: "",
+        }],
+        tokens: 0,
+        fans: [],
+        friends: [],
+        tags: [""],
+        categories: [""],
+        shows: [],
+        content: [],
+        comments: [],
+        messages: [],
+        transactions: [],
       });
 
       const result = await model.save();

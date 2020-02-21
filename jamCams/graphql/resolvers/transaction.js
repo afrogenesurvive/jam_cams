@@ -12,13 +12,13 @@ const Chat = require('../../models/chat');
 const Transaction = require('../../models/transaction');
 const util = require('util');
 
-const { transformMessage } = require('./merge');
+const { transformTransaction } = require('./merge');
 const { dateToString } = require('../../helpers/date');
 const { pocketVariables } = require('../../helpers/pocketVars');
 
 
 module.exports = {
-  messages: async (args, req) => {
+  transactions: async (args, req) => {
     // console.log(`
     //  messages...args: ${util.inspect(args)},
     //   isAuth: ${req.isAuth},
@@ -28,33 +28,15 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-      const messages = await Message.find({});
-      return messages.map(message => {
-        return transformMessage(message,);
+      const transactions = await Transaction.find({});
+      return transactions.map(transaction => {
+        return transformTransaction(transaction,);
       });
     } catch (err) {
       throw err;
     }
   },
-  updateMessageRead: async (args, req) => {
-
-    if (!req.isAuth) {
-      throw new Error('Unauthenticated!');
-    }
-    try {
-
-      const message = await Message.findOneAndUpdate({_id: args.messageId},{read: true},{new: true});
-        return {
-          ...message._doc,
-          _id: message.id,
-          date: message.date,
-          time: message.time,
-        };
-    } catch (err) {
-      throw err;
-    }
-  },
-  deleteMessage: async (args, req) => {
+  deleteTransaction: async (args, req) => {
 
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
@@ -62,18 +44,18 @@ module.exports = {
     try {
 
 
-      const message = await Message.findByIdAndRemove(args.messageId);
+      const transaction = await Transaction.findByIdAndRemove(args.transactionId);
         return {
-          ...message._doc,
-          _id: message.id,
-          date: message.date,
-          time: message.time,
+          ...transaction._doc,
+          _id: transaction.id,
+          date: transaction.date,
+          time: transaction.time,
         };
     } catch (err) {
       throw err;
     }
   },
-  createMessage: async (args, req) => {
+  createTransaction: async (args, req) => {
 
     try {
 
@@ -101,20 +83,19 @@ module.exports = {
       let reciverUser = await User.findById({_id: reciverUserId});
       let reciverModel = await Model.findById({_id: reciverModelId});
 
-      const message = new Message({
-        date: args.messageInput.date,
-        time: args.messageInput.time,
-        type: args.messageInput.type,
-        subject: args.messageInput.subject,
+      const transaction = new Transaction({
+        date: args.transactionInput.date,
+        time: args.transactionInput.time,
+        type: args.transactionInput.type,
         senderUser: senderUser,
         senderModel: senderModel,
         receiverUser: reciverUser,
         receiverModel: reciverModel,
-        message: args.messageInput.message,
-        read: false,
+        amount: args.transactionInput.amount,
+        description: args.transactionInput.description,
       });
 
-      const result = await message.save();
+      const result = await transaction.save();
 
       return {
         ...result._doc,
@@ -127,7 +108,8 @@ module.exports = {
         senderModel: result.senderModel,
         receiverUser: result.receiverUser,
         receiverModel: result.receiverModel,
-        message: result.message,
+        amount: result.amount,
+        description: result.description,
       };
     } catch (err) {
       throw err;

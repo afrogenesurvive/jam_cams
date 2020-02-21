@@ -163,7 +163,12 @@ module.exports = {
         creator: creator,
         models: [
           creator
-        ]
+        ],
+        viewCount: 0,
+        likes: [],
+        likeCount: 0,
+        comments: [],
+        tags: [""],
       });
 
       const result = await content.save();

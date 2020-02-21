@@ -12,13 +12,13 @@ const Chat = require('../../models/chat');
 const Transaction = require('../../models/transaction');
 const util = require('util');
 
-const { transformMessage } = require('./merge');
+const { transformChat } = require('./merge');
 const { dateToString } = require('../../helpers/date');
 const { pocketVariables } = require('../../helpers/pocketVars');
 
 
 module.exports = {
-  messages: async (args, req) => {
+  chats: async (args, req) => {
     // console.log(`
     //  messages...args: ${util.inspect(args)},
     //   isAuth: ${req.isAuth},
@@ -28,33 +28,33 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-      const messages = await Message.find({});
-      return messages.map(message => {
-        return transformMessage(message,);
+      const chats = await Chat.find({});
+      return chats.map(chat => {
+        return transformChat(chat,);
       });
     } catch (err) {
       throw err;
     }
   },
-  updateMessageRead: async (args, req) => {
+  updateChatRead: async (args, req) => {
 
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
 
-      const message = await Message.findOneAndUpdate({_id: args.messageId},{read: true},{new: true});
+      const chat = await Chat.findOneAndUpdate({_id: args.chatId},{read: true},{new: true});
         return {
-          ...message._doc,
-          _id: message.id,
-          date: message.date,
-          time: message.time,
+          ...chat._doc,
+          _id: chat.id,
+          date: chat.date,
+          time: chat.time,
         };
     } catch (err) {
       throw err;
     }
   },
-  deleteMessage: async (args, req) => {
+  deleteChat: async (args, req) => {
 
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
@@ -62,18 +62,18 @@ module.exports = {
     try {
 
 
-      const message = await Message.findByIdAndRemove(args.messageId);
+      const chat = await Chat.findByIdAndRemove(args.chatId);
         return {
-          ...message._doc,
-          _id: message.id,
-          date: message.date,
-          time: message.time,
+          ...chat._doc,
+          _id: chat.id,
+          date: chat.date,
+          time: chat.time,
         };
     } catch (err) {
       throw err;
     }
   },
-  createMessage: async (args, req) => {
+  createChat: async (args, req) => {
 
     try {
 
@@ -101,20 +101,22 @@ module.exports = {
       let reciverUser = await User.findById({_id: reciverUserId});
       let reciverModel = await Model.findById({_id: reciverModelId});
 
-      const message = new Message({
-        date: args.messageInput.date,
-        time: args.messageInput.time,
-        type: args.messageInput.type,
-        subject: args.messageInput.subject,
+      const show = await Show.findById({_id: showId});
+
+      const chat = new Chat({
+        date: args.chatInput.date,
+        time: args.chatInput.time,
+        type: args.chatInput.type,
         senderUser: senderUser,
         senderModel: senderModel,
         receiverUser: reciverUser,
         receiverModel: reciverModel,
-        message: args.messageInput.message,
+        message: args.chatInput.message,
         read: false,
+        show: show,
       });
 
-      const result = await message.save();
+      const result = await chat.save();
 
       return {
         ...result._doc,

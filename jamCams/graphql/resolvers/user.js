@@ -212,7 +212,40 @@ module.exports = {
           parish: args.userInput.addressParish,
           postOffice: args.userInput.addressPostOffice
         },
-        bio: args.userInput.bio
+        bio: args.userInput.bio,
+        profileImages: [{
+          name: "",
+          type: "",
+          path: "",
+        }],
+        interests: [""],
+        perks: [{
+          date: "",
+          name: "",
+          description: "",
+        }],
+        models: [],
+        tokens: 0,
+        tags: [""],
+        viewedShows: [],
+        viewedContent: [],
+        likedContent: [],
+        searches: [{
+          date: "",
+          query: "",
+        }],
+        comments: [],
+        messages: [],
+        transactions: [],
+        billing: [{
+          date: "",
+          type: "",
+          description: "",
+          amount: 0,
+          paid: false,
+          payment: "",
+        }],
+        complaints: [],
       });
 
       const result = await user.save();

@@ -4,6 +4,8 @@ const graphqlHttp = require('express-graphql');
 const graphQlSchema = require('./graphql/schema/index');
 const graphQlResolvers = require('./graphql/resolvers/index');
 
+const { pocketVariables } = require('./helpers/pocketVars');
+
 const mongoose = require('mongoose');
 const mongodb = require('mongodb');
 const isAuth = require('./middleware/is-auth');
@@ -34,13 +36,24 @@ app.use(
   })
 );
 
-mongoose.connect('mongodb://localhost:27017/jam_cams',{useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect('mongodb://localhost:27017/jam_cams_dev',{useNewUrlParser: true, useUnifiedTopology: true})
+// mongoose.connect("mongodb+srv://"+creds.atlas.user+":"+creds.atlas.pw+"@cluster0-5iwfn.mongodb.net/"+creds.atlas.db+"?retryWrites=true&w=majority",{useNewUrlParser: true, useUnifiedTopology: true})
   .then(() => {
     console.log(`
-      DB connected...
+      DB connected... on 9009
       `);
-    app.listen(15000);
+    app.listen(9009);
   })
   .catch(err => {
     console.log(err);
 });
+
+
+//
+// app.use(
+//   express.static(path.join(__dirname, "./frontend/build"))
+// );
+// app.get('/*', function(req, res) {
+//   res.send("Hello World!");
+//   res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
+// });

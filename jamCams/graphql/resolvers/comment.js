@@ -90,6 +90,7 @@ module.exports = {
         model: model,
         comment: args.commentInput.comment,
         parent: parent,
+        children: [],
       });
 
       if (comment.parent !== null) {
