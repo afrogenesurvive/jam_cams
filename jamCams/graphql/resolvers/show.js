@@ -59,7 +59,7 @@ module.exports = {
         return {
           ...show._doc,
           _id: show.id,
-          type: show.type
+          type: show.type,
           title: show.title
         };
     } catch (err) {
@@ -81,7 +81,7 @@ module.exports = {
       return {
         ...show._doc,
         _id: show.id,
-        type: show.type
+        type: show.type,
         title: show.title
       };
     } catch (err) {
@@ -99,7 +99,7 @@ module.exports = {
         return {
           ...show._doc,
           _id: show.id,
-          type: show.type
+          type: show.type,
           title: show.title
         };
     } catch (err) {
@@ -119,7 +119,7 @@ module.exports = {
         return {
           ...show._doc,
           _id: show.id,
-          type: show.type
+          type: show.type,
           title: show.title
         };
     } catch (err) {
@@ -136,7 +136,7 @@ module.exports = {
         return {
           ...show._doc,
           _id: show.id,
-          type: show.type
+          type: show.type,
           title: show.title
         };
     } catch (err) {
@@ -163,12 +163,12 @@ module.exports = {
       return {
         ...result._doc,
         _id: result.id,
-        type: result.type
-        title: result.title
-        description: result.description
-        scheduledDate: result.scheduledDate
-        scheduledTime: result.scheduledTime
-        creator: result.creator
+        type: result.type,
+        title: result.title,
+        description: result.description,
+        scheduledDate: result.scheduledDate,
+        scheduledTime: result.scheduledTime,
+        creator: result.creator,
         models: result.models
       };
     } catch (err) {

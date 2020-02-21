@@ -493,7 +493,7 @@ module.exports = buildSchema(`
     updateChatRead(chatId: ID!): Chat
     deleteChat(chatId: ID!): Chat
 
-    createMessage(userId: ID!, modelId: ID!, messageInput: MessageInput!): Message
+    createMessage(sender: String!,receiver: String!, modelId: ID!, senderId: ID!, receiverId: ID!, messageInput: MessageInput!): Message
     updateMessageRead(messageId: ID!): Message
     deleteMessage(messageId: ID!): Message
 

@@ -43,12 +43,14 @@ module.exports = {
     }
     try {
 
-      const hasChildren = await Comment.findById({_id: args.commentId});
-      if (JSON.stringify(hasChildren.children) !== "[]") {
-        hasChildren.children.map(child => {
-          let deletedChild = await Comment.findByIdAndRemove(child._id);
-        });
-      }
+      const preComment = await Comment.findById({_id: args.commentId});
+      const children = preComment.children.filter(x=> x._id);
+      const parent = preComment.parent;
+      const updateParent = await Comment.findOneAndUpdate({_id: parent._id},{$pull: { children: preComment }},{new: true});
+
+      // send list of child ids to pocket vars. delete all on all comments load OR
+      // send to front end and delete in frontend bg
+
       const comment = await Comment.findByIdAndRemove(args.commentId);
         return {
           ...comment._doc,
@@ -70,13 +72,13 @@ module.exports = {
       const content = await Content.findById({_id: args.contentId});
       let parent = null;
 
-      if (args.userId !== null || args.userId !=== undefined) {
+      if (args.userId !== null || args.userId !== undefined) {
         user = await User.findById({_id: args.userId});
       }
-      if (args.modelId !== null || args.modelId !=== undefined) {
+      if (args.modelId !== null || args.modelId !== undefined) {
         model = await Model.findById({_id: args.modelId});
       }
-      if (args.parentId !== null || args.parentId !=== undefined) {
+      if (args.parentId !== null || args.parentId !== undefined) {
         parent = await Content.findById({_id: args.parentId});
       }
       const comment = new Comment({

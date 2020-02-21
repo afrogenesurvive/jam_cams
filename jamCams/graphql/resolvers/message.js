@@ -43,12 +43,7 @@ module.exports = {
     }
     try {
 
-      const hasChildren = await Message.findById({_id: args.commentId});
-      if (JSON.stringify(hasChildren.children) !== "[]") {
-        hasChildren.children.map(child => {
-          let deletedChild = await Message.findByIdAndRemove(child._id);
-        });
-      }
+      
       const comment = await Message.findByIdAndRemove(args.commentId);
         return {
           ...comment._doc,
@@ -64,49 +59,27 @@ module.exports = {
 
     try {
 
-      let updateParent = null;
-      let user = null;
-      let model = null;
-      const content = await Content.findById({_id: args.contentId});
-      let parent = null;
 
-      if (args.userId !== null || args.userId !=== undefined) {
-        user = await User.findById({_id: args.userId});
-      }
-      if (args.modelId !== null || args.modelId !=== undefined) {
-        model = await Model.findById({_id: args.modelId});
-      }
-      if (args.parentId !== null || args.parentId !=== undefined) {
-        parent = await Content.findById({_id: args.parentId});
-      }
-      const comment = new Message({
-        date: args.commentInput.date,
-        time: args.commentInput.time,
-        type: args.commentInput.type,
-        content: content,
-        user: user,
-        model: model,
-        comment: args.commentInput.comment,
-        parent: parent,
+
+      const message = new Message({
+        date: args.messageInput.date,
+        time: args.messageInput.time,
+        type: args.messageInput.type,
+        subject: args.messageInput.subject,
+        senderUser:
+        senderModel:
+        receiverUser:
+        receiverModel:
+        message: args.messageInput.message
       });
 
-      if (comment.parent !== null) {
-        updateParent = await Message.findOneAndUpdate({_id: parent._id},{$addToSet: {children: comment}},{new: true})
-      }
-
-      const result = await comment.save();
+      const result = await message.save();
 
       return {
         ...result._doc,
         _id: result.id,
         date: result.date,
-        time: result.time,
-        type: result.type,
-        content: result.content,
-        user: result.user,
-        model: result.model,
-        comment: result.comment,
-        parent: result.parent,
+
       };
     } catch (err) {
       throw err;

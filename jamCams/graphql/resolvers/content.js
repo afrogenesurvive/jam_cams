@@ -65,7 +65,7 @@ module.exports = {
             size: content.file.size,
             path: content.file.path
           },
-          creator: content.creator
+          creator: content.creator,
           models: content.models
         };
     } catch (err) {
@@ -180,7 +180,7 @@ module.exports = {
           size: result.file.size,
           path: result.file.path
         },
-        creator: result.creator
+        creator: result.creator,
         models: result.models
       };
     } catch (err) {
