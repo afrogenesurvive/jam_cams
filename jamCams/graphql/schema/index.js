@@ -257,11 +257,14 @@ module.exports = buildSchema(`
     time: String
     type: String
     content: Content
-    user: User
-    model: Model
+    author: Author
     comment: String
     parent: Comment
     children: [Comment]
+  }
+  type Author {
+    role: String
+    ref: ID
   }
   input CommentInput {
     date: String
@@ -493,7 +496,9 @@ module.exports = buildSchema(`
     addShowTags(showId: ID!, tag: String!): Show
     deleteShow(showId: ID!): Show
 
-    createComment(contentId: ID!, userId: ID, modelId: ID, contentId: ID, parentId: ID, commentInput: CommentInput!): Comment
+    createComment(authorId: ID!, authorRole: String!, contentId: ID, parentId: ID, commentInput: CommentInput!): Comment
+    setCommentParent(commentId: ID!, parentId: ID!): Comment
+    addCommentChild(commentId: ID!, childId: ID!): Comment
     deleteComment(commentId: ID!): Comment
 
     createChat(sender: String!,receiver: String!, senderId: ID!, receiverId: ID!, showId: ID!, chatInput: ChatInput!): Chat

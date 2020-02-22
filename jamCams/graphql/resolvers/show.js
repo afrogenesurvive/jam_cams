@@ -147,13 +147,14 @@ module.exports = {
 
     try {
 
-      const creator = await Model.findById({_id: args.creatorId});
+      const creator = await Model.findById({_id: args.modelId});
       const show = new Show({
         type: args.showInput.type,
         title: args.showInput.title,
         description: args.showInput.description,
         scheduledDate: args.showInput.scheduledDate,
         scheduledTime: args.showInput.scheduledTime,
+        status: args.showInput.status,
         creator: creator,
         models:  [creator],
         airedDate: "",

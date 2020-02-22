@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const DataLoader = require('dataloader');
+const mongoose = require('mongoose');
 
 const User = require('../../models/user');
 const Model = require('../../models/model');
@@ -36,6 +37,44 @@ module.exports = {
       throw err;
     }
   },
+  setCommentParent: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const parent = await Comment.findById({_id: args.parentId});
+      const comment = await Comment.findOneAndUpdate({_id: args.commentId},{parent: parent},{new: true});
+        return {
+          ...comment._doc,
+          _id: comment.id,
+          date: comment.date,
+          time: comment.time,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addCommentChild: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const child = await Comment.findById({_id: args.childId});
+      const comment = await Comment.findOneAndUpdate({_id: args.commentId},{$addToSet: {children: child}},{new: true});
+        return {
+          ...comment._doc,
+          _id: comment.id,
+          date: comment.date,
+          time: comment.time,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
   deleteComment: async (args, req) => {
 
     if (!req.isAuth) {
@@ -67,35 +106,37 @@ module.exports = {
     try {
 
       let updateParent = null;
-      let user = null;
-      let model = null;
       const content = await Content.findById({_id: args.contentId});
       let parent = null;
+      let role = args.authorRole;
 
-      if (args.userId !== null || args.userId !== undefined) {
-        user = await User.findById({_id: args.userId});
-      }
-      if (args.modelId !== null || args.modelId !== undefined) {
-        model = await Model.findById({_id: args.modelId});
-      }
-      if (args.parentId !== null || args.parentId !== undefined) {
-        parent = await Content.findById({_id: args.parentId});
-      }
+      author = await mongoose.model(role).findById({_id: args.authorId});
+
+      // if (args.parentId !== null && args.parentId !== undefined && args.parentId !== "") {
+      //   parent = args.parentId;
+      // }
+      // if (args.parentId !== null && args.parentId !== undefined && args.parentId !== "") {
+      //   parent = await Content.findById({_id: args.parentId});
+      //   console.log("here", JSON.stringify(parent));
+      // }
       const comment = new Comment({
         date: args.commentInput.date,
         time: args.commentInput.time,
         type: args.commentInput.type,
         content: content,
-        user: user,
-        model: model,
+        author: {
+          role: role,
+          ref: author
+        },
         comment: args.commentInput.comment,
         parent: parent,
         children: [],
       });
 
-      if (comment.parent !== null) {
-        updateParent = await Comment.findOneAndUpdate({_id: parent._id},{$addToSet: {children: comment}},{new: true})
-      }
+      // updateParent = await Comment.findOneAndUpdate({_id: parent._id},{$addToSet: {children: comment._id}},{new: true})
+      // if (comment.parent !== null) {
+      //   updateParent = await Comment.findOneAndUpdate({_id: parent._id},{$addToSet: {children: comment._id}},{new: true})
+      // }
 
       const result = await comment.save();
 

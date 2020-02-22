@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
+const ObjectId = Schema.ObjectId;
 
 const chatSchema = new Schema({
   date: {type: Date},

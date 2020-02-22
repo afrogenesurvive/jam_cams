@@ -7,10 +7,10 @@ const contentSchema = new Schema({
   type: {type: String},
   title: {type: String},
   file: {
-    fileName: {type: String},
-    fileType: {type: String},
-    fileSize: {type: String},
-    filePath: {type: String},
+    name: {type: String},
+    type: {type: String},
+    size: {type: String},
+    path: {type: String},
   },
   creator: {type: Schema.Types.ObjectId,ref: 'Model'},
   models: [
