@@ -333,15 +333,22 @@ module.exports = buildSchema(`
     amount: Float
   }
 
-  type AuthData {
-    id: ID!
+  type UserAuthData {
+    userId: ID!
+    token: String!
+    tokenExpiration: Int!
+    error: String
+  }
+  type ModelAuthData {
+    modelId: ID!
     token: String!
     tokenExpiration: Int!
     error: String
   }
 
   type RootQuery {
-    login(email: String!, password: String!): AuthData!
+    userLogin(email: String!, password: String!): UserAuthData!
+    modelLogin(email: String!, password: String!): ModelAuthData!
 
     users(activityId: ID!): [User]
     getUserId(activityId: ID!, userId: ID!): User

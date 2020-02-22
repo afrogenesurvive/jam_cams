@@ -167,10 +167,11 @@ module.exports = {
           number: args.modelInput.addressNumber,
           street: args.modelInput.addressStreet,
           town: args.modelInput.addressTown,
-          parish: args.modelInput.addressParish,
-          postOffice: args.modelInput.addressPostOffice
+          city: args.modelInput.addressCity,
+          country: args.modelInput.addressCountry
         },
         bio: args.modelInput.bio,
+        modelNames: [args.modelInput.modelName],
         socialMedia: [{
           platform: "",
           handle: "",
@@ -216,13 +217,14 @@ module.exports = {
           phone: result.contact.phone
         },
         address: {
-          number: result.address.Number,
-          street: result.address.Street,
-          town: result.address.Town,
-          parish: result.address.Parish,
-          postOffice: result.address.PostOffice
+          number: result.address.number,
+          street: result.address.street,
+          town: result.address.town,
+          city: result.address.city,
+          country: result.address.country
         },
-        bio: result.bio
+        bio: result.bio,
+        modelNames: result.modelNames
       };
     } catch (err) {
       throw err;

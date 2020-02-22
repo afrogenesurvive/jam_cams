@@ -116,6 +116,8 @@ module.exports = {
 
       const result = await message.save();
 
+        // write to sender and reciver here??
+
       return {
         ...result._doc,
         _id: result.id,
