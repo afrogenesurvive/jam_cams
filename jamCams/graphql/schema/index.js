@@ -349,11 +349,12 @@ module.exports = buildSchema(`
 
     users(activityId: ID!): [User]
     getUserId(activityId: ID!, userId: ID!): User
+    getUserNameRegex(activityId: ID!, regex: String!): User
     getUserField(activityId: ID!, field: String!, query: String!): [User]
-    getUserInterest(activityId: ID!, interest: String!): [User]
+    getUserInterests(activityId: ID!, interests: [String!]): [User]
     getUserPerk(activityId: ID!, perkName: String!): [User]
-    getUserToken(activityId: ID!, tokenAmount: Float!): [User]
-    getUserTag(activityId: ID!, tag: String!): [User]
+    getUserTokenAmount(activityId: ID!, tokenAmount: Float!): [User]
+    getUserTags(activityId: ID!, tags: [String!]): [User]
     getUserSearch(activityId: ID!, searchQuery: String!): [User]
     getUserBilling(activityId: ID!, billingKey: String!, billingValue: String!): [User]
     getUserComplaint(activityId: ID!, complaintKey: String!, complaintValue: String!): [User]

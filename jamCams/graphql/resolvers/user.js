@@ -37,6 +37,146 @@ module.exports = {
       throw err;
     }
   },
+  getUserId: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const user = await User.findById(args.userId);
+
+        return {
+            ...user._doc,
+            _id: user.id,
+            name: user.name
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  getUserField: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const resolverField = args.field;
+      const resolverQuery = args.query;
+      const query = {[resolverField]:resolverQuery};
+      const users = await User.find(query)
+
+      return users.map(user => {
+        return transformUser(user);
+
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getUserNameRegex: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const regex = "/^" + args.regex + "/";
+      const users = await User.find({'address.street': {$regex: regex, $options: 'i'}});
+
+      return users.map(user => {
+        return transformUser(user);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getUserInterests: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const interests = args.interests;
+      const users = await User.find({'interests': {$all: interests}});
+
+      return users.map(user => {
+        return transformUser(user);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getUserPerks: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const perkNames = args.perkNames;
+      const users = await User.find({'perks.name': {$all: perkNames}});
+
+      return users.map(user => {
+        return transformUser(user);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getUserTokenAmount: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const tokenAmount = args.tokenAmount;
+      const users = await User.find({'tokens': tokenAmount});
+
+      return users.map(user => {
+        return transformUser(user);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getUsersearchQueries: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const searchQueries = args.searchQueries;
+      const users = await User.find({'searches.query': {$all: searchQueries}});
+
+      return users.map(user => {
+        return transformUser(user);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getUserTags: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const tags = args.tags;
+      const users = await User.find({'tags': {$all: tags}});
+
+      return users.map(user => {
+        return transformUser(user);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
   updateUser: async (args, req) => {
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
