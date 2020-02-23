@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const DataLoader = require('dataloader');
+const mongoose = require('mongoose');
 
 const User = require('../../models/user');
 const Model = require('../../models/model');
@@ -77,40 +78,27 @@ module.exports = {
 
     try {
 
-      let senderUserId = null;
-      let senderModelId = null;
-      let reciverUserId = null;
-      let reciverModelId = null;
+      let sender = null;
+      let reciever = null;
+      let senderRole = args.senderRole;
+      sender = await mongoose.model(senderRole).findById({_id: args.senderId});
+      let receiverRole = args.receiverRole;
+      receiver = await mongoose.model(receiverRole).findById({_id: args.receiverId});
 
-      if (args.sender = "user") {
-        senderUserId = args.senderId;
-      }
-      if (args.sender = "model") {
-        senderModelId = args.senderId
-      }
-
-      if (args.reciever = "user") {
-        recieverUserId = args.recieverId;
-      }
-      if (args.reciever = "model") {
-        recieverModelId = args.recieverId
-      }
-
-      let senderUser = await User.findById({_id: senderUserId});
-      let senderModel = await Model.findById({_id: senderModelId});
-      let reciverUser = await User.findById({_id: reciverUserId});
-      let reciverModel = await Model.findById({_id: reciverModelId});
-
-      const show = await Show.findById({_id: showId});
+      const show = await Show.findById({_id: args.showId});
 
       const chat = new Chat({
         date: args.chatInput.date,
         time: args.chatInput.time,
         type: args.chatInput.type,
-        senderUser: senderUser,
-        senderModel: senderModel,
-        receiverUser: reciverUser,
-        receiverModel: reciverModel,
+        sender: {
+          role: senderRole,
+          ref: sender
+        },
+        receiver: {
+          role: receiverRole,
+          ref: receiver
+        },
         message: args.chatInput.message,
         read: false,
         show: show,
@@ -125,10 +113,8 @@ module.exports = {
         time: result.time,
         type: result.type,
         subject: result.subject,
-        senderUser: result.senderUser,
-        senderModel: result.senderModel,
-        receiverUser: result.receiverUser,
-        receiverModel: result.receiverModel,
+        sender: result.sender,
+        receiver: result.receiver,
         message: result.message,
       };
     } catch (err) {

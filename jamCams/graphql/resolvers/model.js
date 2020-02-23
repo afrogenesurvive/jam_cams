@@ -28,7 +28,8 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-      const models = await Model.find({});
+      const models = await Model.find({})
+      .populate('messages');
       return models.map(model => {
         return transformModel(model,);
       });

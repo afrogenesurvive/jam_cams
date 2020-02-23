@@ -8,14 +8,14 @@ const messageSchema = new Schema({
   time: {type: String},
   type: {type: String},
   subject: {type: String},
-  author: {
+  sender: {
     role: {type: String},
     ref: {type: ObjectId}
   },
-  senderUser: {type: Schema.Types.ObjectId,ref: 'User'},
-  senderModel: {type: Schema.Types.ObjectId,ref: 'Model'},
-  receiverUser: {type: Schema.Types.ObjectId,ref: 'User'},
-  receiverModel: {type: Schema.Types.ObjectId,ref: 'Model'},
+  receiver: {
+    role: {type: String},
+    ref: {type: ObjectId}
+  },
   message: {type: String},
   read: {type: Boolean}
 },

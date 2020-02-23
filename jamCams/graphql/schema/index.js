@@ -279,10 +279,8 @@ module.exports = buildSchema(`
     time: String
     type: String
     subject: String
-    senderUser: User
-    senderModel: Model
-    receiverUser: User
-    receiverModel: Model
+    sender: Author
+    receiver: Author
     message: String
     read: Boolean
   }
@@ -300,10 +298,8 @@ module.exports = buildSchema(`
     date: String
     time: String
     type: String
-    senderUser: User
-    senderModel: Model
-    receiverUser: User
-    receiverModel: Model
+    sender: Author
+    receiver: Author
     message: String
     read: Boolean
     show: Show
@@ -320,10 +316,8 @@ module.exports = buildSchema(`
     date: String
     time: String
     type: String
-    senderUser: User
-    senderModel: Model
-    receiverUser: User
-    receiverModel: Model
+    sender: Author
+    receiver: Author
     amount: Float
     description: String
     show: Show
@@ -429,7 +423,7 @@ module.exports = buildSchema(`
     getTransactionSender(activityId: ID!, senderId: ID!): [Transaction]
     getTransactionReceiver(activityId: ID!, receiverId: ID!): [Transaction]
 
-    chats(chatId: ID!): [Chat]
+    chats(activityId: ID!): [Chat]
     getChatId(activityId: ID!, chatId: ID!): Chat
     getChatField(activityId: ID!, field: String!, query: String!): [Chat]
     getChatSender(activityId: ID!, senderId: ID!): [Chat]
@@ -496,20 +490,21 @@ module.exports = buildSchema(`
     addShowTags(showId: ID!, tag: String!): Show
     deleteShow(showId: ID!): Show
 
+    createRootComment(authorId: ID!, authorRole: String!, contentId: ID, commentInput: CommentInput!): Comment
     createComment(authorId: ID!, authorRole: String!, contentId: ID, parentId: ID, commentInput: CommentInput!): Comment
     setCommentParent(commentId: ID!, parentId: ID!): Comment
     addCommentChild(commentId: ID!, childId: ID!): Comment
     deleteComment(commentId: ID!): Comment
 
-    createChat(sender: String!,receiver: String!, senderId: ID!, receiverId: ID!, showId: ID!, chatInput: ChatInput!): Chat
+    createChat(senderRole: String!, receiverRole: String!, senderId: ID!, receiverId: ID!, chatInput: ChatInput!, showId: ID!): Chat
     updateChatRead(chatId: ID!): Chat
     deleteChat(chatId: ID!): Chat
 
-    createMessage(sender: String!,receiver: String!, senderId: ID!, receiverId: ID!, messageInput: MessageInput!): Message
+    createMessage(senderRole: String!, receiverRole: String!, senderId: ID!, receiverId: ID!, messageInput: MessageInput!): Message
     updateMessageRead(messageId: ID!): Message
     deleteMessage(messageId: ID!): Message
 
-    createTransaction(senderId: ID!, receiverId: ID!, transactionInput: TransactionInput!): Transaction
+    createTransaction(senderRole: String!, receiverRole: String!, senderId: ID!, receiverId: ID!, transactionInput: TransactionInput!): Transaction
     deleteTransaction(transactionId: ID!): Transaction
   }
 

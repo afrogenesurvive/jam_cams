@@ -7,10 +7,14 @@ const chatSchema = new Schema({
   date: {type: Date},
   time: {type: String},
   type: {type: String},
-  senderUser: {type: Schema.Types.ObjectId,ref: 'User'},
-  senderModel: {type: Schema.Types.ObjectId,ref: 'Model'},
-  receiverUser: {type: Schema.Types.ObjectId,ref: 'User'},
-  receiverModel: {type: Schema.Types.ObjectId,ref: 'Model'},
+  sender: {
+    role: {type: String},
+    ref: {type: ObjectId}
+  },
+  receiver: {
+    role: {type: String},
+    ref: {type: ObjectId}
+  },
   message: {type: String},
   read: {type: Boolean},
   show: {type: Schema.Types.ObjectId,ref: 'Show'}

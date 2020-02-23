@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const DataLoader = require('dataloader');
+const mongoose = require('mongoose');
 
 const User = require('../../models/user');
 const Model = require('../../models/model');
@@ -28,7 +29,11 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-      const messages = await Message.find({});
+      const messages = await Message.find({})
+      // .populate('sender')
+      // .populate('receiver');
+      // .populate({path: 'sender', model: User})
+      // .populate({path: 'receiver', model: Model});
       return messages.map(message => {
         return transformMessage(message,);
       });
@@ -77,46 +82,34 @@ module.exports = {
 
     try {
 
-      let senderUserId = null;
-      let senderModelId = null;
-      let reciverUserId = null;
-      let reciverModelId = null;
-
-      if (args.sender = "user") {
-        senderUserId = args.senderId;
-      }
-      if (args.sender = "model") {
-        senderModelId = args.senderId
-      }
-
-      if (args.reciever = "user") {
-        recieverUserId = args.recieverId;
-      }
-      if (args.reciever = "model") {
-        recieverModelId = args.recieverId
-      }
-
-      let senderUser = await User.findById({_id: senderUserId});
-      let senderModel = await Model.findById({_id: senderModelId});
-      let reciverUser = await User.findById({_id: reciverUserId});
-      let reciverModel = await Model.findById({_id: reciverModelId});
+      let sender = null;
+      let reciever = null;
+      let senderRole = args.senderRole;
+      sender = await mongoose.model(senderRole).findById({_id: args.senderId});
+      let receiverRole = args.receiverRole;
+      receiver = await mongoose.model(receiverRole).findById({_id: args.receiverId});
 
       const message = new Message({
         date: args.messageInput.date,
         time: args.messageInput.time,
         type: args.messageInput.type,
         subject: args.messageInput.subject,
-        senderUser: senderUser,
-        senderModel: senderModel,
-        receiverUser: reciverUser,
-        receiverModel: reciverModel,
+        sender: {
+          role: senderRole,
+          ref: sender
+        },
+        receiver: {
+          role: receiverRole,
+          ref: receiver
+        },
         message: args.messageInput.message,
         read: false,
       });
 
       const result = await message.save();
 
-        // write to sender and reciver here??
+      const updateSender = await mongoose.model(senderRole).findOneAndUpdate({_id: args.senderId},{$addToSet: {messages: message}},{new: true});
+      const updateReceiver = await mongoose.model(receiverRole).findOneAndUpdate({_id: args.receiverId},{$addToSet: {messages: message}},{new: true});
 
       return {
         ...result._doc,
@@ -125,10 +118,8 @@ module.exports = {
         time: result.time,
         type: result.type,
         subject: result.subject,
-        senderUser: result.senderUser,
-        senderModel: result.senderModel,
-        receiverUser: result.receiverUser,
-        receiverModel: result.receiverModel,
+        sender: result.sender,
+        receiver: result.receiver,
         message: result.message,
       };
     } catch (err) {

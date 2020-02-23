@@ -107,18 +107,11 @@ module.exports = {
 
       let updateParent = null;
       const content = await Content.findById({_id: args.contentId});
-      let parent = null;
+      let parent = parent = await Content.findById({_id: args.parentId});
       let role = args.authorRole;
 
       author = await mongoose.model(role).findById({_id: args.authorId});
 
-      // if (args.parentId !== null && args.parentId !== undefined && args.parentId !== "") {
-      //   parent = args.parentId;
-      // }
-      // if (args.parentId !== null && args.parentId !== undefined && args.parentId !== "") {
-      //   parent = await Content.findById({_id: args.parentId});
-      //   console.log("here", JSON.stringify(parent));
-      // }
       const comment = new Comment({
         date: args.commentInput.date,
         time: args.commentInput.time,
@@ -133,10 +126,48 @@ module.exports = {
         children: [],
       });
 
-      // updateParent = await Comment.findOneAndUpdate({_id: parent._id},{$addToSet: {children: comment._id}},{new: true})
-      // if (comment.parent !== null) {
-      //   updateParent = await Comment.findOneAndUpdate({_id: parent._id},{$addToSet: {children: comment._id}},{new: true})
-      // }
+      updateParent = await Comment.findOneAndUpdate({_id: parentId},{$addToSet: {children: comment}},{new: true})
+
+      const result = await comment.save();
+
+      return {
+        ...result._doc,
+        _id: result.id,
+        date: result.date,
+        time: result.time,
+        type: result.type,
+        content: result.content,
+        user: result.user,
+        model: result.model,
+        comment: result.comment,
+        parent: result.parent,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  createRootComment: async (args, req) => {
+
+    try {
+
+      const content = await Content.findById({_id: args.contentId});
+      let role = args.authorRole;
+
+      author = await mongoose.model(role).findById({_id: args.authorId});
+
+      const comment = new Comment({
+        date: args.commentInput.date,
+        time: args.commentInput.time,
+        type: args.commentInput.type,
+        content: content,
+        author: {
+          role: role,
+          ref: author
+        },
+        comment: args.commentInput.comment,
+        parent: parent,
+        children: [],
+      });
 
       const result = await comment.save();
 

@@ -28,7 +28,8 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-      const users = await User.find({});
+      const users = await User.find({})
+      .populate('messages');
       return users.map(user => {
         return transformUser(user,);
       });
