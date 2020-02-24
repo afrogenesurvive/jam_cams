@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const modelSchema = new Schema({
   password: {type: String,required: true},
   name: {type: String,required: true},
+  role: {type: String,required: true},
   username: {type: String,required: true},
   modelNames: [
     {type: String}
@@ -15,7 +16,8 @@ const modelSchema = new Schema({
     street: {type: String},
     town: {type: String},
     city: {type:String},
-    country: {type:String}
+    country: {type:String},
+    postalCode: {type:String},
   },
   contact: {
     phone: {type: String},

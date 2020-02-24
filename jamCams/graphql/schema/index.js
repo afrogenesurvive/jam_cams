@@ -34,6 +34,7 @@ module.exports = buildSchema(`
     town: String
     city: String
     country: String
+    postalCode: String
   }
   type Contact {
     phone: String
@@ -45,6 +46,11 @@ module.exports = buildSchema(`
     path: String
   }
   type Perk {
+    date: String
+    name: String
+    description: String
+  }
+  input PerkInput {
     date: String
     name: String
     description: String
@@ -89,6 +95,7 @@ module.exports = buildSchema(`
     addressTown: String
     addressCity: String
     addressCountry: String
+    addressPostalCode: String
     contactPhone: String
     contactEmail: String
     bio: String
@@ -145,7 +152,15 @@ module.exports = buildSchema(`
     platform: String
     handle: String
   }
+  input SocialMediaInput {
+    platform: String
+    handle: String
+  }
   type Trait {
+    key: String
+    value: String
+  }
+  input TraitInput {
     key: String
     value: String
   }
@@ -160,6 +175,7 @@ module.exports = buildSchema(`
     addressTown: String
     addressCity: String
     addressCountry: String
+    addressPostalCode: String
     contactPhone: String
     contactEmail: String
     socialMediaPlatform: String
@@ -352,10 +368,10 @@ module.exports = buildSchema(`
     getUserNameRegex(activityId: ID!, regex: String!): User
     getUserField(activityId: ID!, field: String!, query: String!): [User]
     getUserInterests(activityId: ID!, interests: [String!]): [User]
-    getUserPerk(activityId: ID!, perkName: String!): [User]
+    getUserPerks(activityId: ID!, perkNames: [String!]): [User]
     getUserTokenAmount(activityId: ID!, tokenAmount: Float!): [User]
     getUserTags(activityId: ID!, tags: [String!]): [User]
-    getUserSearch(activityId: ID!, searchQuery: String!): [User]
+    getUserSearchQueries(activityId: ID!, searchQueries: [String!]): [User]
     getUserBilling(activityId: ID!, billingKey: String!, billingValue: String!): [User]
     getUserComplaint(activityId: ID!, complaintKey: String!, complaintValue: String!): [User]
     getUserModel(activityId: ID!, modelId: ID!): [User]
@@ -369,17 +385,18 @@ module.exports = buildSchema(`
 
     models(activityId: ID!): [Model]
     getModelId(activityId: ID!, modelId: ID!): Model
+    getModelNameRegex(activityId: ID!, regex: String!): User
     getModelField(activityId: ID!, field: String!, query: String!): [Model]
     getModelSocialMedia(activityId: ID!, socialMediaKey: String!, socialMediaValue: String!): Model
-    getModelTrait(activityId: ID!, traitKey: String!, traitValue: String!): [Model]
+    getModelTraits(activityId: ID!, traits: [Trait]): [Model]
     getModelProfileImage(activityId: ID!, profileImageKey: String!, profileImageValue: String!): [Model]
-    getModelInterest(activityId: ID!, interest: String!): [Model]
-    getModelPerk(activityId: ID!, perkKey: String!, perkValue: String!): [Model]
-    getModelToken(activityId: ID!, tokens: Float!): [Model]
-    getModelTag(activityId: ID!, tag: String!): [Model]
-    getModelCategory(activityId: ID!, category: String!): [Model]
+    getModelInterests(activityId: ID!, interests: [String!]): [Model]
+    getModelPerks(activityId: ID!, perkNames: [String!]): [Model]
+    getModelTokenAmount(activityId: ID!, tokenAmount: Float!): [Model]
+    getModelTags(activityId: ID!, tags: [String!]): [Model]
+    getModelCategories(activityId: ID!, categories: [String!]): [Model]
     getModelFan(activityId: ID!, fanId: ID!): [Model]
-    getModelFriend(activityId: ID!, fanId: ID!): [Model]
+    getModelFriend(activityId: ID!, friendId: ID!): [Model]
     getModelShow(activityId: ID!, showId: ID!): [Model]
     getModelContent(activityId: ID!, contentId: ID!): [Model]
     getModelComment(activityId: ID!, commentId: ID!): [Model]
@@ -434,43 +451,59 @@ module.exports = buildSchema(`
 
   type RootMutation {
     createUser(userInput: UserInput!): User
-    updateUser(userId: ID!, userInput: UserInput!): User
-    updateUserField(userId: ID!, field: String!, query: String!): User
-    addUserInterest(userId: ID!, userInput: UserInput!): User
-    addUserPerk(userId: ID!, userInput: UserInput!): User
-    addUserToken(userId: ID!, userInput: UserInput!): User
-    addUserTag(userId: ID!, userInput: UserInput!): User
-    addUserSearch(userId: ID!, userInput: UserInput!): User
-    addUserBilling(userId: ID!, userInput: UserInput!): User
-    addUserComplaint(userId: ID!, userInput: UserInput!): User
-    addUserModel(userId: ID!, modelId: ID!): User
-    addUserViewedShow(userId: ID!, showId: ID!): User
-    addUserViewedContent(userId: ID!, contentId: ID!): User
-    addUserLikedContent(userId: ID!, contentId: ID!): User
-    addUserComment(userId: ID!, commentId: ID!): User
-    addUserMessage(userId: ID!, messageId: ID!): User
-    addUserTransaction(userId: ID!, transactionId: ID!): User
-    deleteUser(userId: ID!): User
+    updateUser(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    updateUserField(activityId: ID!, userId: ID!, field: String!, query: String!): User
+    addUserInterests(activityId: ID!, userId: ID!, interests: [String!]): User
+    addUserPerks(activityId: ID!, userId: ID!, perks: [PerkInput]): User
+    addUserToken(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    addUserTags(activityId: ID!, userId: ID!, tags: [String!]): User
+    addUserSearch(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    addUserBilling(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    editUserBilling(activityId: ID!, userId: ID!, prevKey: String!, prevValue: String!, newKey: String!, newValue: String!): User
+    addUserComplaint(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    addUserModel(activityId: ID!, userId: ID!, modelId: ID!): User
+    addUserViewedShow(activityId: ID!, userId: ID!, showId: ID!, date: String!): User
+    addUserViewedContent(activityId: ID!, userId: ID!, contentId: ID!, date: String!): User
+    addUserLikedContent(activityId: ID!, userId: ID!, contentId: ID!): User
+    addUserComment(activityId: ID!, userId: ID!, commentId: ID!): User
+    addUserMessage(activityId: ID!, userId: ID!, messageId: ID!): User
+    addUserTransaction(activityId: ID!, userId: ID!, transactionId: ID!): User
+
+    deleteUser(activityId: ID!, userId: ID!): User
+    deleteUserInterests(activityId: ID!, userId: ID!, interests: [String!]): User
+    deleteUserPerks(activityId: ID!, userId: ID!, perkNames: [String!]): User
+    deleteUserTags(activityId: ID!, userId: ID!, tags: [String!]): User
+    deleteUserSearches(activityId: ID!, userId: ID!, searchQueries: [String!]): User
+    deleteUserBilling(activityId: ID!, userId: ID!, billing: Billing!): User
+    deleteUserComplaint(activityId: ID!, userId: ID!, complaint: Complaint!): User
+    deleteUserModel(activityId: ID!, userId: ID!, modelId: ID!): User
+    deleteUserLikedContent(activityId: ID!, userId: ID!, likedContentId: ID!): User
+    deleteUserComment(activityId: ID!, userId: ID!, commentId: ID!): User
+    deleteUserMessage(activityId: ID!, userId: ID!, messageId: ID!): User
+    deleteUserTransaction(activityId: ID!, userId: ID!, transactionId: ID!): User
+
 
     createModel(modelInput: ModelInput!): Model
-    updateModel(modelId: ID!, modelInput: ModelInput!): Model
-    updateModelField(modelId: ID!, field: String!, query: String!): Model
-    addModelSocialMedia(modelId: ID!, modelInput: ModelInput): Model
-    addModelTrait(modelId: ID!, modelInput: ModelInput): Model
-    addModelProfileImage(modelId: ID!, modelInput: ModelInput): Model
-    addModelInterest(modelId: ID!, modelInput: ModelInput): Model
-    addModelPerk(modelId: ID!, modelInput: ModelInput): Model
-    addModelToken(modelId: ID!, modelInput: ModelInput): Model
-    addModelTag(modelId: ID!, modelInput: ModelInput): Model
-    addModelCategory(modelId: ID!, modelInput: ModelInput): Model
-    addModelFan(modelId: ID!, fanId: ID!): Model
-    addModelFriend(modelId: ID!, friendId: ID!): Model
-    addModelShow(modelId: ID!, showId: ID!): Model
-    addModelContent(modelId: ID!, contentID: ID!): Model
-    addModelComment(modelId: ID!, commentId: ID!): Model
-    addModelMessage(modelId: ID!, messageId: ID!): Model
-    addModelTransaction(modelId: ID!, transactionId: ID!): Model
-    deleteModel(modelId: ID!): Model
+    updateModel(activityId: ID!, modelId: ID!, modelInput: ModelInput!): Model
+    updateModelField(activityId: ID!, modelId: ID!, field: String!, query: String!): Model
+    addModelSocialMedia(activityId: ID!, modelId: ID!, socialMedia: [SocialMediaInput!]): Model
+    addModelTraits(activityId: ID!, modelId: ID!, traits: [TraitInput!]): Model
+    addModelProfileImage(activityId: ID!, modelId: ID!, modelInput: ModelInput): Model
+    addModelInterests(activityId: ID!, modelId: ID!, interests: [String!]): Model
+    addModelPerks(activityId: ID!, modelId: ID!, perks: [PerkInput!]): Model
+    addModelToken(activityId: ID!, modelId: ID!, modelInput: ModelInput): Model
+    addModelTags(activityId: ID!, modelId: ID!, tags: [String!]): Model
+    addModelCategories(activityId: ID!, modelId: ID!, categories: [String!]): Model
+    addModelFan(activityId: ID!, modelId: ID!, fanId: ID!): Model
+    addModelFriend(activityId: ID!, modelId: ID!, friendId: ID!): Model
+    addModelShow(activityId: ID!, modelId: ID!, showId: ID!): Model
+    addModelContent(activityId: ID!, modelId: ID!, contentID: ID!): Model
+    addModelComment(activityId: ID!, modelId: ID!, commentId: ID!): Model
+    addModelMessage(activityId: ID!, modelId: ID!, messageId: ID!): Model
+    addModelTransaction(activityId: ID!, modelId: ID!, transactionId: ID!): Model
+
+    deleteModel(activityId: ID!, modelId: ID!): Model
+    deleteModelTraits(activityId: ID!, modelId: ID!, traits: [TraitInput!]): Model
 
     createContent(creatorId: ID!, contentInput: ContentInput!): Content
     updateContent(contentId: ID!, contentInput: ContentInput!): Content

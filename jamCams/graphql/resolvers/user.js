@@ -143,7 +143,7 @@ module.exports = {
       throw err;
     }
   },
-  getUsersearchQueries: async (args, req) => {
+  getUserSearchQueries: async (args, req) => {
 
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
@@ -177,6 +177,182 @@ module.exports = {
       throw err;
     }
   },
+  getUserBilling: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const dbQueryKey = `billing.${args.billingKey}`;
+      // const dbQueryKey = "billing."+args.billingKey+"";
+      // console.log(JSON.stringify(dbQueryKey));
+      const users = await User.find({dbQueryKey: args.billingValue});
+
+      return users.map(user => {
+        return transformUser(user);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getUserComplaint: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const dbQueryKey = `complaint.${args.complaintKey}`;
+      // const dbQueryKey = "complaint."+args.complaintKey+"";
+      // console.log(JSON.stringify(dbQueryKey));
+      const users = await User.find({dbQueryKey: args.complaintValue});
+
+      return users.map(user => {
+        return transformUser(user);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getUserModel: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const model = await Model.findById({_id: args.modelId})
+      const users = await User.find({model: model});
+
+      return users.map(user => {
+        return transformUser(user);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getUserViewedShow: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const show = await Show.findById({_id: args.showId})
+      const users = await User.find({'viewedShows.ref': show});
+
+      return users.map(user => {
+        return transformUser(user);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getUserViewedContent: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const content = await Content.findById({_id: args.contentId})
+      const users = await User.find({'viewedContent.ref': content});
+
+      return users.map(user => {
+        return transformUser(user);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getUserLikedContent: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const content = await Content.findById({_id: args.contentId})
+      const users = await User.find({'likedContent.ref': content});
+
+      return users.map(user => {
+        return transformUser(user);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getUserComment: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const comment = await Comment.findById({_id: args.commentId})
+      const users = await User.find({comments: comment});
+
+      return users.map(user => {
+        return transformUser(user);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getUserMessage: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const message = await Message.findById({_id: args.messageId})
+      const users = await User.find({messages: message});
+
+      return users.map(user => {
+        return transformUser(user);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getUserTransaction: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const transaction = await Transaction.findById({_id: args.transactionId})
+      const users = await User.find({transactions: transaction});
+
+      return users.map(user => {
+        return transformUser(user);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getThisUser: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const user = await User.findById({_id: activityId});
+
+      return {
+        ...user._doc,
+        _id: user.id,
+        email: user.contact.email ,
+        name: user.name,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
   updateUser: async (args, req) => {
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
@@ -197,8 +373,9 @@ module.exports = {
           number: args.userInput.addressNumber,
           street: args.userInput.addressStreet,
           town: args.userInput.addressTown,
-          parish: args.userInput.addressParish,
-          postOffice: args.userInput.addressPostOffice
+          city: args.userInput.addressCity,
+          country: args.userInput.addressCountry,
+          postalCode: args.userInput.addressPostalCode,
         },
         bio: args.userInput.bio
         },{new: true});
@@ -217,8 +394,9 @@ module.exports = {
             number: user.address.number,
             street: user.address.street,
             town: user.address.town,
-            parish: user.address.parish,
-            postOffice: user.address.postOffice
+            city: user.address.city,
+            country: user.address.country,
+            postalCode: user.adress.postalCode
           },
           bio: user.bio,
         };
@@ -252,8 +430,9 @@ module.exports = {
           number: user.address.number,
           street: user.address.street,
           town: user.address.town,
-          parish: user.address.parish,
-          postOffice: user.address.postOffice
+          city: user.address.city,
+          country: user.address.country,
+          postalCode: user.adress.postalCode
         },
         bio: user.bio,
       };
@@ -261,38 +440,377 @@ module.exports = {
       throw err;
     }
   },
-  addUserInterest: async (args, req) => {
+  addUserInterests: async (args, req) => {
 
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
-      const interest = args.userInput.interest;
-      const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { interests: interest }},{new: true, useFindAndModify: false})
+      const interests = args.interests;
+      const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { interests: {$each: interests} }},{new: true, useFindAndModify: false})
         return {
           ...user._doc,
           _id: user.id,
-          email: user.email,
+          email: user.contact.email ,
           name: user.name,
         };
     } catch (err) {
       throw err;
     }
   },
-  deleteUserInterest: async (args, req) => {
+  addUserTags: async (args, req) => {
 
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
-        const interest = args.userInput.interest;
-        const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { interests: interest }},{new: true});
+      const tags = args.tags;
+      const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { tags: {$each: tags} }},{new: true, useFindAndModify: false})
+        return {
+          ...user._doc,
+          _id: user.id,
+          email: user.contact.email ,
+          name: user.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addUserPerks: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const perks = args.perks;
+      const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { perks: {$each: perks} }},{new: true, useFindAndModify: false})
+        return {
+          ...user._doc,
+          _id: user.id,
+          email: user.contact.email,
+          name: user.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addUserToken: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    // admin or own profile check here
+    try {
+      const prevAmountUser = await User.findById({_id: args.userId});
+      const prevAmount = prevAmountUser.tokens;
+      const amountToAdd = args.userInput.tokens;
+      const newAmount = prevAmount + newAmount;
+      const user = await User.findOneAndUpdate({_id:args.userId},{ tokens: newAmount },{new: true, useFindAndModify: false})
+        return {
+          ...user._doc,
+          _id: user.id,
+          email: user.contact.email ,
+          name: user.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addUserSearch: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const search = {
+        date: args.userInput.searchDate,
+        query: args.userInput.searchQuery,
+      };
+      const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { searches: search }},{new: true, useFindAndModify: false})
+        return {
+          ...user._doc,
+          _id: user.id,
+          email: user.contact.email ,
+          name: user.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addUserBilling: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const billing = {
+        date: args.userInput.billingDate,
+        type: args.userInput.billingType,
+        description: args.userInput.billingDescription,
+        amount: args.userInput.billingAmount,
+        paid: args.userInput.billingPaid,
+        payment: args.userInput.billingPayment
+      };
+      const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { billing: billing }},{new: true, useFindAndModify: false})
+        return {
+          ...user._doc,
+          _id: user.id,
+          email: user.contact.email ,
+          name: user.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  editUserBilling: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const dbQueryPrevKey = `billing.${args.prevKey}`;
+      const dbQueryNewKey = `billing.${args.newKey}`;
+      const user = await User.findOneAndUpdate({_id:args.userId, dbQueryPrevKey: args.prevValue},{$set: { dbQueryNewKey: args.newValue }},{new: true})
+        return {
+          ...user._doc,
+          _id: user.id,
+          email: user.contact.email ,
+          name: user.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addUserComplaint: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const complaint = {
+        date: args.userInput.complaintDate,
+        type: args.userInput.complaintType,
+        description: args.userInput.complaintDescription,
+        complainant: args.userInput.complaintComplainant,
+      };
+      const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { complaints: complaint }},{new: true, useFindAndModify: false})
+        return {
+          ...user._doc,
+          _id: user.id,
+          email: user.contact.email ,
+          name: user.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addUserModel: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const model = await Model.findById({_id: args.modelId})
+      const user = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {model: model}},{new: true});
+
+      return {
+        ...user._doc,
+        _id: user.id,
+        email: user.contact.email ,
+        name: user.name,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addUserViewedShow: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const show = await Show.findById({_id: args.showId})
+      const viewedShow =  {
+        date: args.date,
+        ref: show
+      };
+      const user = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {viewedShows: viewedShow}},{new: true});
+
+      return {
+        ...user._doc,
+        _id: user.id,
+        email: user.contact.email ,
+        name: user.name,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addUserViewedContent: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const content = await Content.findById({_id: args.contentId})
+      const viewedContent =  {
+        date: args.date,
+        ref: content
+      };
+      const user = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {viewedContent: viewedContent}},{new: true});
+
+      return {
+        ...user._doc,
+        _id: user.id,
+        email: user.contact.email ,
+        name: user.name,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addUserLikedContent: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const content = await Content.findById({_id: args.contentId})
+      const likedContent =  {
+        date: args.date,
+        ref: content
+      };
+      const users = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {likedContent: likedContent}},{new: true});
+
+      return {
+        ...user._doc,
+        _id: user.id,
+        email: user.contact.email ,
+        name: user.name,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addUserComment: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const comment = await Model.findById({_id: args.commentId})
+      const users = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {comments: comment}},{new: true});
+
+      return {
+        ...user._doc,
+        _id: user.id,
+        email: user.contact.email ,
+        name: user.name,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addUserMessage: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const message = await Model.findById({_id: args.messageId})
+      const users = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {messages: message}},{new: true});
+
+      return {
+        ...user._doc,
+        _id: user.id,
+        email: user.contact.email ,
+        name: user.name,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addUserTransaction: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const transaction = await Model.findById({_id: args.transactionId})
+      const users = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {transactions: transaction}},{new: true});
+
+      return {
+        ...user._doc,
+        _id: user.id,
+        email: user.contact.email ,
+        name: user.name,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteUserInterests: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const interests = args.userInput.interest;
+        const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { interests: interests }},{new: true});
         // const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { interest: { date: new Date(attendanceDate) }}},{new: true})
 
         return {
           ...user._doc,
           _id: user.id,
-          email: user.email,
+          email: user.contact.email ,
+          name: user.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteUserPerks: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const perks = args.perkNames;
+        const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { 'perks.name': perkNames }},{new: true});
+        // const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { interest: { date: new Date(attendanceDate) }}},{new: true})
+
+        return {
+          ...user._doc,
+          _id: user.id,
+          email: user.contact.email ,
+          name: user.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteUserTags: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const tags = args.tags;
+        const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { 'tags': tags }},{new: true});
+        // const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { interest: { date: new Date(attendanceDate) }}},{new: true})
+
+        return {
+          ...user._doc,
+          _id: user.id,
+          email: user.contact.email ,
           name: user.name,
         };
     } catch (err) {
@@ -320,8 +838,9 @@ module.exports = {
             number: user.address.number,
             street: user.address.street,
             town: user.address.town,
-            parish: user.address.parish,
-            postOffice: user.address.postOffice
+            city: user.address.city,
+            country: user.address.country,
+            postalCode: user.adress.postalCode
           },
           bio: user.bio,
         };
@@ -340,6 +859,7 @@ module.exports = {
       const user = new User({
         password: hashedPassword,
         name: args.userInput.name,
+        role: "User",
         username: args.userInput.username,
         dob: args.userInput.dob,
         contact: {
@@ -350,8 +870,9 @@ module.exports = {
           number: args.userInput.addressNumber,
           street: args.userInput.addressStreet,
           town: args.userInput.addressTown,
-          parish: args.userInput.addressParish,
-          postOffice: args.userInput.addressPostOffice
+          city: args.userInput.addressCity,
+          country: args.userInput.addressCountry,
+          postalCode: args.userInput.addressPostalCode
         },
         bio: args.userInput.bio,
         profileImages: [{
@@ -396,6 +917,7 @@ module.exports = {
         password: hashedPassword,
         _id: result.id,
         name: result.name,
+        role: result.role,
         username: result.username,
         dob: result.dob,
         content: {
@@ -406,8 +928,9 @@ module.exports = {
           number: result.address.number,
           street: result.address.street,
           town: result.address.town,
-          parish: result.address.parish,
-          postOffice: result.address.postOffice
+          city: result.address.city,
+          country: result.address.country,
+          postalCode: result.adress.postalCode
         },
         bio: result.bio
       };

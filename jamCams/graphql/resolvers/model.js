@@ -37,6 +37,317 @@ module.exports = {
       throw err;
     }
   },
+  getModelId: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const model = await Model.findById(args.modelId);
+
+        return {
+            ...model._doc,
+            _id: model.id,
+            name: model.name
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  getModelField: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const resolverField = args.field;
+      const resolverQuery = args.query;
+      const query = {[resolverField]:resolverQuery};
+      const models = await Model.find(query)
+
+      return models.map(model => {
+        return transformModel(model);
+
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getModelNameRegex: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const regex = "/^" + args.regex + "/";
+      const models = await Model.find({'address.street': {$regex: regex, $options: 'i'}});
+
+      return models.map(model => {
+        return transformModel(model);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getModelInterests: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const interests = args.interests;
+      const models = await Model.find({'interests': {$all: interests}});
+
+      return models.map(model => {
+        return transformModel(model);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getModelSocialMedia: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const dbQueryKey = `socialMedia.${args.socialMediaKey}`;
+      const models = await Model.find({dbQueryKey: args.socialMediaValue}});
+
+      return models.map(model => {
+        return transformModel(model);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getModelTraits: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const models = await Model.find({traits: {$all: args.traits}}});
+
+      return models.map(model => {
+        return transformModel(model);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getUserPerks: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const perkNames = args.perkNames;
+      const models = await Model.find({'perks.name': {$all: perkNames}});
+
+      return models.map(model => {
+        return transformModel(model);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getUserTokenAmount: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const tokenAmount = args.tokenAmount;
+      const models = await Model.find({'tokens': tokenAmount});
+
+      return models.map(model => {
+        return transformModel(model);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getModelTags: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const tags = args.tags;
+      const models = await Model.find({'tags': {$all: tags}});
+
+      return models.map(model => {
+        return transformModel(model);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getModelCategories: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const categories = args.categories;
+      const models = await Model.find({'categories': {$all: categories}});
+
+      return models.map(model => {
+        return transformModel(model);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getModelFan: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const fan = await User.findById({_id: args.fanId})
+      const models = await Model.find({fans: fan});
+
+      return models.map(model => {
+        return transformUser(model);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getModelFriend: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const friend = await User.findById({_id: args.friendId})
+      const models = await Model.find({friends: friend});
+
+      return models.map(model => {
+        return transformUser(model);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getModelShow: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const show = await User.findById({_id: args.showId})
+      const models = await Model.find({shows: show});
+
+      return models.map(model => {
+        return transformUser(model);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getModelContent: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const content = await User.findById({_id: args.contentId})
+      const models = await Model.find({content: content});
+
+      return models.map(model => {
+        return transformUser(model);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getModelComment: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const comment = await User.findById({_id: args.commentId})
+      const models = await Model.find({comments: comment});
+
+      return models.map(model => {
+        return transformUser(model);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getModelMessage: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const message = await User.findById({_id: args.messageId})
+      const models = await Model.find({messages: message});
+
+      return models.map(model => {
+        return transformUser(model);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getModelTransaction: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const transaction = await User.findById({_id: args.transactionId})
+      const models = await Model.find({transactions: transaction});
+
+      return models.map(model => {
+        return transformUser(model);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getThisModel: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const model = await Model.findById({_id: activityId});
+
+      return {
+        ...model._doc,
+        _id: model.id,
+        email: model.contact.email ,
+        name: model.name,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
   updateModel: async (args, req) => {
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
@@ -57,8 +368,9 @@ module.exports = {
           number: args.modelInput.addressNumber,
           street: args.modelInput.addressStreet,
           town: args.modelInput.addressTown,
-          parish: args.modelInput.addressParish,
-          postOffice: args.modelInput.addressPostOffice
+          city: args.modelInput.addressCity,
+          country: args.modelInput.addressCountry,
+          postalCode: args.modelInput.addressPostalCode,
         },
         bio: args.modelInput.bio
         },{new: true});
@@ -93,20 +405,294 @@ module.exports = {
       throw err;
     }
   },
-  addModelInterest: async (args, req) => {
+  addModelInterests: async (args, req) => {
 
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
-      const interest = args.modelInput.interest;
-      const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { interests: interest }},{new: true, useFindAndModify: false})
+      const interests = args.interests;
+      const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { interests: {$each: interests} }},{new: true, useFindAndModify: false})
         return {
           ...model._doc,
           _id: model.id,
-          email: model.email,
+          email: model.contact.email ,
           name: model.name,
         };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addModelSocialMedia: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const socialMedia = args.socialMedia;
+      const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { socialMedia: {$each: socialMedia} }},{new: true, useFindAndModify: false})
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email ,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addModelTraits: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const traits = args.traits;
+      const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { traits: {$each: traits} }},{new: true, useFindAndModify: false})
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email ,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addModelProfileImage: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const profileImage = {
+        name: profileImageName,
+        type: profileImagesType,
+        path: profileImagesPath
+      };
+      const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { profileImages: profileImage }},{new: true, useFindAndModify: false})
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email ,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addModelPerks: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const perks = args.perks;
+      const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { perks: {$each: perks} }},{new: true, useFindAndModify: false})
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addModelToken: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    // admin or own profile check here
+    try {
+      const prevAmountModel = await Model.findById({_id: args.modelId});
+      const prevAmount = prevAmountModel.tokens;
+      const amountToAdd = args.userInput.tokens;
+      const newAmount = prevAmount + newAmount;
+      const model = await Model.findOneAndUpdate({_id:args.modelId},{ tokens: newAmount },{new: true, useFindAndModify: false})
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email ,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addModelTags: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const tags = args.tags;
+      const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { tags: {$each: tags} }},{new: true, useFindAndModify: false})
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email ,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addModelCategories: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const categories = args.categories;
+      const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { categories: {$each: categories} }},{new: true, useFindAndModify: false})
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email ,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addModelFan: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const fan = await User.findById({_id: args.fanId})
+      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {fans: fan}},{new: true});
+
+      return {
+        ...model._doc,
+        _id: model.id,
+        email: model.contact.email ,
+        name: model.name,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addModelFriend: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const friend = await Model.findById({_id: args.friendId})
+      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {friends: friend}},{new: true});
+
+      return {
+        ...model._doc,
+        _id: model.id,
+        email: model.contact.email ,
+        name: model.name,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addModelShow: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const show = await Model.findById({_id: args.showId})
+      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {shows: show}},{new: true});
+
+      return {
+        ...model._doc,
+        _id: model.id,
+        email: model.contact.email ,
+        name: model.name,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addModelComment: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const comment = await Model.findById({_id: args.commentId})
+      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {comments: comment}},{new: true});
+
+      return {
+        ...model._doc,
+        _id: model.id,
+        email: model.contact.email ,
+        name: model.name,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addModelContent: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const content = await Model.findById({_id: args.contentId})
+      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {content: content}},{new: true});
+
+      return {
+        ...model._doc,
+        _id: model.id,
+        email: model.contact.email ,
+        name: model.name,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addModelMessage: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const message = await Model.findById({_id: args.messageId})
+      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {messages: message}},{new: true});
+
+      return {
+        ...model._doc,
+        _id: model.id,
+        email: model.contact.email ,
+        name: model.name,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addModelTransaction: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const transaction = await Model.findById({_id: args.transactionId})
+      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {transactions: transaction}},{new: true});
+
+      return {
+        ...model._doc,
+        _id: model.id,
+        email: model.contact.email ,
+        name: model.name,
+      };
     } catch (err) {
       throw err;
     }
@@ -124,7 +710,26 @@ module.exports = {
         return {
           ...model._doc,
           _id: model.id,
-          email: model.email,
+          email: model.contact.email ,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteUserTraits: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const traits = args.traits;
+        const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { traits: traits }},{new: true});
+
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email ,
           name: model.name,
         };
     } catch (err) {
@@ -158,6 +763,7 @@ module.exports = {
       const model = new Model({
         password: hashedPassword,
         name: args.modelInput.name,
+        role: "Model",
         username: args.modelInput.username,
         dob: args.modelInput.dob,
         contact: {
@@ -169,7 +775,8 @@ module.exports = {
           street: args.modelInput.addressStreet,
           town: args.modelInput.addressTown,
           city: args.modelInput.addressCity,
-          country: args.modelInput.addressCountry
+          country: args.modelInput.addressCountry,
+          postalCode: args.modelInput.addressPostalCode
         },
         bio: args.modelInput.bio,
         modelNames: [args.modelInput.modelName],
@@ -211,6 +818,7 @@ module.exports = {
         password: hashedPassword,
         _id: result.id,
         name: result.name,
+        role: result.role,
         username: result.username,
         dob: result.dob,
         contact: {
@@ -222,7 +830,8 @@ module.exports = {
           street: result.address.street,
           town: result.address.town,
           city: result.address.city,
-          country: result.address.country
+          country: result.address.country,
+          postalCode: result.adress.postalCode
         },
         bio: result.bio,
         modelNames: result.modelNames
