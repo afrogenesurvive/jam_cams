@@ -45,6 +45,11 @@ module.exports = buildSchema(`
     type: String
     path: String
   }
+  input ProfileImageInput {
+    name: String
+    type: String
+    path: String
+  }
   type Perk {
     date: String
     name: String
@@ -504,6 +509,14 @@ module.exports = buildSchema(`
 
     deleteModel(activityId: ID!, modelId: ID!): Model
     deleteModelTraits(activityId: ID!, modelId: ID!, traits: [TraitInput!]): Model
+    deleteModelInterests(activityId: ID!, modelId: ID!, interests: [String!]): Model
+    deleteModelSocialMedia(activityId: ID!, modelId: ID!, socialMedia: [SocialMediaInput!]): Model
+    deleteModelProfileImage(activityId: ID!, modelId: ID!, profileImageName: String!): Model
+    deleteModelPerks(activityId: ID!, modelId: ID!, perkNames: [String!]): Model
+    deleteModelTags(activityId: ID!, modelId: ID!, tags: [String!]): Model
+    deleteModelCategories(activityId: ID!, modelId: ID!, categories: [String!]): Model
+    deleteModelFan(activityId: ID!, modelId: ID!, fanId: ID!): Model
+    deleteModelFriend(activityId: ID!, userId: ID!, friendId: ID!): Model
 
     createContent(creatorId: ID!, contentInput: ContentInput!): Content
     updateContent(contentId: ID!, contentInput: ContentInput!): Content

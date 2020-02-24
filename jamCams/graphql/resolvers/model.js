@@ -117,7 +117,7 @@ module.exports = {
     try {
 
       const dbQueryKey = `socialMedia.${args.socialMediaKey}`;
-      const models = await Model.find({dbQueryKey: args.socialMediaValue}});
+      const models = await Model.find({dbQueryKey: args.socialMediaValue});
 
       return models.map(model => {
         return transformModel(model);
@@ -133,7 +133,7 @@ module.exports = {
     }
     try {
 
-      const models = await Model.find({traits: {$all: args.traits}}});
+      const models = await Model.find({traits: {$all: args.traits}});
 
       return models.map(model => {
         return transformModel(model);
@@ -717,14 +717,166 @@ module.exports = {
       throw err;
     }
   },
-  deleteUserTraits: async (args, req) => {
+  deleteModelTraits: async (args, req) => {
 
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
         const traits = args.traits;
-        const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { traits: traits }},{new: true});
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { traits: traits }},{new: true});
+
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email ,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteModelInterests: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const interests = args.interests;
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { interests: interests }},{new: true});
+
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email ,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteModelSocialMedia: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const socialMedia = args.socialMedia;
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { socialMedia: socialMedia }},{new: true});
+
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email ,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteModelProfileImage: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const profileImageName = args.profileImageName;
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { 'profileImages.name': profileImageName }},{new: true});
+
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email ,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteModelPerks: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const perkNames = args.perkNames;
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { 'perks.name': perkNames }},{new: true});
+
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email ,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteModelTags: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const tags = args.tags;
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { 'tags': tags }},{new: true});
+
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email ,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteModelCategories: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const categories = args.categories;
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { 'categories': categories }},{new: true});
+
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email ,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteModelFan: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const fan = await User.findById({_id: args.fanId});
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { 'fans': fan }},{new: true});
+
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email ,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteModelFriend: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const friend = await Model.findById({_id: args.friendId});
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { 'fans': fan }},{new: true});
 
         return {
           ...model._doc,

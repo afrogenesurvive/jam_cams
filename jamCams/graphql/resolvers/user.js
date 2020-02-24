@@ -817,6 +817,158 @@ module.exports = {
       throw err;
     }
   },
+  deleteUserSearches: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const searchQueries = args.searchQueries;
+        const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { 'searches.query': searchQueries }},{new: true});
+
+        return {
+          ...user._doc,
+          _id: user.id,
+          email: user.contact.email ,
+          name: user.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteUserBilling: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const billing = args.billing;
+        const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { billing: billing }},{new: true});
+
+        return {
+          ...user._doc,
+          _id: user.id,
+          email: user.contact.email ,
+          name: user.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteUserComplaint: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const complaint = args.complaint;
+        const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { complaints: complaint }},{new: true});
+
+        return {
+          ...user._doc,
+          _id: user.id,
+          email: user.contact.email ,
+          name: user.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteUserModel: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const model = await Model.findById({_id: args.modelId});
+        const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { 'models': model }},{new: true});
+
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email ,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteUserLikedContent: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const content = await Content.findById({_id: args.contentId});
+        const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { 'likedContent.ref': content }},{new: true});
+
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email ,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteUserComment: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const comment = await Comment.findById({_id: args.commentId});
+        const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { 'comments': comment }},{new: true});
+
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email ,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteUserMessage: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const message = await Message.findById({_id: args.messageId});
+        const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { 'messages': message }},{new: true});
+
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email ,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteUserTransaction: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const transaction = await Transaction.findById({_id: args.transactionId});
+        const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { 'transactions': transaction }},{new: true});
+
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email ,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
   deleteUser: async (args, req) => {
 
     if (!req.isAuth) {
