@@ -18,10 +18,23 @@ module.exports = {
     }
     const token = jwt.sign({ userId: user.id },'JammaCammaDingDong',{expiresIn: '2h'});
 
+    const userLoggedIn = await User.findById({_id: user.id},{loggedIn: true})
+
     // pocketVariables.token = token;
     // pocketVariables.userId = user.id;
 
-    return { userId: user.id, token: token, tokenExpiration: 2 };
+    return { userId: user.id, token: token, tokenExpiration: 4 };
+  },
+  userLogout: async ({ args }) => {
+
+    const userLogout = await User.findOneAndUpdate({ _id: args.userId },{loggedIn: false});
+
+    return {
+      ...user._doc,
+      _id: user.id,
+      email: user.contact.email ,
+      name: user.name,
+    };
   },
   modelLogin: async ({ email, password }) => {
 
@@ -36,6 +49,19 @@ module.exports = {
     }
     const token = jwt.sign({ modelId: model.id },'JammaCammaPingPong',{expiresIn: '2h'});
 
-    return { modelId: model.id, token: token, tokenExpiration: 2 };
+    const modelLoggedIn = await Model.findById({_id: model.id},{loggedIn: true});
+
+    return { modelId: model.id, token: token, tokenExpiration: 4 };
+  },
+  modelLogout: async ({ args }) => {
+
+    const modelLogout = await Model.findOneAndUpdate({ _id: args.modelId },{loggedIn: false});
+
+    return {
+      ...model._doc,
+      _id: model.id,
+      email: model.contact.email ,
+      name: model.name,
+    };
   }
 };

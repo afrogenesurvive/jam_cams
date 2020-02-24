@@ -142,7 +142,7 @@ module.exports = {
       throw err;
     }
   },
-  getUserPerks: async (args, req) => {
+  getModelPerks: async (args, req) => {
 
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
@@ -159,7 +159,7 @@ module.exports = {
       throw err;
     }
   },
-  getUserTokenAmount: async (args, req) => {
+  getModelTokenAmount: async (args, req) => {
 
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
@@ -983,7 +983,7 @@ module.exports = {
           town: result.address.town,
           city: result.address.city,
           country: result.address.country,
-          postalCode: result.adress.postalCode
+          postalCode: result.address.postalCode
         },
         bio: result.bio,
         modelNames: result.modelNames

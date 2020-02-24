@@ -6,6 +6,7 @@ module.exports = buildSchema(`
     _id: ID!
     password: String
     name: String
+    role: String
     username: String
     dob: String
     address: Address
@@ -17,6 +18,7 @@ module.exports = buildSchema(`
     models: [Model]
     tokens: Float
     tags: [String]
+    loggedin: Boolean
     viewedShows: [ViewedShow]
     viewedContent: [ViewedContent]
     likedContent: [LikedContent]
@@ -93,6 +95,7 @@ module.exports = buildSchema(`
   input UserInput {
     password: String
     name: String
+    role: String
     username: String
     dob: String
     addressNumber: Int
@@ -113,6 +116,7 @@ module.exports = buildSchema(`
     perkDescription: String
     tokens: Float
     tag: String
+    loggedIn: Boolean
     searchDate: String
     searchQuery: String
     billingDate: String
@@ -128,9 +132,10 @@ module.exports = buildSchema(`
   }
 
   type Model {
-    _id: ID!
+    _id: ID
     password: String
     name: String
+    role: String
     username: String
     modelNames: [String]
     dob: String
@@ -146,6 +151,7 @@ module.exports = buildSchema(`
     fans: [User]
     friends:[Model]
     tags: [String]
+    loggedIn: String
     categories: [String]
     shows: [Show]
     content: [Content]
@@ -172,6 +178,7 @@ module.exports = buildSchema(`
   input ModelInput {
     password: String
     name: String
+    role: String
     username: String
     modelName: String
     dob: String
@@ -197,6 +204,7 @@ module.exports = buildSchema(`
     perkDescription: String
     token: Float
     tag: String
+    loggedIn: Boolean
     category: String
   }
 
@@ -366,7 +374,10 @@ module.exports = buildSchema(`
 
   type RootQuery {
     userLogin(email: String!, password: String!): UserAuthData!
+    userLogout(activityId: ID!, userId: ID!): User!
     modelLogin(email: String!, password: String!): ModelAuthData!
+    modelLogout(activityId: ID!, modelId: ID!): Model!
+
 
     users(activityId: ID!): [User]
     getUserId(activityId: ID!, userId: ID!): User
@@ -393,7 +404,7 @@ module.exports = buildSchema(`
     getModelNameRegex(activityId: ID!, regex: String!): User
     getModelField(activityId: ID!, field: String!, query: String!): [Model]
     getModelSocialMedia(activityId: ID!, socialMediaKey: String!, socialMediaValue: String!): Model
-    getModelTraits(activityId: ID!, traits: [Trait]): [Model]
+    getModelTraits(activityId: ID!, traits: [TraitInput!]): [Model]
     getModelProfileImage(activityId: ID!, profileImageKey: String!, profileImageValue: String!): [Model]
     getModelInterests(activityId: ID!, interests: [String!]): [Model]
     getModelPerks(activityId: ID!, perkNames: [String!]): [Model]
@@ -479,8 +490,8 @@ module.exports = buildSchema(`
     deleteUserPerks(activityId: ID!, userId: ID!, perkNames: [String!]): User
     deleteUserTags(activityId: ID!, userId: ID!, tags: [String!]): User
     deleteUserSearches(activityId: ID!, userId: ID!, searchQueries: [String!]): User
-    deleteUserBilling(activityId: ID!, userId: ID!, billing: Billing!): User
-    deleteUserComplaint(activityId: ID!, userId: ID!, complaint: Complaint!): User
+    deleteUserBilling(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    deleteUserComplaint(activityId: ID!, userId: ID!, userInput: UserInput!): User
     deleteUserModel(activityId: ID!, userId: ID!, modelId: ID!): User
     deleteUserLikedContent(activityId: ID!, userId: ID!, likedContentId: ID!): User
     deleteUserComment(activityId: ID!, userId: ID!, commentId: ID!): User

@@ -29,7 +29,15 @@ module.exports = {
     }
     try {
       const users = await User.find({})
-      .populate('messages');
+      .populate('models')
+      .populate('viewedShows.ref')
+      .populate('viewedcontent.ref')
+      .populate('likedcontent.ref')
+      .populate('comments')
+      // .populate('messages.sender.ref')
+      // .populate('messages.recdeiver.ref')
+      .populate('messages')
+      .populate('transactions');
       return users.map(user => {
         return transformUser(user,);
       });
@@ -83,7 +91,8 @@ module.exports = {
     try {
 
       const regex = "/^" + args.regex + "/";
-      const users = await User.find({'address.street': {$regex: regex, $options: 'i'}});
+      console.log("regex", regex);
+      const users = await User.find({'name': {$regex: regex, $options: 'i'}});
 
       return users.map(user => {
         return transformUser(user);
@@ -842,7 +851,14 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-        const billing = args.billing;
+        const billing = {
+          date: args.userInput.billingDate,
+          type: args.userInput.billingType,
+          description: args.userInput.billingDescription,
+          amount: args.userInput.billingAmount,
+          paid: args.userInput.billingPaid,
+          payment: args.userInput.billingPayment
+        };
         const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { billing: billing }},{new: true});
 
         return {
@@ -861,7 +877,12 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-        const complaint = args.complaint;
+        const complaint = {
+          date: args.userInput.complaintDate,
+          type: args.userInput.complaintType,
+          description: args.userInput.complaintDescription,
+          complainant: args.userInput.complaintComplainant
+        };
         const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { complaints: complaint }},{new: true});
 
         return {
@@ -1082,7 +1103,7 @@ module.exports = {
           town: result.address.town,
           city: result.address.city,
           country: result.address.country,
-          postalCode: result.adress.postalCode
+          postalCode: result.address.postalCode
         },
         bio: result.bio
       };
