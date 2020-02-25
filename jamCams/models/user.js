@@ -37,18 +37,9 @@ const userSchema = new Schema({
   tags: [{type: String}],
   loggedin: {type: Boolean},
   activity:[{type: String}],
-  viewedShows: [{
-    date: {type: Date},
-    ref: {type: Schema.Types.ObjectId,ref: 'Show'}
-  }],
-  viewedContent: [{
-    date: {type: Date},
-    ref: {type: Schema.Types.ObjectId,ref: 'Content'}
-  }],
-  likedContent: [{
-    date: {type: Date},
-    ref: {type: Schema.Types.ObjectId,ref: 'Content'}
-  }],
+  viewedShows: [{type: Schema.Types.ObjectId,ref: 'Show'}],
+  viewedContent: [{type: Schema.Types.ObjectId,ref: 'Content'}],
+  likedContent: [{type: Schema.Types.ObjectId,ref: 'Content'}],
   searches: [{
     date: {type: Date},
     query: {type: String}

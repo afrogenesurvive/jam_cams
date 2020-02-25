@@ -336,7 +336,7 @@ module.exports = {
     }
     try {
 
-      const model = await Model.findById({_id: activityId});
+      const model = await Model.findById({_id: args.activityId});
 
       return {
         ...model._doc,
@@ -361,8 +361,8 @@ module.exports = {
         username: args.modelInput.username,
         dob: args.modelInput.dob,
         contact: {
-          email: args.modelInput.email,
-          phone: args.modelInput.phone
+          email: args.modelInput.contactEmail,
+          phone: args.modelInput.contactPhone
         },
         address: {
           number: args.modelInput.addressNumber,

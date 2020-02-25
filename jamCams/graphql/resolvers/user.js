@@ -91,7 +91,6 @@ module.exports = {
     try {
 
       const regex = "/^" + args.regex + "/";
-      console.log("regex", regex);
       const users = await User.find({'name': {$regex: regex, $options: 'i'}});
 
       return users.map(user => {
@@ -350,7 +349,7 @@ module.exports = {
     }
     try {
 
-      const user = await User.findById({_id: activityId});
+      const user = await User.findById({_id: args.activityId});
 
       return {
         ...user._doc,
@@ -393,6 +392,7 @@ module.exports = {
           ...user._doc,
           _id: user.id,
           name: user.name,
+          role: user.role,
           username: user.username,
           dob: user.dob,
           contact: {
@@ -405,7 +405,7 @@ module.exports = {
             town: user.address.town,
             city: user.address.city,
             country: user.address.country,
-            postalCode: user.adress.postalCode
+            postalCode: user.address.postalCode
           },
           bio: user.bio,
         };
@@ -441,7 +441,7 @@ module.exports = {
           town: user.address.town,
           city: user.address.city,
           country: user.address.country,
-          postalCode: user.adress.postalCode
+          postalCode: user.address.postalCode
         },
         bio: user.bio,
       };
@@ -513,7 +513,7 @@ module.exports = {
       const prevAmountUser = await User.findById({_id: args.userId});
       const prevAmount = prevAmountUser.tokens;
       const amountToAdd = args.userInput.tokens;
-      const newAmount = prevAmount + newAmount;
+      const newAmount = prevAmount + amountToAdd;
       const user = await User.findOneAndUpdate({_id:args.userId},{ tokens: newAmount },{new: true, useFindAndModify: false})
         return {
           ...user._doc,
@@ -571,16 +571,15 @@ module.exports = {
       throw err;
     }
   },
-  editUserBilling: async (args, req) => {
+  editUserBillingPaid: async (args, req) => {
 
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
 
-      const dbQueryPrevKey = `billing.${args.prevKey}`;
-      const dbQueryNewKey = `billing.${args.newKey}`;
-      const user = await User.findOneAndUpdate({_id:args.userId, dbQueryPrevKey: args.prevValue},{$set: { dbQueryNewKey: args.newValue }},{new: true})
+      const user = await User.findOneAndUpdate({'billing.date': args.date, 'billing.amount': args.amount},{$set: {paid: true}},{new: true})
+      // const user = await User.findOneAndUpdate({'billing.date': args.date, 'billing.amount': args.amount},{$set: { dbQueryNewKey: args.newValue }},{new: true})
         return {
           ...user._doc,
           _id: user.id,
@@ -597,11 +596,12 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
+      const complainant = await Model.findById({_id: args.complainantId})
       const complaint = {
         date: args.userInput.complaintDate,
         type: args.userInput.complaintType,
         description: args.userInput.complaintDescription,
-        complainant: args.userInput.complaintComplainant,
+        complainant: complainant,
       };
       const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { complaints: complaint }},{new: true, useFindAndModify: false})
         return {
@@ -622,7 +622,8 @@ module.exports = {
     try {
 
       const model = await Model.findById({_id: args.modelId})
-      const user = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {model: model}},{new: true});
+      const user = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {models: model}},{new: true})
+      .populate('models');
 
       return {
         ...user._doc,
@@ -641,12 +642,8 @@ module.exports = {
     }
     try {
 
-      const show = await Show.findById({_id: args.showId})
-      const viewedShow =  {
-        date: args.date,
-        ref: show
-      };
-      const user = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {viewedShows: viewedShow}},{new: true});
+      const show = await Show.findById({_id: args.showId});
+      const user = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {viewedShows: show}},{new: true});
 
       return {
         ...user._doc,
@@ -665,12 +662,9 @@ module.exports = {
     }
     try {
 
-      const content = await Content.findById({_id: args.contentId})
-      const viewedContent =  {
-        date: args.date,
-        ref: content
-      };
-      const user = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {viewedContent: viewedContent}},{new: true});
+      const content = await Content.findById({_id: args.contentId});
+      const user = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {viewedContent: content}},{new: true})
+      .populate('viewedContent.ref');
 
       return {
         ...user._doc,
@@ -690,11 +684,7 @@ module.exports = {
     try {
 
       const content = await Content.findById({_id: args.contentId})
-      const likedContent =  {
-        date: args.date,
-        ref: content
-      };
-      const users = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {likedContent: likedContent}},{new: true});
+      const user = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {likedContent: content}},{new: true});
 
       return {
         ...user._doc,
@@ -713,8 +703,9 @@ module.exports = {
     }
     try {
 
-      const comment = await Model.findById({_id: args.commentId})
-      const users = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {comments: comment}},{new: true});
+      const comment = await Comment.findById({_id: args.commentId})
+      const user = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {comments: comment}},{new: true})
+      .populate('comments');
 
       return {
         ...user._doc,
@@ -733,8 +724,9 @@ module.exports = {
     }
     try {
 
-      const message = await Model.findById({_id: args.messageId})
-      const users = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {messages: message}},{new: true});
+      const message = await Message.findById({_id: args.messageId})
+      const user = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {messages: message}},{new: true})
+      .populate('messages');
 
       return {
         ...user._doc,
@@ -753,8 +745,8 @@ module.exports = {
     }
     try {
 
-      const transaction = await Model.findById({_id: args.transactionId})
-      const users = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {transactions: transaction}},{new: true});
+      const transaction = await Transaction.findById({_id: args.transactionId})
+      const user = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {transactions: transaction}},{new: true});
 
       return {
         ...user._doc,
@@ -1013,7 +1005,7 @@ module.exports = {
             town: user.address.town,
             city: user.address.city,
             country: user.address.country,
-            postalCode: user.adress.postalCode
+            postalCode: user.address.postalCode
           },
           bio: user.bio,
         };

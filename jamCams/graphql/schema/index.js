@@ -19,9 +19,9 @@ module.exports = buildSchema(`
     tokens: Float
     tags: [String]
     loggedin: Boolean
-    viewedShows: [ViewedShow]
-    viewedContent: [ViewedContent]
-    likedContent: [LikedContent]
+    viewedShows: [Show]
+    viewedContent: [Content]
+    likedContent: [Content]
     searches:[Search]
     comments: [Comment]
     messages: [Message]
@@ -62,18 +62,7 @@ module.exports = buildSchema(`
     name: String
     description: String
   }
-  type ViewedShow {
-    date: String
-    ref: Show
-  }
-  type ViewedContent {
-    date: String
-    ref: Content
-  }
-  type LikedContent {
-    date: String
-    ref: Content
-  }
+  
   type Search {
     date: String
     query: String
@@ -381,7 +370,7 @@ module.exports = buildSchema(`
 
     users(activityId: ID!): [User]
     getUserId(activityId: ID!, userId: ID!): User
-    getUserNameRegex(activityId: ID!, regex: String!): User
+    getUserNameRegex(activityId: ID!, regex: String!): User!
     getUserField(activityId: ID!, field: String!, query: String!): [User]
     getUserInterests(activityId: ID!, interests: [String!]): [User]
     getUserPerks(activityId: ID!, perkNames: [String!]): [User]
@@ -475,12 +464,12 @@ module.exports = buildSchema(`
     addUserTags(activityId: ID!, userId: ID!, tags: [String!]): User
     addUserSearch(activityId: ID!, userId: ID!, userInput: UserInput!): User
     addUserBilling(activityId: ID!, userId: ID!, userInput: UserInput!): User
-    editUserBilling(activityId: ID!, userId: ID!, prevKey: String!, prevValue: String!, newKey: String!, newValue: String!): User
-    addUserComplaint(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    editUserBillingPaid(activityId: ID!, userId: ID!, date: String!, amount: Float!): User
+    addUserComplaint(activityId: ID!, userId: ID!, complainantId: ID!, userInput: UserInput!): User
     addUserModel(activityId: ID!, userId: ID!, modelId: ID!): User
     addUserViewedShow(activityId: ID!, userId: ID!, showId: ID!, date: String!): User
     addUserViewedContent(activityId: ID!, userId: ID!, contentId: ID!, date: String!): User
-    addUserLikedContent(activityId: ID!, userId: ID!, contentId: ID!): User
+    addUserLikedContent(activityId: ID!, userId: ID!, contentId: ID!, date: String!): User
     addUserComment(activityId: ID!, userId: ID!, commentId: ID!): User
     addUserMessage(activityId: ID!, userId: ID!, messageId: ID!): User
     addUserTransaction(activityId: ID!, userId: ID!, transactionId: ID!): User
