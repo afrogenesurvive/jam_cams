@@ -62,7 +62,7 @@ module.exports = buildSchema(`
     name: String
     description: String
   }
-  
+
   type Search {
     date: String
     query: String
@@ -412,6 +412,7 @@ module.exports = buildSchema(`
     content(activityId: ID!): [Content]
     getContentId(activityId: ID!, contentId: ID!): Content
     getContentField(activityId: ID!, field: String!, query: String!): [Content]
+    getContentCreator(activityId: ID!, creatorId: ID!): [Content]
     getContentModel(activityId: ID!, modelId: ID!): [Content]
     getContentLikeCount(activityId: ID!, likeCount: Int!): [Content]
     getContentComment(activityId: ID!, commentId: ID!): [Content]
@@ -518,15 +519,18 @@ module.exports = buildSchema(`
     deleteModelFan(activityId: ID!, modelId: ID!, fanId: ID!): Model
     deleteModelFriend(activityId: ID!, userId: ID!, friendId: ID!): Model
 
-    createContent(creatorId: ID!, contentInput: ContentInput!): Content
-    updateContent(contentId: ID!, contentInput: ContentInput!): Content
-    updateContentField(modelId: ID!, field: String!, query: String!): Content
-    addContentModel(contentId: ID!, modelId: ID!): Content
-    addContentView(contentId: ID!, views: Int): Content
-    addContentLikes(contentId: ID!, likes: Int): Content
-    addContentComments(contentId: ID!, commentId: ID!): Content
-    addContentTags(contentId: ID!, tag: String): Content
-    deleteContent(contentId: ID!): Content
+    createContent(activityId: ID!, creatorId: ID!, contentInput: ContentInput!): Content
+    updateContent(activityId: ID!, contentId: ID!, contentInput: ContentInput!): Content
+    updateContentField(activityId: ID!, modelId: ID!, field: String!, query: String!): Content
+    addContentModel(activityId: ID!, contentId: ID!, modelId: ID!): Content
+    addContentLikes(activityId: ID!, contentId: ID!, userId: ID!): Content
+    addContentViews(activityId: ID!, contentId: ID!): Content
+    addContentComments(activityId: ID!, contentId: ID!, commentId: ID!): Content
+    addContentTags(activityId: ID!, contentId: ID!, tag: String): Content
+
+    deleteContent(activityId: ID!, contentId: ID!): Content
+    deleteContentComment(activityId: ID!, contentId: ID!, commentId: ID!): Content
+    deleteContentTags(activityId: ID!, contentId: ID!, tags: [String!]): Content
 
     createShow(modelId: ID!, showInput: ShowInput!): Show
     updateShow(showId: ID!, showInput: ShowInput!): Show

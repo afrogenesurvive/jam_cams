@@ -6,9 +6,7 @@ import Tab from 'react-bootstrap/Tab';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-import UserAttendanceList from './UserList/UserAttendanceList';
-import UserLeaveList from './UserList/UserLeaveList';
-import UserAttachmentList from './UserList/UserAttachmentList';
+// import UserAttendanceList from './UserList/UserAttendanceList';
 
 import './thisUserProfile.css';
 
@@ -16,15 +14,8 @@ const thisUserProfile = (props) => {
   const {...user} = props.user;
   const authUserId = props.authUserId;
   const userAddress = user.address;
-  const userAttendance = user.attendance;
-  const userLeave = user.leave;
-  const userAttachment = user.attachments;
+
   const userDob = new Date(user.dob.substr(0,10)*1000).toISOString().slice(0,10);
-  const userEmploymentDate = new Date(user.employmentDate.substr(0,10)*1000).toISOString().slice(0,10);
-  let userTerminationDate = user.terminationDate;
-  if (user.terminationDate !== null) {
-    userTerminationDate = new Date(user.terminationDate.substr(0,10)*1000).toISOString().slice(0,10);
-  }
 
   return (
 
@@ -82,52 +73,10 @@ const thisUserProfile = (props) => {
         </Col>
       </Row>
 
-      <Row className="detailCardRow">
-        <Col className="detailCardCol">
-        <Button variant="warning" onClick={props.onCreatePdf.bind(this, user)}>
-          Create Pdf
-        </Button>
-        </Col>
-      </Row>
-
-
     </Card.Body>
     </Card>
     </Tab>
-    <Tab eventKey="Attendance" title="Attendance">
-    <Card.Text>
-      Attendance:
-    </Card.Text>
-    <UserAttendanceList
-        userAttendance={userAttendance}
-        authUserId={authUserId}
-        canDelete={props.canDelete}
-        onDelete={props.attendanceDelete}
-      />
-    </Tab>
-    <Tab eventKey="Leave" title="Leave">
-    <Card.Text>
-      Leave:
-    </Card.Text>
-    <UserLeaveList
-        userLeave={userLeave}
-        authUserId={authUserId}
-        canDelete={props.canDelete}
-        onDelete={props.leaveDelete}
-      />
-    </Tab>
-    <Tab eventKey="Attachments" title="Attachments">
-    <Card.Text>
-      Attachments:
-    </Card.Text>
-    <UserAttachmentList
-        userAttachment={userAttachment}
-        authUserId={authUserId}
-        canDelete={props.canDelete}
-        onDelete={props.attachmentDelete}
-        onViewAttachment={props.onViewAttachment}
-      />
-    </Tab>
+
   </Tabs>
   );
 }

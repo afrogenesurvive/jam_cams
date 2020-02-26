@@ -110,14 +110,111 @@ module.exports = {
       throw err;
     }
   },
-  deleteContentTag: async (args, req) => {
+  addContentModel: async (args, req) => {
 
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
-        const tag = args.contentInput.tag;
-        const model = await Content.findOneAndUpdate({_id:args.contentId},{$pull: { tags: tag }},{new: true});
+      const model = await Model.findById({_id: args.modelId});
+      const content = await Content.findOneAndUpdate({_id:args.contentId},{$addToSet: { models: model }},{new: true, useFindAndModify: false})
+        return {
+          ...content._doc,
+          _id: content.id,
+          date: content.date,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addContentComment: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const comment = await Comment.findById({_id: args.commentId});
+      const content = await Content.findOneAndUpdate({_id:args.contentId},{$addToSet: { comments: comment }},{new: true, useFindAndModify: false})
+        return {
+          ...content._doc,
+          _id: content.id,
+          date: content.date,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addContentLikes: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const user = await User.findById({_id: args.userId});
+      const like = {
+        date: new Date(),
+        user: user
+      };
+      const likeCountContent = await Content.findById({_id: args.contentId});
+      const likeCount = likeCountContent.likeCount;
+      const newCount = likeCount+1;
+      const content = await Content.findOneAndUpdate({_id:args.contentId},{$addToSet: { : likes: like }, likeCount: newCount },{new: true, useFindAndModify: false})
+        return {
+          ...content._doc,
+          _id: content.id,
+          date: content.date,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addContentViews: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const viewCountContent = await Content.findById({_id: args.contentId});
+      const viewCount = viewCountContent.viewCount;
+      const newCount = viewCount+1;
+      const content = await Content.findOneAndUpdate({_id:args.contentId},{ viewCount: newCount},{new: true, useFindAndModify: false})
+        return {
+          ...content._doc,
+          _id: content.id,
+          date: content.date,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteContentTags: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const tags = args.tags;
+        const content = await Content.findOneAndUpdate({_id:args.contentId},{$pull: { tags: tags }},{new: true});
+        // const user = await Content.findOneAndUpdate({_id:args.userId},{$pull: { interest: { date: new Date(attendanceDate) }}},{new: true})
+
+        return {
+          ...content._doc,
+          _id: content.id,
+          date: content.date,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteContentComment: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const comment = await Comment.findById({_id: args.commentId});
+        const content = await Content.findOneAndUpdate({_id:args.contentId},{$pull: { tags: tags }},{new: true});
         // const user = await Content.findOneAndUpdate({_id:args.userId},{$pull: { interest: { date: new Date(attendanceDate) }}},{new: true})
 
         return {
