@@ -36,6 +36,116 @@ module.exports = {
       throw err;
     }
   },
+  getShowId: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const show = await Show.findById(args.showId);
+
+      return {
+        ...show._doc,
+        _id: show.id,
+        type: show.type,
+        title: show.title
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  getShowField: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const resolverField = args.field;
+      const resolverQuery = args.query;
+      const query = {[resolverField]:resolverQuery};
+      const shows = await Show.find(query)
+
+      return shows.map(show => {
+        return transformShow(show);
+
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getShowCreator: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const creator = await Model.findById({_id: args.creatorId})
+      const shows = await Show.find({creator: creator})
+
+      return shows.map(show => {
+        return transformShow(show);
+
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getShowModel: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const model = await Model.findById({_id: args.modelId})
+      const shows = await Show.find({models: model})
+
+      return shows.map(show => {
+        return transformShow(show);
+
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getShowViewer: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const viewer = await User.findById({_id: args.viewerId})
+      const shows = await Show.find({viewers: viewer})
+
+      return shows.map(show => {
+        return transformShow(show);
+
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getContentTags: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const tags = args.tags;
+      const contents = await Content.find({'tags': {$all: tags}});
+
+      return contents.map(content => {
+        return transformContent(content);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
   updateShow: async (args, req) => {
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
@@ -88,14 +198,14 @@ module.exports = {
       throw err;
     }
   },
-  addShowTag: async (args, req) => {
+  addShowTags: async (args, req) => {
 
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
-      const tag = args.showInput.tag;
-      const show = await Show.findOneAndUpdate({_id:args.showId},{$addToSet: { tags: tag }},{new: true, useFindAndModify: false})
+      const tags = args.tags;
+      const show = await Show.findOneAndUpdate({_id:args.showId},{$addToSet: { tags: {$each: tags} }},{new: true, useFindAndModify: false})
         return {
           ...show._doc,
           _id: show.id,
@@ -106,14 +216,146 @@ module.exports = {
       throw err;
     }
   },
-  deleteShowTag: async (args, req) => {
+  addShowModel: async (args, req) => {
 
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
-        const tag = args.showInput.tag;
-        const show = await Show.findOneAndUpdate({_id:args.showId},{$pull: { tags: tag }},{new: true});
+      const model = await Model.findById({_id: args.modelId});
+      const show = await Show.findOneAndUpdate({_id:args.showId},{$addToSet: { models: model }},{new: true, useFindAndModify: false})
+        return {
+          ...show._doc,
+          _id: show.id,
+          type: show.type,
+          title: show.title
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addShowContent: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const content = await Content.findById({_id: args.contentId});
+      const show = await Show.findOneAndUpdate({_id:args.showId},{$addToSet: { content: content }},{new: true, useFindAndModify: false})
+        return {
+          ...show._doc,
+          _id: show.id,
+          type: show.type,
+          title: show.title
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addShowViewer: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const viewer = await User.findById({_id: args.viewerId});
+      const show = await Show.findOneAndUpdate({_id:args.showId},{$addToSet: { viewers: viewer }},{new: true, useFindAndModify: false})
+        return {
+          ...show._doc,
+          _id: show.id,
+          type: show.type,
+          title: show.title
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addShowChat: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const chat = await Chat.findById({_id: args.chatId});
+      const show = await Show.findOneAndUpdate({_id:args.showId},{$addToSet: { chats: chat }},{new: true, useFindAndModify: false})
+        return {
+          ...show._doc,
+          _id: show.id,
+          type: show.type,
+          title: show.title
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteShowTags: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const tags = args.tags;
+        const show = await Show.findOneAndUpdate({_id:args.showId},{$pull: { tags: tags }},{new: true});
+        // const user = await Show.findOneAndUpdate({_id:args.userId},{$pull: { interest: { date: new Date(attendanceDate) }}},{new: true})
+
+        return {
+          ...show._doc,
+          _id: show.id,
+          type: show.type,
+          title: show.title
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteShowViewer: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const viewer = await User.findById({_id: args.viewerId});
+        const show = await Show.findOneAndUpdate({_id:args.showId},{$pull: { viewers: viewer }},{new: true});
+        // const user = await Show.findOneAndUpdate({_id:args.userId},{$pull: { interest: { date: new Date(attendanceDate) }}},{new: true})
+
+        return {
+          ...show._doc,
+          _id: show.id,
+          type: show.type,
+          title: show.title
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteShowModel: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const model = await Model.findById({_id: args.modelId});
+        const show = await Show.findOneAndUpdate({_id:args.showId},{$pull: { models: model }},{new: true});
+        // const user = await Show.findOneAndUpdate({_id:args.userId},{$pull: { interest: { date: new Date(attendanceDate) }}},{new: true})
+
+        return {
+          ...show._doc,
+          _id: show.id,
+          type: show.type,
+          title: show.title
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteShowContent: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const content = await Content.findById({_id: args.contentId});
+        const show = await Show.findOneAndUpdate({_id:args.showId},{$pull: { contents: content }},{new: true});
         // const user = await Show.findOneAndUpdate({_id:args.userId},{$pull: { interest: { date: new Date(attendanceDate) }}},{new: true})
 
         return {

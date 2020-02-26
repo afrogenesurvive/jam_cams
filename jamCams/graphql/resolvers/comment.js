@@ -45,7 +45,7 @@ module.exports = {
     try {
 
       const parent = await Comment.findById({_id: args.parentId});
-      const comment = await Comment.findOneAndUpdate({_id: args.commentId},{parent: parent},{new: true});
+      const comment = await Comment.findOneAndUpdate({_id: args.commentId},{parent: parent},{new: true, useFindAndModify: false});
         return {
           ...comment._doc,
           _id: comment.id,
@@ -64,7 +64,7 @@ module.exports = {
     try {
 
       const child = await Comment.findById({_id: args.childId});
-      const comment = await Comment.findOneAndUpdate({_id: args.commentId},{$addToSet: {children: child}},{new: true});
+      const comment = await Comment.findOneAndUpdate({_id: args.commentId},{$addToSet: {children: child}},{new: true, useFindAndModify: false});
         return {
           ...comment._doc,
           _id: comment.id,
@@ -85,7 +85,7 @@ module.exports = {
       const preComment = await Comment.findById({_id: args.commentId});
       const children = preComment.children.filter(x=> x._id);
       const parent = preComment.parent;
-      const updateParent = await Comment.findOneAndUpdate({_id: parent._id},{$pull: { children: preComment }},{new: true});
+      const updateParent = await Comment.findOneAndUpdate({_id: parent._id},{$pull: { children: preComment }},{new: true, useFindAndModify: false});
 
       // send list of child ids to pocket vars. delete all on all comments load OR
       // send to front end and delete in frontend bg
@@ -126,7 +126,7 @@ module.exports = {
         children: [],
       });
 
-      updateParent = await Comment.findOneAndUpdate({_id: parentId},{$addToSet: {children: comment}},{new: true})
+      updateParent = await Comment.findOneAndUpdate({_id: parentId},{$addToSet: {children: comment}},{new: true, useFindAndModify: false})
 
       const result = await comment.save();
 

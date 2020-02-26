@@ -373,7 +373,7 @@ module.exports = {
           postalCode: args.modelInput.addressPostalCode,
         },
         bio: args.modelInput.bio
-        },{new: true});
+        },{new: true, useFindAndModify: false});
 
         return {
           ...model._doc,
@@ -394,7 +394,7 @@ module.exports = {
       const resolverField = args.field;
       const resolverQuery = args.query;
       const query = {[resolverField]:resolverQuery};
-      const model = await Model.findOneAndUpdate({_id:args.modelId},query,{new: true})
+      const model = await Model.findOneAndUpdate({_id:args.modelId},query,{new: true, useFindAndModify: false})
 
       return {
         ...model._doc,
@@ -565,7 +565,7 @@ module.exports = {
     try {
 
       const fan = await User.findById({_id: args.fanId})
-      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {fans: fan}},{new: true});
+      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {fans: fan}},{new: true, useFindAndModify: false});
 
       return {
         ...model._doc,
@@ -585,7 +585,7 @@ module.exports = {
     try {
 
       const friend = await Model.findById({_id: args.friendId})
-      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {friends: friend}},{new: true});
+      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {friends: friend}},{new: true, useFindAndModify: false});
 
       return {
         ...model._doc,
@@ -605,7 +605,7 @@ module.exports = {
     try {
 
       const show = await Model.findById({_id: args.showId})
-      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {shows: show}},{new: true});
+      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {shows: show}},{new: true, useFindAndModify: false});
 
       return {
         ...model._doc,
@@ -625,7 +625,7 @@ module.exports = {
     try {
 
       const comment = await Model.findById({_id: args.commentId})
-      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {comments: comment}},{new: true});
+      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {comments: comment}},{new: true, useFindAndModify: false});
 
       return {
         ...model._doc,
@@ -645,7 +645,7 @@ module.exports = {
     try {
 
       const content = await Model.findById({_id: args.contentId})
-      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {content: content}},{new: true});
+      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {content: content}},{new: true, useFindAndModify: false});
 
       return {
         ...model._doc,
@@ -665,7 +665,7 @@ module.exports = {
     try {
 
       const message = await Model.findById({_id: args.messageId})
-      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {messages: message}},{new: true});
+      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {messages: message}},{new: true, useFindAndModify: false});
 
       return {
         ...model._doc,
@@ -685,7 +685,7 @@ module.exports = {
     try {
 
       const transaction = await Model.findById({_id: args.transactionId})
-      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {transactions: transaction}},{new: true});
+      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {transactions: transaction}},{new: true, useFindAndModify: false});
 
       return {
         ...model._doc,
@@ -704,8 +704,8 @@ module.exports = {
     }
     try {
         const interest = args.modelInput.interest;
-        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { interests: interest }},{new: true});
-        // const user = await Model.findOneAndUpdate({_id:args.userId},{$pull: { interest: { date: new Date(attendanceDate) }}},{new: true})
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { interests: interest }},{new: true, useFindAndModify: false});
+        // const user = await Model.findOneAndUpdate({_id:args.userId},{$pull: { interest: { date: new Date(attendanceDate) }}},{new: true, useFindAndModify: false})
 
         return {
           ...model._doc,
@@ -724,7 +724,7 @@ module.exports = {
     }
     try {
         const traits = args.traits;
-        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { traits: traits }},{new: true});
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { traits: traits }},{new: true, useFindAndModify: false});
 
         return {
           ...model._doc,
@@ -743,7 +743,7 @@ module.exports = {
     }
     try {
         const interests = args.interests;
-        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { interests: interests }},{new: true});
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { interests: interests }},{new: true, useFindAndModify: false});
 
         return {
           ...model._doc,
@@ -762,7 +762,7 @@ module.exports = {
     }
     try {
         const socialMedia = args.socialMedia;
-        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { socialMedia: socialMedia }},{new: true});
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { socialMedia: socialMedia }},{new: true, useFindAndModify: false});
 
         return {
           ...model._doc,
@@ -781,7 +781,7 @@ module.exports = {
     }
     try {
         const profileImageName = args.profileImageName;
-        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { 'profileImages.name': profileImageName }},{new: true});
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { 'profileImages.name': profileImageName }},{new: true, useFindAndModify: false});
 
         return {
           ...model._doc,
@@ -800,7 +800,7 @@ module.exports = {
     }
     try {
         const perkNames = args.perkNames;
-        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { 'perks.name': perkNames }},{new: true});
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { 'perks.name': perkNames }},{new: true, useFindAndModify: false});
 
         return {
           ...model._doc,
@@ -819,7 +819,7 @@ module.exports = {
     }
     try {
         const tags = args.tags;
-        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { 'tags': tags }},{new: true});
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { 'tags': tags }},{new: true, useFindAndModify: false});
 
         return {
           ...model._doc,
@@ -838,7 +838,7 @@ module.exports = {
     }
     try {
         const categories = args.categories;
-        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { 'categories': categories }},{new: true});
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { 'categories': categories }},{new: true, useFindAndModify: false});
 
         return {
           ...model._doc,
@@ -857,7 +857,7 @@ module.exports = {
     }
     try {
         const fan = await User.findById({_id: args.fanId});
-        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { 'fans': fan }},{new: true});
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { 'fans': fan }},{new: true, useFindAndModify: false});
 
         return {
           ...model._doc,
@@ -876,7 +876,7 @@ module.exports = {
     }
     try {
         const friend = await Model.findById({_id: args.friendId});
-        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { 'fans': fan }},{new: true});
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { 'fans': fan }},{new: true, useFindAndModify: false});
 
         return {
           ...model._doc,

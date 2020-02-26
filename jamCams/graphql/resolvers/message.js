@@ -48,7 +48,7 @@ module.exports = {
     }
     try {
 
-      const message = await Message.findOneAndUpdate({_id: args.messageId},{read: true},{new: true});
+      const message = await Message.findOneAndUpdate({_id: args.messageId},{read: true},{new: true, useFindAndModify: false});
         return {
           ...message._doc,
           _id: message.id,
@@ -108,8 +108,8 @@ module.exports = {
 
       const result = await message.save();
 
-      const updateSender = await mongoose.model(senderRole).findOneAndUpdate({_id: args.senderId},{$addToSet: {messages: message}},{new: true});
-      const updateReceiver = await mongoose.model(receiverRole).findOneAndUpdate({_id: args.receiverId},{$addToSet: {messages: message}},{new: true});
+      const updateSender = await mongoose.model(senderRole).findOneAndUpdate({_id: args.senderId},{$addToSet: {messages: message}},{new: true, useFindAndModify: false});
+      const updateReceiver = await mongoose.model(receiverRole).findOneAndUpdate({_id: args.receiverId},{$addToSet: {messages: message}},{new: true, useFindAndModify: false});
 
       return {
         ...result._doc,

@@ -36,6 +36,97 @@ module.exports = {
       throw err;
     }
   },
+  getContentId: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const content = await Content.findById(args.contentId);
+
+        return {
+            ...user._doc,
+            _id: user.id,
+            name: user.name
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  getContentField: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const resolverField = args.field;
+      const resolverQuery = args.query;
+      const query = {[resolverField]:resolverQuery};
+      const contents = await Content.find(query)
+
+      return contents.map(content => {
+        return transformContent(content);
+
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getContentCreator: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const creator = await Model.findById({_id: args.creatorId})
+      const contents = await Content.find({creator: creator})
+
+      return contents.map(content => {
+        return transformContent(content);
+
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getContentModel: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const model = await Model.findById({_id: args.modelId})
+      const contents = await Content.find({models: model})
+
+      return contents.map(content => {
+        return transformContent(content);
+
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getContentTags: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const tags = args.tags;
+      const contents = await Content.find({'tags': {$all: tags}});
+
+      return contents.map(content => {
+        return transformContent(content);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
   updateContent: async (args, req) => {
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
@@ -51,7 +142,7 @@ module.exports = {
           type: args.contentInput.fileType,
           size: args.contentInput.fileSize,
           path: args.contentInput.filePath
-        }},{new: true});
+        }},{new: true, useFindAndModify: false});
 
         return {
           ...content._doc,
@@ -82,7 +173,7 @@ module.exports = {
       const resolverField = args.field;
       const resolverQuery = args.query;
       const query = {[resolverField]:resolverQuery};
-      const model = await Content.findOneAndUpdate({_id:args.contentId},query,{new: true})
+      const model = await Content.findOneAndUpdate({_id:args.contentId},query,{new: true, useFindAndModify: false})
 
       return {
         ...content._doc,
@@ -93,14 +184,14 @@ module.exports = {
       throw err;
     }
   },
-  addContentTag: async (args, req) => {
+  addContentTags: async (args, req) => {
 
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
-      const tag = args.contentInput.tag;
-      const model = await Content.findOneAndUpdate({_id:args.contentId},{$addToSet: { tags: tag }},{new: true, useFindAndModify: false})
+      const tags = args.tags;
+      const content = await Content.findOneAndUpdate({_id:args.contentId},{$addToSet: { tags: {$each: tags} }},{new: true, useFindAndModify: false})
         return {
           ...content._doc,
           _id: content.id,
@@ -158,7 +249,7 @@ module.exports = {
       const likeCountContent = await Content.findById({_id: args.contentId});
       const likeCount = likeCountContent.likeCount;
       const newCount = likeCount+1;
-      const content = await Content.findOneAndUpdate({_id:args.contentId},{$addToSet: { : likes: like }, likeCount: newCount },{new: true, useFindAndModify: false})
+      const content = await Content.findOneAndUpdate({_id:args.contentId},{$addToSet: { likes: like }, likeCount: newCount },{new: true, useFindAndModify: false})
         return {
           ...content._doc,
           _id: content.id,
@@ -195,8 +286,8 @@ module.exports = {
     }
     try {
         const tags = args.tags;
-        const content = await Content.findOneAndUpdate({_id:args.contentId},{$pull: { tags: tags }},{new: true});
-        // const user = await Content.findOneAndUpdate({_id:args.userId},{$pull: { interest: { date: new Date(attendanceDate) }}},{new: true})
+        const content = await Content.findOneAndUpdate({_id:args.contentId},{$pull: { tags: tags }},{new: true, useFindAndModify: false});
+        // const user = await Content.findOneAndUpdate({_id:args.userId},{$pull: { interest: { date: new Date(attendanceDate) }}},{new: true, useFindAndModify: false})
 
         return {
           ...content._doc,
@@ -214,8 +305,8 @@ module.exports = {
     }
     try {
         const comment = await Comment.findById({_id: args.commentId});
-        const content = await Content.findOneAndUpdate({_id:args.contentId},{$pull: { tags: tags }},{new: true});
-        // const user = await Content.findOneAndUpdate({_id:args.userId},{$pull: { interest: { date: new Date(attendanceDate) }}},{new: true})
+        const content = await Content.findOneAndUpdate({_id:args.contentId},{$pull: { tags: tags }},{new: true, useFindAndModify: false});
+        // const user = await Content.findOneAndUpdate({_id:args.userId},{$pull: { interest: { date: new Date(attendanceDate) }}},{new: true, useFindAndModify: false})
 
         return {
           ...content._doc,

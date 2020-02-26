@@ -44,7 +44,7 @@ module.exports = {
     }
     try {
 
-      const chat = await Chat.findOneAndUpdate({_id: args.chatId},{read: true},{new: true});
+      const chat = await Chat.findOneAndUpdate({_id: args.chatId},{read: true},{new: true, useFindAndModify: false});
         return {
           ...chat._doc,
           _id: chat.id,
@@ -105,6 +105,8 @@ module.exports = {
       });
 
       const result = await chat.save();
+
+      const updateShow = await Show.findOneAndUpdate({_id: args.showId},{$addToSet: {chats: chat}},{new: true, useFindAndModify: false})
 
       return {
         ...result._doc,

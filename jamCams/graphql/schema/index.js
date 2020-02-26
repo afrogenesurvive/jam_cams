@@ -416,16 +416,17 @@ module.exports = buildSchema(`
     getContentModel(activityId: ID!, modelId: ID!): [Content]
     getContentLikeCount(activityId: ID!, likeCount: Int!): [Content]
     getContentComment(activityId: ID!, commentId: ID!): [Content]
-    getContentTag(activityId: ID!, tag: String!): [Content]
+    getContentTags(activityId: ID!, tags: [String!]): [Content]
 
     shows(activityId: ID!): [Show]
     getShowId(activityId: ID!, showId: ID!): Show
     getShowField(activityId: ID!, field: String!, query: String!): [Show]
     getShowContent(activityId: ID!, contentId: ID!): [Show]
+    getShowCreator(activityId: ID!, creatorId: ID!): [Show]
     getShowModel(activityId: ID!, modelId: ID!): [Show]
-    getShowViewer(activityId: ID!, userId: ID!): [Show]
+    getShowViewer(activityId: ID!, viewerId: ID!): [Show]
     getShowChat(activityId: ID!, chatId: ID!): [Show]
-    getShowTag(activityId: ID!, tag: String!): [Show]
+    getShowTags(activityId: ID!, tags: [String!]): [Show]
 
     comments(activityId: ID!): [Comment]
     getCommentId(activityId: ID!, commentId: ID!): Comment
@@ -526,20 +527,25 @@ module.exports = buildSchema(`
     addContentLikes(activityId: ID!, contentId: ID!, userId: ID!): Content
     addContentViews(activityId: ID!, contentId: ID!): Content
     addContentComments(activityId: ID!, contentId: ID!, commentId: ID!): Content
-    addContentTags(activityId: ID!, contentId: ID!, tag: String): Content
+    addContentTags(activityId: ID!, contentId: ID!, tags: [String!]): Content
 
     deleteContent(activityId: ID!, contentId: ID!): Content
     deleteContentComment(activityId: ID!, contentId: ID!, commentId: ID!): Content
     deleteContentTags(activityId: ID!, contentId: ID!, tags: [String!]): Content
 
-    createShow(modelId: ID!, showInput: ShowInput!): Show
-    updateShow(showId: ID!, showInput: ShowInput!): Show
-    addShowContent(showId: ID!, contentId: ID!): Show
-    addShowModels(showId: ID!, modelId: ID!): Show
-    addShowViewers(showId: ID!, viewerId: ID!): Show
-    addShowChat(showId: ID!, chatId: ID!): Show
-    addShowTags(showId: ID!, tag: String!): Show
-    deleteShow(showId: ID!): Show
+    createShow(activityId: ID!, modelId: ID!, showInput: ShowInput!): Show
+    updateShow(activityId: ID!, showId: ID!, showInput: ShowInput!): Show
+    addShowContent(activityId: ID!, showId: ID!, contentId: ID!): Show
+    addShowModel(activityId: ID!, showId: ID!, modelId: ID!): Show
+    addShowViewer(activityId: ID!, showId: ID!, viewerId: ID!): Show
+    addShowChat(activityId: ID!, showId: ID!, chatId: ID!): Show
+    addShowTags(activityId: ID!, showId: ID!, tags: [String!]): Show
+
+    deleteShow(activityId: ID!, showId: ID!): Show
+    deleteShowTags(activityId: ID!, showId: ID!, tags: [String!]): Show
+    deleteShowViewer(activityId: ID!, showId: ID!, viewerId: ID!): Show
+    deleteShowModel(activityId: ID!, showId: ID!, modelId: ID!): Show
+    deleteShowContent(activityId: ID!, showId: ID!, contentId: ID!): Show
 
     createRootComment(authorId: ID!, authorRole: String!, contentId: ID, commentInput: CommentInput!): Comment
     createComment(authorId: ID!, authorRole: String!, contentId: ID, parentId: ID, commentInput: CommentInput!): Comment

@@ -84,8 +84,11 @@ module.exports = {
 
       const result = await transaction.save();
 
-      const updateSender = await mongoose.model(senderRole).findOneAndUpdate({_id: args.senderId},{$addToSet: {transactions: transaction}},{new: true});
-      const updateReceiver = await mongoose.model(receiverRole).findOneAndUpdate({_id: args.receiverId},{$addToSet: {transactions: transaction}},{new: true});
+      const newSenderTokens = sender.tokens-args.transactionInput.amount;
+      const newReceiverTokens = receiver.tokens+args.transactionInput.amount;
+
+      const updateSender = await mongoose.model(senderRole).findOneAndUpdate({_id: args.senderId},{$addToSet: {transactions: transaction}, tokens: newSenderTokens},{new: true});
+      const updateReceiver = await mongoose.model(receiverRole).findOneAndUpdate({_id: args.receiverId},{$addToSet: {transactions: transaction}, tokens: newReceiverTokens},{new: true});
 
       return {
         ...result._doc,
