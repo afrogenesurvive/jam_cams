@@ -360,6 +360,7 @@ module.exports = {
       });
 
       const result = await content.save();
+      const updateCreator = await Model.findOneAndUpdate({_id: args.creatorId},{$addToSet:{content: content}},{new: true, useFindAndModify: false})
 
       return {
         ...result._doc,

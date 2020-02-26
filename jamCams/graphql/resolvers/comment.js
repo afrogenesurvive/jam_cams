@@ -170,6 +170,7 @@ module.exports = {
       });
 
       const result = await comment.save();
+      const updateCommenter = await mongoose.model(role).findOneAndUpdate({_id: args.authorId},{$addToSet:{comments: comment}},{new: true, useFindAndModify: false})
 
       return {
         ...result._doc,
