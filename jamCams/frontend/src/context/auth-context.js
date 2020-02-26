@@ -2,7 +2,12 @@ import React from 'react';
 
 export default React.createContext({
     token: null,
+    activityId: null,
+    role: null,
     userId: null,
+    modelId: null,
+    contentId: null,
+    showId: null,
     user: {},
     users:[],
     selectedUser: {},
@@ -18,6 +23,6 @@ export default React.createContext({
     userAlert: null,
     file: null,
     fancyDate: null,
-    login: (token, userId, tokenExpiration) => {},
+    login: (token, activityId, role, tokenExpiration) => {},
     logout: () => {}
 });

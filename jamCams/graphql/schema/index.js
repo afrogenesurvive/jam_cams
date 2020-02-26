@@ -349,13 +349,15 @@ module.exports = buildSchema(`
   }
 
   type UserAuthData {
-    userId: ID!
+    activityId: ID!
+    role: String!
     token: String!
     tokenExpiration: Int!
     error: String
   }
   type ModelAuthData {
-    modelId: ID!
+    activityId: ID!
+    role: String!
     token: String!
     tokenExpiration: Int!
     error: String

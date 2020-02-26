@@ -23,7 +23,7 @@ module.exports = {
     // pocketVariables.token = token;
     // pocketVariables.userId = user.id;
 
-    return { userId: user.id, token: token, tokenExpiration: 4 };
+    return { activityId: user.id, role: "User", token: token, tokenExpiration: 4 };
   },
   userLogout: async ({ args }) => {
 
@@ -51,7 +51,7 @@ module.exports = {
 
     const modelLoggedIn = await Model.findById({_id: model.id},{loggedIn: true});
 
-    return { modelId: model.id, token: token, tokenExpiration: 4 };
+    return { activityId: model.id, role: "Model", token: token, tokenExpiration: 4 };
   },
   modelLogout: async ({ args }) => {
 

@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 
-import AuthPage from './pages/Auth';
-import SignupPage from './pages/Signup';
+import AuthPage from './pages/auth/Auth';
+import SignupPage from './pages/auth/Signup';
 
-import UserProfilePage from './pages/user/UserProfile';
-import ModelProfilePage from './pages/model/ModelProfile';
+import UserProfile from './pages/user/UserProfile';
+import ModelProfile from './pages/model/ModelProfile';
 import UsersPage from './pages/user/Users';
-import ModelsPage from './pages/model/Models';
-import ContentPage from './pages/contentContent';
-import ShowsPage from './pages/show/Shows';
+import ModelsPage from './pages/user/Users';
+import ContentPage from './pages/user/Users';
+import ShowsPage from './pages/user/Users';
+// import ModelsPage from './pages/model/Models';
+// import ContentPage from './pages/content/Content';
+// import ShowsPage from './pages/show/Shows';
 import MainNavigation from './components/Navigation/MainNavigation';
 import AuthContext from './context/auth-context';
 
@@ -18,7 +21,8 @@ import './App.css';
 class App extends Component {
   state = {
     token: null,
-    userId: null,
+    activityId: null,
+    role: null,
     context: this.context,
     sessionCookiePresent: false,
   };
@@ -30,20 +34,29 @@ class App extends Component {
     this.sessionStorageAuth = null;
   }
 
-  login = (token, userId, tokenExpiration) => {
-    this.setState({ token: token, userId: userId });
+  login = (token, activityId, role, tokenExpiration) => {
+    this.setState({
+      token: token,
+      activityId: activityId,
+      role: role });
   };
 
   logout = () => {
     this.setState({
        token: null,
-       userId: null,
+       activityId: null,
+       role: null,
        sessionCookiePresent: null
       });
     sessionStorage.clear();
     this.context = {
       token: null,
+      activityId: null,
+      role: null,
       userId: null,
+      modelId: null,
+      contentId: null,
+      showId: null,
       user: {},
       users:[],
       selectedUser: {},
@@ -71,10 +84,10 @@ class App extends Component {
 
       let seshStore = sessionStorage.getItem('login info');
       this.context.token = seshStore.token;
-      this.context.userId = seshStore.userId;
+      // this.context.userId = seshStore.userId;
       this.setState({
         sessionCookiePresent: true,
-        userId: seshStore.userId,
+
         token: seshStore.token,
         });
     }
@@ -87,7 +100,13 @@ class App extends Component {
           <AuthContext.Provider
             value={{
               token: this.state.token,
-              userId: this.state.userId,
+              activityId: this.state.activityId,
+              role: this.state.role,
+              userId: null,
+              modelId: null,
+              contentId: null,
+              showId: null,
+              userId: null,
               user: {},
               users:[],
               selectedUser: {},
@@ -112,14 +131,29 @@ class App extends Component {
               <Switch>
 
                 { // logged in -> pages
-                this.state.token && <Redirect from="/" to="/profile" exact />}
+                this.state.token &&
+                this.state.role === "User" && <Redirect from="/" to="/userProfile" exact />}
+                {this.state.token &&
+                  this.state.role === "Model" && <Redirect from="/" to="/modelProfile" exact />}
+
                 {this.state.token && (<Route path="/users" component={UsersPage} />)}
                 {this.state.token && (<Route path="/models" component={ModelsPage} />)}
                 {this.state.token && (<Route path="/content" component={ContentPage} />)}
                 {this.state.token && (<Route path="/shows" component={ShowsPage} />)}
-                {this.state.token && (<Route path="/userProfile" component={UserProfile} />)}
-                {this.state.token && (<Route path="/modelProfile" component={ModelProfile} />)}
-                {this.state.token && (<Redirect from="/auth" to="/profile" exact />)}
+
+                {this.state.token &&
+                  this.state.role === "User" && (<Route path="/userProfile" component={UserProfile} />)}
+                {this.state.token &&
+                  this.state.role === "Profile" && (<Route path="/modelProfile" component={ModelProfile} />)}
+
+                {this.state.token &&
+                  this.state.role === "User" && (
+                    <Redirect from="/auth" to="/userprofile" exact />
+                )}
+                {this.state.token &&
+                  this.state.role === "Model" && (
+                    <Redirect from="/auth" to="/modelprofile" exact />
+                )}
 
                 { //if not logged in -> go to login page
                 !this.state.token && (<Route path="/auth" component={AuthPage} />)}

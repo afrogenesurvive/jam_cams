@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-import AlertBox from '../components/AlertBox';
-import CreateUserForm from '../components/Forms/CreateUserForm';
-import LoadingOverlay from '../components/LoadingOverlay';
+import AlertBox from '../../components/AlertBox';
+import CreateUserForm from '../../components/Forms/CreateUserForm';
+import LoadingOverlay from '../../components/LoadingOverlay';
 
 class SignupPage extends Component {
   state = {
