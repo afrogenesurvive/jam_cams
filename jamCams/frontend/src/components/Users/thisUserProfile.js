@@ -35,25 +35,22 @@ const thisUserProfile = (props) => {
             <span className="bold">Name:</span> {user.name}
           </Card.Text>
           <Card.Text>
+            <span className="bold">Username:</span> {user.username}
+          </Card.Text>
+          <Card.Text>
             <span className="bold">D.O.B:</span> {userDob}
           </Card.Text>
           <Card.Text>
-            <span className="bold">Phone:</span> {user.phone}
+            <span className="bold">Phone:</span> {user.contact.phone}
           </Card.Text>
           <Card.Text>
-            <span className="bold">Email:</span> {user.email}
-          </Card.Text>
-          <Card.Text>
-            <span className="bold">Role:</span> {user.role}
+            <span className="bold">Email:</span> {user.contact.email}
           </Card.Text>
         </Col>
 
         <Col className="detailCardCol">
           <Card.Text>
-            <span className="bold">Start Date:</span> {userEmploymentDate}
-          </Card.Text>
-          <Card.Text>
-            <span className="bold">End Date:</span> {userTerminationDate}
+            <span className="bold">Bio:</span> {user.bio}
           </Card.Text>
           <Card.Text>
             <span className="bold">Address:</span>
@@ -65,10 +62,13 @@ const thisUserProfile = (props) => {
             <span className="bold">Town :</span> {userAddress.town}
           </Card.Text>
           <Card.Text>
-            <span className="bold">Parish :</span> {userAddress.parish}
+            <span className="bold">City :</span> {userAddress.city}
           </Card.Text>
           <Card.Text>
-            <span className="bold">Post Office :</span> {userAddress.postOffice}
+            <span className="bold">Country :</span> {userAddress.country}
+          </Card.Text>
+          <Card.Text>
+            <span className="bold">Postal Code :</span> {userAddress.postalCode}
           </Card.Text>
         </Col>
       </Row>

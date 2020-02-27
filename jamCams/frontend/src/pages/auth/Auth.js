@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Button from 'react-bootstrap/Button';
 import { NavLink } from 'react-router-dom';
+import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Tabs from 'react-bootstrap/Tabs';
@@ -13,6 +14,8 @@ import './Auth.css';
 import AuthContext from '../../context/auth-context';
 import AlertBox from '../../components/AlertBox';
 import LoadingOverlay from '../../components/LoadingOverlay';
+import SidebarControl from '../../components/SidebarControl';
+
 
 class AuthPage extends Component {
   state = {
@@ -20,8 +23,10 @@ class AuthPage extends Component {
     userAlert: null,
     overlay: false,
     overlayStatus: "test",
+    activeTab: "choose",
   };
   static contextType = AuthContext;
+
 
   componentDidMount() {
 
@@ -34,6 +39,8 @@ class AuthPage extends Component {
 
   submitHandler = event => {
     event.preventDefault();
+
+    console.log("here");
 
     this.setState({ userAlert: "Signing you in..."})
 
@@ -61,7 +68,7 @@ class AuthPage extends Component {
         `};
     }
 
-    fetch('http://localhost:10000/graphql', {
+    fetch('http://localhost:9009/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -70,10 +77,8 @@ class AuthPage extends Component {
     })
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
-          // this.context.userAlert = 'Failed!';
           throw new Error('Failed!');
         }
-        // this.context.userAlert = 'Failed!';
         return res.json();
       })
       .then(resData => {
@@ -129,73 +134,175 @@ class AuthPage extends Component {
 
   changeLoginMode = (args) => {
     console.log("login mode change", args);
+    this.setState({role: args})
   }
+
+
+  showSidebar = () => {
+      console.log(`
+        showing sidebar...
+        `);
+        this.setState({
+          sidebarShow: true,
+          mCol2Size: 9
+        })
+    }
+
+    hideSidebar = () => {
+      console.log(`
+        hiding sidebar...
+        `);
+        this.setState({
+          sidebarShow: false,
+          mCol2Size: 11
+        })
+    }
+
+  // <Row className="loginTabContainer">
+  // <AlertBox
+  //   authUserId={this.context.userId}
+  //   alert={this.state.userAlert}
+  // />
+  //
+  // {this.state.overlay === true && (
+  //   <LoadingOverlay
+  //     status={this.state.overlayStatus}
+  //   />
+  // )}
+  //
+  //
+  // <Tab.Container id="left-tabs-example"  defaultActiveKey="first">
+  //   <Row>
+  //     <Col sm={3}>
+  //       <Nav variant="pills" className="flex-column">
+  //         <Nav.Item>
+  //           <Nav.Link eventKey="1" onClick={this.changeLoginMode.bind(this, "User")}>
+  //           Users
+  //           </Nav.Link>
+  //         </Nav.Item>
+  //         <Nav.Item>
+  //           <Nav.Link eventKey="2" onClick={this.changeLoginMode.bind(this, "Model")}>
+  //           Models
+  //           </Nav.Link>
+  //         </Nav.Item>
+  //       </Nav>
+  //     </Col>
+  //     <Col sm={9}>
+  //       <Tab.Content>
+  //         <Tab.Pane eventKey="1">
+  //           <Form className="auth-form" onSubmit={this.submitHandler}>
+  //             <Form.Group controlId="formBasicEmail">
+  //               <Form.Label>Email address</Form.Label>
+  //               <Form.Control type="email" placeholder="Enter email"/>
+  //               <Form.Text className="text-muted">
+  //                 User Login
+  //               </Form.Text>
+  //             </Form.Group>
+  //
+  //             <Form.Group controlId="formBasicPassword">
+  //               <Form.Label>Password</Form.Label>
+  //               <Form.Control type="password" placeholder="Password" />
+  //             </Form.Group>
+  //             <Button variant="outline-success" type="submit" className="loginButton" size="lg">
+  //               Login
+  //             </Button>
+  //
+  //             <Button variant="outline-warning" className="loginButton" size="lg">
+  //               <NavLink to="/signup">Signup as User</NavLink>
+  //             </Button>
+  //           </Form>
+  //         </Tab.Pane>
+  //
+  //         <Tab.Pane eventKey="2">
+  //           <Form className="auth-form" onSubmit={this.submitHandler}>
+  //             <Form.Group controlId="formBasicEmail">
+  //               <Form.Label>Email address</Form.Label>
+  //               <Form.Control type="email" placeholder="Enter email"/>
+  //               <Form.Text className="text-muted">
+  //                 Model Login
+  //               </Form.Text>
+  //             </Form.Group>
+  //
+  //             <Form.Group controlId="formBasicPassword">
+  //               <Form.Label>Password</Form.Label>
+  //               <Form.Control type="password" placeholder="Password" />
+  //             </Form.Group>
+  //             <Button variant="outline-success" type="submit" className="loginButton" size="lg">
+  //               Login
+  //             </Button>
+  //
+  //             <Button variant="outline-warning" className="loginButton" size="lg">
+  //               <NavLink to="/signup">Signup as Model</NavLink>
+  //             </Button>
+  //           </Form>
+  //         </Tab.Pane>
+  //
+  //       </Tab.Content>
+  //     </Col>
+  //   </Row>
+  // </Tab.Container>
+  //
+  // </Row>
+
 
   render() {
     return (
-      <Row>
-      <AlertBox
-        authUserId={this.context.userId}
-        alert={this.state.userAlert}
-      />
+      <Container className="loginPageContainer">
+        <Row className="loginPageContainerRow">
+        <Col className="loginPageContainerCol">
+        <Button variant="primary" size="lg" onClick={this.changeLoginMode.bind(this, "User")}>User Login</Button>
+        <Button variant="success" size="lg" onClick={this.changeLoginMode.bind(this, "Model")}>Model Login</Button>
 
-      {this.state.overlay === true && (
-        <LoadingOverlay
-          status={this.state.overlayStatus}
-        />
-      )}
+        {this.state.role === "User" && (
+          <Form className="auth-form" onSubmit={this.submitHandler}>
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Email address</Form.Label>
+              <Form.Control type="email" placeholder="Enter email"/>
+              <Form.Text className="text-muted">
+                User Login
+              </Form.Text>
+            </Form.Group>
 
+            <Form.Group controlId="formBasicPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control type="password" placeholder="Password" />
+            </Form.Group>
+            <Button variant="outline-success" type="submit" className="loginButton" size="lg">
+              Login
+            </Button>
 
-      <Tab.Container id="left-tabs-example" defaultActiveKey="first">
-        <Row>
-          <Col sm={3}>
-            <Nav variant="pills" className="flex-column">
-              <Nav.Item>
-                <Nav.Link eventKey="1">
-                <Button variant="primary" onClick={this.changeLoginMode.bind(this, "User")}>Users</Button>
-                </Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="2">
-                <Button variant="primary" onClick={this.changeLoginMode.bind(this, "Model")}>Users</Button>
-                </Nav.Link>
-              </Nav.Item>
-            </Nav>
-          </Col>
-          <Col sm={9}>
-            <Tab.Content>
-              <Tab.Pane eventKey="1">
-                <Form className="auth-form" onSubmit={this.submitHandler}>
-                  <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" placeholder="Enter email"/>
-                    <Form.Text className="text-muted">
-                      User Login
-                    </Form.Text>
-                  </Form.Group>
+            <Button variant="outline-warning" className="loginButton" size="lg">
+              <NavLink to="/signup">Signup as User</NavLink>
+            </Button>
+          </Form>
+        )}
+        {this.state.role === "Model" && (
+          <Form className="auth-form" onSubmit={this.submitHandler}>
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Email address</Form.Label>
+              <Form.Control type="email" placeholder="Enter email"/>
+              <Form.Text className="text-muted">
+                Model Login
+              </Form.Text>
+            </Form.Group>
 
-                  <Form.Group controlId="formBasicPassword">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" />
-                  </Form.Group>
-                  <Button variant="outline-success" type="submit" className="loginButton" size="lg">
-                    Login
-                  </Button>
+            <Form.Group controlId="formBasicPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control type="password" placeholder="Password" />
+            </Form.Group>
+            <Button variant="outline-success" type="submit" className="loginButton" size="lg">
+              Login
+            </Button>
 
-                  <Button variant="outline-warning" className="loginButton" size="lg">
-                    <NavLink to="/signup">Signup as User</NavLink>
-                  </Button>
-                </Form>
-              </Tab.Pane>
-              <Tab.Pane eventKey="2">
-
-              </Tab.Pane>
-            </Tab.Content>
-          </Col>
+            <Button variant="outline-warning" className="loginButton" size="lg">
+              <NavLink to="/signup">Signup as Model</NavLink>
+            </Button>
+          </Form>
+        )}
+        </Col>
         </Row>
-      </Tab.Container>
+      </Container>
 
-      </Row>
 
 
     );

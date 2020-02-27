@@ -11,30 +11,29 @@ import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import Card from 'react-bootstrap/Card';
 
-import AuthContext from '../context/auth-context';
-import UserList from '../components/Users/UserList/UserList';
-import SearchUserList from '../components/Users/UserList/SearchUserList';
-import UserDetail from '../components/Users/UserDetail';
+import AuthContext from '../../context/auth-context';
+import UserList from '../../components/Users/UserList/UserList';
+import SearchUserList from '../../components/Users/UserList/SearchUserList';
+import UserDetail from '../../components/Users/UserDetail';
 
-import Spinner from '../components/Spinner/Spinner';
+import Spinner from '../../components/Spinner/Spinner';
 import SidebarPage from './Sidebar';
-import SidebarControl from '../components/SidebarControl';
-import AlertBox from '../components/AlertBox';
-import LoadingOverlay from '../components/LoadingOverlay';
-import AttachmentViewer from '../components/AttachmentViewer';
-import PdfCreator from '../components/PdfCreator';
-
-import CreateUserForm from '../components/Forms/CreateUserForm';
-import UpdateUserForm from '../components/Forms/UpdateUserForm';
-import UpdateUserFieldForm from '../components/Forms/UpdateUserFieldForm';
-import UpdateUserAttendanceForm from '../components/Forms/UpdateUserAttendanceForm';
-import UpdateUserAttachmentForm from '../components/Forms/UpdateUserAttachmentForm';
-import UpdateUserLeaveForm from '../components/Forms/UpdateUserLeaveForm';
-import SearchUserForm from '../components/Forms/SearchUserForm';
-import SearchUserIdForm from '../components/Forms/SearchUserIdForm';
-import SearchUserNameForm from '../components/Forms/SearchUserNameForm';
-import SearchUserAttendanceDateForm from '../components/Forms/SearchUserAttendanceDateForm';
-import SearchUserLeaveDateRangeForm from '../components/Forms/SearchUserLeaveDateRangeForm';
+import SidebarControl from '../../components/SidebarControl';
+import AlertBox from '../../components/AlertBox';
+import LoadingOverlay from '../../components/LoadingOverlay';
+import AttachmentViewer from '../../components/AttachmentViewer';
+// 
+// import CreateUserForm from '../components/Forms/CreateUserForm';
+// import UpdateUserForm from '../components/Forms/UpdateUserForm';
+// import UpdateUserFieldForm from '../components/Forms/UpdateUserFieldForm';
+// import UpdateUserAttendanceForm from '../components/Forms/UpdateUserAttendanceForm';
+// import UpdateUserAttachmentForm from '../components/Forms/UpdateUserAttachmentForm';
+// import UpdateUserLeaveForm from '../components/Forms/UpdateUserLeaveForm';
+// import SearchUserForm from '../components/Forms/SearchUserForm';
+// import SearchUserIdForm from '../components/Forms/SearchUserIdForm';
+// import SearchUserNameForm from '../components/Forms/SearchUserNameForm';
+// import SearchUserAttendanceDateForm from '../components/Forms/SearchUserAttendanceDateForm';
+// import SearchUserLeaveDateRangeForm from '../components/Forms/SearchUserLeaveDateRangeForm';
 
 import './Users.css';
 
@@ -1153,39 +1152,6 @@ showDetailHandler = userId => {
       this.setState({showAttachment: false})
   }
 
-  createPdf = (user) => {
-
-      const pdfData = {
-        title: "This pdf is supplied with Staff data...",
-        user: {
-          _id: user._id,
-          email: user.email,
-          password: user.password,
-          name: user.name,
-          dob: user.dob,
-          address:{
-            number: user.address.number,
-            street: user.address.street,
-            town: user.address.town,
-            parish: user.address.parish,
-            postOffice: user.address.postOffice,
-          },
-          phone: user.phone,
-          role: user.role,
-          employmentDate: user.employmentDate,
-          terminationDate: user.terminationDate,
-          attachments: user.attachments,
-          attendance: user.atttendance,
-          leave: user.leave
-        }
-      };
-    this.setState({createPdf: true, pdfData: pdfData})
-  }
-
-  closePdfCreator = () => {
-      this.setState({createPdf: false, pdfData: null})
-  }
-
   userSearchClearlHandler () {
     this.setState({searchUsers: [], userAlert: "clearing user search results"});
   }
@@ -1222,13 +1188,6 @@ showDetailHandler = userId => {
           onCloseAttachmentView={this.closeAttachmentView}
           attachmentFile={this.state.showThisAttachmentFile}
           attachmentType={this.state.showThisAttachmentType}
-        />
-      )}
-      {this.state.creatingDocument === true && (
-        <PdfCreator
-          pdfType={this.state.pdfType}
-          pdfData={this.state.pdfData}
-          onClosePdfCreator={this.closePdfCreator}
         />
       )}
       <AlertBox

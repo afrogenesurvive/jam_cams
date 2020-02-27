@@ -13,3 +13,26 @@
     height: 30vh;
     width: 70vw;
 }
+
+.loginPageContainer {
+  margin: 8vh 1rem 0 1rem;
+  /* height: 95vh; */
+}
+.loginPageContainerRow {
+  margin: 8vh 1rem 0 1rem;
+  /* height: 100%; */
+}
+.loginPageContainerCol {
+  border: 1px black solid;
+  /* height: 90%; */
+}
+
+.root: {
+  margin-top: 10vh;
+  flexGrow: 1;
+}
+.paper: {
+  padding: 2;
+  textAlign: center;
+  color: grey;
+}

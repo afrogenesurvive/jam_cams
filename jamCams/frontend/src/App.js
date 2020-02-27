@@ -6,10 +6,11 @@ import SignupPage from './pages/auth/Signup';
 
 import UserProfile from './pages/user/UserProfile';
 import ModelProfile from './pages/model/ModelProfile';
-import UsersPage from './pages/user/Users';
-import ModelsPage from './pages/user/Users';
-import ContentPage from './pages/user/Users';
-import ShowsPage from './pages/user/Users';
+// import UsersPage from './pages/user/Users';
+// import ModelsPage from './pages/user/Users';
+// import ContentPage from './pages/user/Users';
+// import ShowsPage from './pages/user/Users';
+
 // import ModelsPage from './pages/model/Models';
 // import ContentPage from './pages/content/Content';
 // import ShowsPage from './pages/show/Shows';
@@ -136,10 +137,18 @@ class App extends Component {
                 {this.state.token &&
                   this.state.role === "Model" && <Redirect from="/" to="/modelProfile" exact />}
 
-                {this.state.token && (<Route path="/users" component={UsersPage} />)}
-                {this.state.token && (<Route path="/models" component={ModelsPage} />)}
-                {this.state.token && (<Route path="/content" component={ContentPage} />)}
-                {this.state.token && (<Route path="/shows" component={ShowsPage} />)}
+                {
+                  // this.state.token && (<Route path="/users" component={UsersPage} />)
+                }
+                {
+                  // this.state.token && (<Route path="/models" component={ModelsPage} />)
+                }
+                {
+                  // this.state.token && (<Route path="/content" component={ContentPage} />)
+                }
+                {
+                  // this.state.token && (<Route path="/shows" component={ShowsPage} />)
+                }
 
                 {this.state.token &&
                   this.state.role === "User" && (<Route path="/userProfile" component={UserProfile} />)}
