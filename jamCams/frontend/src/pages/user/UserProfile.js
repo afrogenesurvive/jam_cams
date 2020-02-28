@@ -318,7 +318,7 @@ class UserProfile extends Component {
                   {this.state.user !== null && (
                       <ThisUserProfile
                         user={this.state.user}
-                        authUserId={this.context.userId}
+                        authId={this.context.activityId}
                         canDelete={this.state.canDelete}
                       />
                     )}

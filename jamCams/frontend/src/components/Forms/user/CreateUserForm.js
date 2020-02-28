@@ -10,20 +10,10 @@ import './CreateUserForm.css';
 const CreateUserForm = (props) => {
 
   const [dob, setDob] = useState(new Date());
-  const [employmentDate, setEmploymentDate] = useState(new Date());
-  const [terminationDate, setTerminationDate] = useState(new Date());
 
   const handleChangeDob = date => {
     setDob(date);
     console.log(`Dob ${dob}`);
-   }
-  const handleChangeEmploymentDate = date => {
-    setEmploymentDate(date);
-    console.log(`employmentDate ${employmentDate}`);
-   }
-  const handleChangeTerminationDate = date => {
-    setTerminationDate(date);
-    console.log(`terminationDate ${terminationDate}`);
    }
 
 return (
@@ -32,6 +22,7 @@ return (
   <h4 className="signupTitle">{props.title}</h4>
 )}
 <Form onSubmit={props.onConfirm}>
+
 <Form.Row>
   <Form.Group as={Col} controlId="formGridEmail">
     <Form.Label>Email</Form.Label>
@@ -51,17 +42,11 @@ return (
   <Form.Control type="text" placeholder="Name" />
 </Form.Group>
 
-
-<Form.Group as={Col} controlId="formGridRole">
-  <Form.Label>Role</Form.Label>
-  <Form.Control as="select">
-  <option>guest</option>
-  <option>nurse</option>
-  <option>doctor</option>
-  <option>staff</option>
-
-  </Form.Control>
+<Form.Group as={Col} controlId="formGridUsername">
+  <Form.Label>Username</Form.Label>
+  <Form.Control type="text" placeholder="Name" />
 </Form.Group>
+
 </Form.Row>
 
 <Form.Row>
@@ -76,10 +61,21 @@ return (
   <Form.Label>D.O.B</Form.Label>
   <Form.Control type="date" placeholder="Date of Birth"/>
 </Form.Group>
-
 </Form.Row>
 
 {
+  // <Form.Group as={Col} controlId="formGridRole">
+  //   <Form.Label>Role</Form.Label>
+  //   <Form.Control as="select">
+  //   <option>guest</option>
+  //   <option>nurse</option>
+  //   <option>doctor</option>
+  //   <option>staff</option>
+  //
+  //   </Form.Control>
+  // </Form.Group>
+  // </Form.Row>
+
 // <Form.Row>
 // <Form.Group as={Col} controlId="">
 //   <Form.Label>Fancy D.O.B</Form.Label>
@@ -89,42 +85,15 @@ return (
 //   />
 // </Form.Group>
 // </Form.Row>
+
+// <Form.Row>
+// <Form.Group as={Col} controlId="formGridEmploymentDateTodayCheckbox">
+//   <Form.Label>Today ?</Form.Label>
+//   <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
+// </Form.Group>
+// </Form.Row>
 }
 
-<Form.Row>
-<Form.Group as={Col} controlId="formGridEmploymentDateTodayCheckbox">
-  <Form.Label>Today ?</Form.Label>
-  <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
-</Form.Group>
-</Form.Row>
-
-<Form.Row>
-<Form.Group as={Col} controlId="">
-  <Form.Label>Fancy Employment Date</Form.Label>
-  <DatePicker className="" id="staffCalendarEmploymentDate"
-    selected={employmentDate}
-    onChange={handleChangeEmploymentDate}
-  />
-</Form.Group>
-</Form.Row>
-
-
-<Form.Row>
-<Form.Group as={Col} controlId="formGridTerminationDateTodayCheckbox">
-  <Form.Label>Today ?</Form.Label>
-  <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
-</Form.Group>
-</Form.Row>
-
-<Form.Row>
-<Form.Group as={Col} controlId="">
-  <Form.Label>Fancy Termination Date</Form.Label>
-  <DatePicker className="" id="staffCalendarTerminationDate"
-    selected={terminationDate}
-    onChange={handleChangeTerminationDate}
-  />
-</Form.Group>
-</Form.Row>
 
 <Form.Row>
 <Form.Group as={Col} controlId="formGridAddressNumber">
@@ -144,16 +113,30 @@ return (
   <Form.Control type="text" placeholder="addressTown"/>
 </Form.Group>
 
-<Form.Group as={Col} controlId="formGridAddressParish">
-  <Form.Label>Parish</Form.Label>
-  <Form.Control type="text" placeholder="addressParish"/>
+<Form.Group as={Col} controlId="formGridAddressCity">
+  <Form.Label>City</Form.Label>
+  <Form.Control type="text" placeholder="addressCity"/>
 </Form.Group>
 </Form.Row>
 
 <Form.Row>
-<Form.Group as={Col} controlId="formGridAddressPostOffice">
-  <Form.Label>Post Office</Form.Label>
-  <Form.Control type="text" placeholder="addressPostOffice"/>
+<Form.Group as={Col} controlId="formGridAddressCountry">
+  <Form.Label>Country</Form.Label>
+  <Form.Control type="text" placeholder="addressCountry"/>
+</Form.Group>
+</Form.Row>
+
+<Form.Row>
+<Form.Group as={Col} controlId="formGridAddresspostalCode">
+  <Form.Label>postalCode</Form.Label>
+  <Form.Control type="text" placeholder="addresspostalCode"/>
+</Form.Group>
+</Form.Row>
+
+<Form.Row>
+<Form.Group as={Col} controlId="formGridBio">
+  <Form.Label>Bio</Form.Label>
+  <Form.Control as="textarea"rows="7" placeholder="Bio"/>
 </Form.Group>
 </Form.Row>
 
@@ -168,8 +151,9 @@ return (
   Create
   </Button>
 )}
-</Form.Row>
 <p>{props.successText}</p>
+</Form.Row>
+
 
 </Form>
 </div>

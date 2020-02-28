@@ -22,7 +22,7 @@ import SidebarControl from '../../components/SidebarControl';
 import AlertBox from '../../components/AlertBox';
 import LoadingOverlay from '../../components/LoadingOverlay';
 import AttachmentViewer from '../../components/AttachmentViewer';
-// 
+//
 // import CreateUserForm from '../components/Forms/CreateUserForm';
 // import UpdateUserForm from '../components/Forms/UpdateUserForm';
 // import UpdateUserFieldForm from '../components/Forms/UpdateUserFieldForm';
@@ -355,232 +355,97 @@ class UsersPage extends Component {
       });
   }
 
-  updateUserAttendanceHandler = (event) => {
 
-    this.setState({ updating: false , userUpdateField: null, userAlert: "adding user attendance item..." });
-    const token = this.context.token;
-    const userId = this.context.userId;
-    let selectedUserId = this.context.selectedUser._id;
-    if (userId !== selectedUserId && this.context.user.role !== "admin" ) {
-      this.setState({ userAlert: "Not the creator or Admin! No edit permission!!"});
-      selectedUserId = null;
-    }
+  //   updateUserAttachmentHandler = (event) => {
+  //     event.preventDefault();
+  //
+  //   if (event.target.fileInput.value === "") {
+  //     this.setState({ userAlert: "no file present! Please try again"})
+  //     return
+  //   }
+  //
+  //   this.setState({ updating: false , userUpdateField: null, userAlert: "adding user attatchment item..." });
+  //   const token = this.context.token;
+  //   const userId = this.context.userId;
+  //   let selectedUserId = this.context.selectedUser._id;
+  //   if (userId !== selectedUserId && this.context.user.role !== "admin" ) {
+  //     this.setState({userAlert: "Not the creator or Admin! No edit permission!!"})
+  //     selectedUserId = null;
+  //   }
+  //   let attachmentFormat = event.target.formGridAttachmentFormat.value;
+  //   let attachmentPath = "uploads/staff/"+selectedUserId+"/attachments";
+  //
+  //   let attachmentName = null;
+  //
+  //   if (
+  //       event.target.fileInput.value !== ""
+  //   ) {
+  //
+  //     let file = AuthContext._currentValue.file;
+  //
+  //     const config = {
+  //       bucketName: this.state.creds.s3.bucketName,
+  //       dirName: attachmentPath,
+  //       region: this.state.creds.s3.region,
+  //       accessKeyId: this.state.creds.s3.accessKeyId,
+  //       secretAccessKey: this.state.creds.s3.secretAccessKey,
+  //     }
+  //     const ReactS3Client = new S3(config);
+  //     const newFileName = file.name;
+  //     attachmentName = newFileName;
+  //     this.setState({userAlert: "uploading attachment ..."});
+  //
+  //     ReactS3Client
+  //         .uploadFile(file, newFileName)
+  //         .then(data => {console.log(data);this.setState({userAlert: "attachment upload success!" });})
+  //         .catch(err => {console.error(err);this.setState({userAlert: "upload error:  "+err });})
+  //   }
+  //
+  //   if (
+  //     attachmentName.trim().length === 0 ||
+  //     attachmentFormat.trim().length === 0 ||
+  //     attachmentPath.trim().length === 0
+  //   ) {
+  //     this.setState({ userAlert: "blank fields detected!!! try again" })
+  //     return
+  //   }
+  //
+  //   const requestBody = {
+  //     query:`
+  //       mutation{updateUserAttachment(userId:"${userId}",selectedUserId:"${selectedUserId}",userInput:{attachmentName:"${attachmentName}",attachmentFormat:"${attachmentFormat}",attachmentPath:"${attachmentPath}"})
+  //       {_id,email,password,name,dob,address{number,street,town,parish,postOffice},phone,role,employmentDate,terminationDate,attachments{name,format,path},attendance{date,status,description},leave{type,title,startDate,endDate}}}
+  //     `};
+  //
+  //     fetch('http://localhost:10000/graphql', {
+  //     method: 'POST',
+  //     body: JSON.stringify(requestBody),
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       Authorization: 'Bearer ' + token
+  //     }
+  //   })
+  //     .then(res => {
+  //       if (res.status !== 200 && res.status !== 201) {
+  //         throw new Error('Failed!');
+  //       }
+  //       return res.json();
+  //     })
+  //     .then(resData => {
+  //       const updatedUserId = resData.data.updateUserAttachment._id;
+  //       const updatedUser = this.state.users.find(e => e._id === updatedUserId);
+  //       const updatedUserPos = this.state.users.indexOf(updatedUser);
+  //       const slicedArray = this.state.users.splice(updatedUserPos, 1);
+  //       this.state.users.push(resData.data.updateUserAttachment);
+  //       this.context.users = this.state.users;
+  //       const responseAlert = JSON.stringify(resData.data).slice(2,25);
+  //       this.fetchUsers();
+  //       this.setState({ userAlert: responseAlert, selectedUser: resData.data.updateUserAttachment})
+  //     })
+  //     .catch(err => {
+  //       this.setState({userAlert: err});
+  //     });
+  // }
 
-    let attendanceDate = new Date(event.target.staffAttendanceCalendarDate.value).toISOString().slice(0,10);
-    if (event.target.formGridAttendanceDateTodayCheckbox.checked === true) {
-      console.log("1");
-      attendanceDate = new Date().toISOString().slice(0,10);
-    }
-
-    let attendanceStatus = event.target.formGridAttendanceStatus.value;
-    let attendanceDescription = event.target.formGridAttendanceDescription.value;
-
-    if (
-    attendanceDate.trim().length === 0 ||
-    attendanceStatus.trim().length === 0
-    ){
-      return
-    }
-
-    const requestBody = {
-      query:`
-        mutation {updateUserAttendance(userId:"${userId}", selectedUserId:"${selectedUserId}",userInput:{attendanceDate:"${attendanceDate}",attendanceStatus:"${attendanceStatus}",attendanceDescription:"${attendanceDescription}"})
-        {_id,email,password,name,dob,address{number,street,town,parish,postOffice},phone,role,employmentDate,terminationDate,attachments{name,format,path},attendance{date,status,description},leave{type,title,startDate,endDate}}}
-      `};
-
-    fetch('http://localhost:10000/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-      .then(res => {
-        if (res.status !== 200 && res.status !== 201) {
-          throw new Error('Failed!');
-        }
-        return res.json();
-      })
-      .then(resData => {
-        const updatedUserId = resData.data.updateUserAttendance._id;
-        const updatedUser = this.state.users.find(e => e._id === updatedUserId);
-        const updatedUserPos = this.state.users.indexOf(updatedUser);
-        const slicedArray = this.state.users.splice(updatedUserPos, 1);
-        this.state.users.push(resData.data.updateUserAttendance);
-        this.context.users = this.state.users;
-        const responseAlert = JSON.stringify(resData.data).slice(2,25);
-        this.fetchUsers();
-        this.setState({ userAlert: responseAlert, selectedUser: resData.data.updateUserAttendance })
-      })
-      .catch(err => {
-        this.setState({userAlert: err});
-      });
-  }
-
-    updateUserAttachmentHandler = (event) => {
-      event.preventDefault();
-
-    if (event.target.fileInput.value === "") {
-      this.setState({ userAlert: "no file present! Please try again"})
-      return
-    }
-
-    this.setState({ updating: false , userUpdateField: null, userAlert: "adding user attatchment item..." });
-    const token = this.context.token;
-    const userId = this.context.userId;
-    let selectedUserId = this.context.selectedUser._id;
-    if (userId !== selectedUserId && this.context.user.role !== "admin" ) {
-      this.setState({userAlert: "Not the creator or Admin! No edit permission!!"})
-      selectedUserId = null;
-    }
-    let attachmentFormat = event.target.formGridAttachmentFormat.value;
-    let attachmentPath = "uploads/staff/"+selectedUserId+"/attachments";
-
-    let attachmentName = null;
-
-    if (
-        event.target.fileInput.value !== ""
-    ) {
-
-      let file = AuthContext._currentValue.file;
-
-      const config = {
-        bucketName: this.state.creds.s3.bucketName,
-        dirName: attachmentPath,
-        region: this.state.creds.s3.region,
-        accessKeyId: this.state.creds.s3.accessKeyId,
-        secretAccessKey: this.state.creds.s3.secretAccessKey,
-      }
-      const ReactS3Client = new S3(config);
-      const newFileName = file.name;
-      attachmentName = newFileName;
-      this.setState({userAlert: "uploading attachment ..."});
-
-      ReactS3Client
-          .uploadFile(file, newFileName)
-          .then(data => {console.log(data);this.setState({userAlert: "attachment upload success!" });})
-          .catch(err => {console.error(err);this.setState({userAlert: "upload error:  "+err });})
-    }
-
-    if (
-      attachmentName.trim().length === 0 ||
-      attachmentFormat.trim().length === 0 ||
-      attachmentPath.trim().length === 0
-    ) {
-      this.setState({ userAlert: "blank fields detected!!! try again" })
-      return
-    }
-
-    const requestBody = {
-      query:`
-        mutation{updateUserAttachment(userId:"${userId}",selectedUserId:"${selectedUserId}",userInput:{attachmentName:"${attachmentName}",attachmentFormat:"${attachmentFormat}",attachmentPath:"${attachmentPath}"})
-        {_id,email,password,name,dob,address{number,street,town,parish,postOffice},phone,role,employmentDate,terminationDate,attachments{name,format,path},attendance{date,status,description},leave{type,title,startDate,endDate}}}
-      `};
-
-      fetch('http://localhost:10000/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-      .then(res => {
-        if (res.status !== 200 && res.status !== 201) {
-          throw new Error('Failed!');
-        }
-        return res.json();
-      })
-      .then(resData => {
-        const updatedUserId = resData.data.updateUserAttachment._id;
-        const updatedUser = this.state.users.find(e => e._id === updatedUserId);
-        const updatedUserPos = this.state.users.indexOf(updatedUser);
-        const slicedArray = this.state.users.splice(updatedUserPos, 1);
-        this.state.users.push(resData.data.updateUserAttachment);
-        this.context.users = this.state.users;
-        const responseAlert = JSON.stringify(resData.data).slice(2,25);
-        this.fetchUsers();
-        this.setState({ userAlert: responseAlert, selectedUser: resData.data.updateUserAttachment})
-      })
-      .catch(err => {
-        this.setState({userAlert: err});
-      });
-  }
-
-
-  updateUserLeaveHandler = (event) => {
-
-    this.setState({ updating: false , userUpdateField: null, userAlert: "adding user leave item..." });
-    const token = this.context.token;
-    const userId = this.context.userId;
-    let selectedUserId = this.context.selectedUser._id;
-    if (userId !== selectedUserId && this.context.user.role !== "admin" ) {
-      this.setState({userAlert: "Not the creator or Admin! No edit permission!!"})
-      selectedUserId = null;
-    }
-
-    let leaveType = event.target.formGridLeaveType.value;
-    let leaveTitle = event.target.formGridLeaveTitle.value;
-
-    let leaveStartDate = new Date(event.target.staffLeaveCalendarStartDate.value).toISOString().slice(0,10);
-    if (event.target.formGridLeaveStartDateTodayCheckbox.checked === true) {
-      leaveStartDate = new Date().toISOString().slice(0,10);
-    }
-
-
-    let leaveEndDate = new Date(event.target.staffLeaveCalendarEndDate.value).toISOString().slice(0,10);
-    if (event.target.formGridLeaveEndDateTodayCheckbox.checked === true) {
-      leaveEndDate = new Date().toISOString().slice(0,10);
-    }
-
-
-    if (
-      leaveType.trim().length === 0 ||
-      leaveTitle.trim().length === 0 ||
-      leaveStartDate.trim().length === 0 ||
-      leaveEndDate.trim().length === 0
-    ) {
-      this.setState({userAlert: "blank fields detected!!!...try again"});
-      return
-    }
-
-    const requestBody = {
-      query:`
-        mutation{updateUserLeave(userId:"${userId}",selectedUserId:"${selectedUserId}",userInput:{leaveType:"${leaveType}",leaveTitle:"${leaveTitle}",leaveStartDate:"${leaveStartDate}",leaveEndDate:"${leaveEndDate}"})
-        {_id,email,password,name,dob,address{number,street,town,parish,postOffice},phone,role,employmentDate,terminationDate,attachments{name,format,path},attendance{date,status,description},leave{type,title,startDate,endDate}}}
-      `};
-
-    fetch('http://localhost:10000/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-      .then(res => {
-        if (res.status !== 200 && res.status !== 201) {
-          throw new Error('Failed!');
-        }
-        return res.json();
-      })
-      .then(resData => {
-        const updatedUserId = resData.data.updateUserLeave._id;
-        const updatedUser = this.state.users.find(e => e._id === updatedUserId);
-        const updatedUserPos = this.state.users.indexOf(updatedUser);
-        const slicedArray = this.state.users.splice(updatedUserPos, 1);
-        this.state.users.push(resData.data.updateUserLeave);
-        this.context.users = this.state.users;
-        const responseAlert = JSON.stringify(resData.data).slice(2,25);
-        // this.setState({ userAlert: responseAlert})
-        this.fetchUsers();
-        this.setState({ userAlert: responseAlert, selectedUser: resData.data.updateUserLeave })
-      })
-      .catch(err => {
-        this.setState({userAlert: err});
-      });
-  }
 
 
   modalConfirmSearchHandler = (event) => {

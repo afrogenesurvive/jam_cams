@@ -10,12 +10,12 @@ import Col from 'react-bootstrap/Col';
 
 import './thisUserProfile.css';
 
-const thisUserProfile = (props) => {
-  const {...user} = props.user;
+const thisModelProfile = (props) => {
+  const {...model} = props.model;
   const authId = props.authId;
-  const userAddress = user.address;
+  const modelAddress = model.address;
 
-  const userDob = new Date(user.dob.substr(0,10)*1000).toISOString().slice(0,10);
+  const modelDob = new Date(model.dob.substr(0,10)*1000).toISOString().slice(0,10);
 
   return (
 
@@ -29,46 +29,46 @@ const thisUserProfile = (props) => {
       <Row className="detailCardRow">
         <Col className="detailCardCol">
           <Card.Text>
-            <span className="bold">ID:</span> {user._id}
+            <span className="bold">ID:</span> {model._id}
           </Card.Text>
           <Card.Text>
-            <span className="bold">Name:</span> {user.name}
+            <span className="bold">Name:</span> {model.name}
           </Card.Text>
           <Card.Text>
-            <span className="bold">Username:</span> {user.username}
+            <span className="bold">Username:</span> {model.username}
           </Card.Text>
           <Card.Text>
-            <span className="bold">D.O.B:</span> {userDob}
+            <span className="bold">D.O.B:</span> {modelDob}
           </Card.Text>
           <Card.Text>
-            <span className="bold">Phone:</span> {user.contact.phone}
+            <span className="bold">Phone:</span> {model.contact.phone}
           </Card.Text>
           <Card.Text>
-            <span className="bold">Email:</span> {user.contact.email}
+            <span className="bold">Email:</span> {model.contact.email}
           </Card.Text>
         </Col>
 
         <Col className="detailCardCol">
           <Card.Text>
-            <span className="bold">Bio:</span> {user.bio}
+            <span className="bold">Bio:</span> {model.bio}
           </Card.Text>
           <Card.Text>
             <span className="bold">Address:</span>
           </Card.Text>
           <Card.Text>
-            <span className="bold">Street & Number :</span> {userAddress.number}, {userAddress.street}
+            <span className="bold">Street & Number :</span> {modelAddress.number}, {modelAddress.street}
           </Card.Text>
           <Card.Text>
-            <span className="bold">Town :</span> {userAddress.town}
+            <span className="bold">Town :</span> {modelAddress.town}
           </Card.Text>
           <Card.Text>
-            <span className="bold">City :</span> {userAddress.city}
+            <span className="bold">City :</span> {modelAddress.city}
           </Card.Text>
           <Card.Text>
-            <span className="bold">Country :</span> {userAddress.country}
+            <span className="bold">Country :</span> {modelAddress.country}
           </Card.Text>
           <Card.Text>
-            <span className="bold">Postal Code :</span> {userAddress.postalCode}
+            <span className="bold">Postal Code :</span> {modelAddress.postalCode}
           </Card.Text>
         </Col>
       </Row>
@@ -81,4 +81,4 @@ const thisUserProfile = (props) => {
   );
 }
 
-export default thisUserProfile;
+export default thisModelProfile;

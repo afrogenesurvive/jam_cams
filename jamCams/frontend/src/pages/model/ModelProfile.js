@@ -15,7 +15,7 @@ import LoadingOverlay from '../../components/LoadingOverlay';
 import SidebarPage from '../Sidebar';
 import SidebarControl from '../../components/SidebarControl';
 
-// import ThisUserProfile from '../../components/Users/thisUserProfile';
+import ThisModelProfile from '../../components/Models/thisModelProfile';
 // import UpdateUserFieldForm from '../components/Forms/UpdateUserFieldForm';
 
 import './Users.css';
@@ -23,10 +23,10 @@ import './Users.css';
 class ModelProfile extends Component {
   state = {
     model: null,
-    users: [],
+    models: [],
     updating: false,
     isLoading: false,
-    userUpdateField: null,
+    modelUpdateField: null,
     userAlert: null,
     overlay: false,
     overlayStatus: "test",
@@ -43,13 +43,14 @@ class ModelProfile extends Component {
   static contextType = AuthContext;
 
   componentDidMount() {
-    if (this.context.user.name === "Lord-of-the-Manor"){
+    // console.log("here there");
+    if (this.context.model.name === "Lord-of-the-Manor"){
       this.setState({canDelete: true})
     }
     this.getThisModel();
   }
 
-  startUpdateUserHandler = () => {
+  startUpdateModelHandler = () => {
     this.setState({ updating: true });
   };
 
@@ -215,12 +216,13 @@ class ModelProfile extends Component {
 
 
   getThisModel() {
+    // console.log("here");
     this.setState({ isLoading: true });
     const activityId = this.context.activityId;
     const requestBody = {
       query: `
       query {getThisModel(activityId:"${activityId}")
-      {_id,name,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
+      {_id,name,role,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
         `};
 
     fetch('http://localhost:9009/graphql', {
@@ -238,7 +240,8 @@ class ModelProfile extends Component {
       })
       .then(resData => {
         const thisModel = resData.data.getThisModel;
-        // this.context.model = thisModel;
+        this.context.model = thisModel;
+        console.log("model:  ", JSON.stringify(thisModel));
         if (this.isActive) {
           this.setState({ model: thisModel, isLoading: false });
         }
@@ -251,16 +254,15 @@ class ModelProfile extends Component {
       });
   }
 
-
   modalCancelHandler = () => {
     this.setState({ updating: false  });
   };
 
 
-  updateUserSpecialProfile (event) {
+  updateModelSpecialProfile (event) {
 
     const field = event.target.value;
-    this.setState({ userUpdateField: field});
+    this.setState({ modelUpdateField: field});
   }
 
 
@@ -275,18 +277,19 @@ class ModelProfile extends Component {
 
 
       <AlertBox
-        authUserId={this.context.userId}
+        authId={this.context.activityId}
         alert={this.state.userAlert}
       />
-      <SidebarControl
-        onShowSidebar={this.showSidebar}
-        onHideSidebar={this.hideSidebar}
-      />
+
       {this.state.overlay === true && (
         <LoadingOverlay
           status={this.state.overlayStatus}
         />
       )}
+      <SidebarControl
+        onShowSidebar={this.showSidebar}
+        onHideSidebar={this.hideSidebar}
+      />
 
       <Row>
 
@@ -313,19 +316,16 @@ class ModelProfile extends Component {
             <Col sm={10}>
               <Tab.Content>
                 <Tab.Pane eventKey="Detail">
-                  {
-                    // this.state.user !== null && (
-                    //   <ThisUserProfile
-                    //     user={this.state.user}
-                    //     authUserId={this.context.userId}
-                    //     canDelete={this.state.canDelete}
-                    //   />
-                    // )
-                  }
-                  <p>Model Profile</p>
+                  {this.state.model !== null && (
+                      <ThisModelProfile
+                        model={this.state.model}
+                        authId={this.context.activityId}
+                        canDelete={this.state.canDelete}
+                      />
+                    )}
                 </Tab.Pane>
 
-                <Tab.Pane eventKey="userEditField">
+                <Tab.Pane eventKey="modelEditField">
                   {this.state.model !== null && (
                     <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={this.startUpdateUserHandler}>Edit a Single Field</Button>
                   )}

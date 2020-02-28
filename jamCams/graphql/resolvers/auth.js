@@ -16,7 +16,7 @@ module.exports = {
     if (!isEqual) {
       throw new Error('Password is incorrect!');
     }
-    const token = jwt.sign({ userId: user.id },'JammaCammaDingDong',{expiresIn: '2h'});
+    const token = jwt.sign({ userId: user.id },'JammaCammaDingDong',{expiresIn: '4h'});
 
     const userLoggedIn = await User.findById({_id: user.id},{loggedIn: true})
 
@@ -47,7 +47,7 @@ module.exports = {
     if (!isEqual) {
       throw new Error('Password is incorrect!');
     }
-    const token = jwt.sign({ modelId: model.id },'JammaCammaPingPong',{expiresIn: '2h'});
+    const token = jwt.sign({ modelId: model.id },'JammaCammaDingDong',{expiresIn: '4h'});
 
     const modelLoggedIn = await Model.findById({_id: model.id},{loggedIn: true});
 

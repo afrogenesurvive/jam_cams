@@ -153,15 +153,15 @@ class App extends Component {
                 {this.state.token &&
                   this.state.role === "User" && (<Route path="/userProfile" component={UserProfile} />)}
                 {this.state.token &&
-                  this.state.role === "Profile" && (<Route path="/modelProfile" component={ModelProfile} />)}
+                  this.state.role === "Model" && (<Route path="/modelProfile" component={ModelProfile} />)}
 
                 {this.state.token &&
                   this.state.role === "User" && (
-                    <Redirect from="/auth" to="/userprofile" exact />
+                    <Redirect from="/auth" to="/userProfile" exact />
                 )}
                 {this.state.token &&
                   this.state.role === "Model" && (
-                    <Redirect from="/auth" to="/modelprofile" exact />
+                    <Redirect from="/auth" to="/modelProfile" exact />
                 )}
 
                 { //if not logged in -> go to login page

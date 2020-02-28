@@ -40,8 +40,6 @@ class AuthPage extends Component {
   submitHandler = event => {
     event.preventDefault();
 
-    console.log("here");
-
     this.setState({ userAlert: "Signing you in..."})
 
 
@@ -86,7 +84,28 @@ class AuthPage extends Component {
         this.setState({userAlert: responseAlert})
         let sessionStorageLoginInfo = null;
 
+
+        if (resData.data.modelLogin) {
+          console.log("2");
+          this.context.login(
+            resData.data.modelLogin.token,
+            resData.data.modelLogin.activityId,
+            resData.data.modelLogin.role,
+            resData.data.modelLogin.tokenExpiration
+          );
+
+          //  sessionStorageLoginInfo = {
+          //   token: resData.data.modelLogin.token,
+          //   activityId: resData.data.modelLogin.activityId,
+          //   role: resData.data.modelLogin.role,
+          //   tokenExpiration: resData.data.modelLogin.tokenExpiration
+          // };
+          // sessionStorage.setItem('login info', sessionStorageLoginInfo);
+          // sessionStorage.setItem('login info', JSON.stringify(sessionStorageLoginInfo));
+        }
+
         if (resData.data.userLogin.token) {
+          console.log("1");
           this.context.login(
             resData.data.userLogin.token,
             resData.data.userLogin.activityId,
@@ -105,26 +124,11 @@ class AuthPage extends Component {
 
         }
 
-        if (resData.data.modelLogin.token) {
-          this.context.login(
-            resData.data.modelLogin.token,
-            resData.data.modelLogin.activityId,
-            resData.data.modelLogin.role,
-            resData.data.modelLogin.tokenExpiration
-          );
-
-           sessionStorageLoginInfo = {
-            token: resData.data.modelLogin.token,
-            activityId: resData.data.modelLogin.activityId,
-            role: resData.data.modelLogin.role,
-            tokenExpiration: resData.data.modelLogin.tokenExpiration
-          };
-          // sessionStorage.setItem('login info', sessionStorageLoginInfo);
-          sessionStorage.setItem('login info', JSON.stringify(sessionStorageLoginInfo));
-        }
       })
       .catch(err => {
-        this.setState({userAlert: err});
+        if (this.isActive) {
+          this.setState({userAlert: err});
+        }
         // this.context.userAlert = err;
         // console.log(`
         //   err: ${this.context.userAlert}
@@ -133,7 +137,6 @@ class AuthPage extends Component {
   };
 
   changeLoginMode = (args) => {
-    console.log("login mode change", args);
     this.setState({role: args})
   }
 
@@ -248,6 +251,17 @@ class AuthPage extends Component {
   render() {
     return (
       <Container className="loginPageContainer">
+      <AlertBox
+        authId={this.context.activityId}
+        alert={this.state.userAlert}
+      />
+
+      {this.state.overlay === true && (
+        <LoadingOverlay
+          status={this.state.overlayStatus}
+        />
+      )}
+
         <Row className="loginPageContainerRow">
         <Col className="loginPageContainerCol">
         <Button variant="primary" size="lg" onClick={this.changeLoginMode.bind(this, "User")}>User Login</Button>
