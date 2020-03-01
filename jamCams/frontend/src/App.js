@@ -36,6 +36,7 @@ class App extends Component {
   }
 
   login = (token, activityId, role, tokenExpiration) => {
+
     this.setState({
       token: token,
       activityId: activityId,

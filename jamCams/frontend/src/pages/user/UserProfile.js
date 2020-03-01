@@ -55,162 +55,177 @@ class UserProfile extends Component {
 
   modalConfirmUpdateHandler = (event) => {
 
-    // const token = this.context.token;
-    // let userId = this.context.userId;
-    // let selectedUserId = this.context.selectedUser._id;
-    // if(userId !== selectedUserId && this.context.user.role !== 'admin') {
-    //   this.setState({userAlert: "Not the creator or Admin! No edit permission!!"});
-    //   selectedUserId = null;
+    const token = this.context.token;
+    const activityId = this.context.activityId;
+
+    this.setState({ updating: false, userAlert: "Updating selected Staff ..." });
+    let email = event.target.formGridEmail.value;
+    let password = event.target.formGridPassword.value;
+    let name = event.target.formGridName.value;
+    let username = event.target.formGridUserame.value;
+    let role = this.context.user.role;
+    let dob = event.target.formGridDob.value;
+
+    let phone = event.target.formGridPhone.value;
+    let addressNumber = event.target.formGridAddressNumber.value;
+    let addressStreet = event.target.formGridAddressStreet.value;
+    let addressTown = event.target.formGridAddressTown.value;
+    let addressCity = event.target.formGridAddressCity.value;
+    let addressCountry = event.target.formGridAddressCountry.value;
+    let addressPostalCode = event.target.formGridAddressPostalCode.value;
+    let bio = event.target.formGridBio.value;
+
+
+
+    if (email.trim().length === 0 ) {
+      this.setState({ userAlert: "blank fields detected!!!...filling w/ previous data..."});
+      email = this.context.user.email;
+    }
+    if (password.trim().length === 0) {
+      this.setState({ userAlert: "blank fields detected!!!...filling w/ previous data..."});
+      password = this.context.user.password;
+    }
+    if (name.trim().length === 0) {
+      this.setState({ userAlert: "blank fields detected!!!...filling w/ previous data..."});
+      name = this.context.user.name;
+    }
+    if (username.trim().length === 0) {
+      this.setState({ userAlert: "blank fields detected!!!...filling w/ previous data..."});
+      username = this.context.user.username;
+    }
+    // if (role.trim().length === 0) {
+    //   console.log("blank fields detected!!!...filling w/ previous data...");
+    //   role = this.state.user.role;
     // }
-    // this.setState({ updating: false, userAlert: "Updating selected Staff ..." });
-    // let email = event.target.formGridEmail.value;
-    // let password = event.target.formGridPassword.value;
-    // let name = event.target.formGridName.value;
-    // let role = this.context.user.role;
-    // let dob = event.target.formGridDob.value;
-    //
-    // // if (
-    // //   event.target.staffCalendarDob.value !== null
-    // // ) {
-    // //   console.log("fancyDate2", new Date(event.target.staffCalendarDob.value).toISOString().slice(0,10));
-    // //   dob = new Date(event.target.staffCalendarDob.value).toISOString().slice(0,10);
-    // // }
-    //
-    // let phone = event.target.formGridPhone.value;
-    // let addressNumber = event.target.formGridAddressNumber.value;
-    // let addressStreet = event.target.formGridAddressStreet.value;
-    // let addressTown = event.target.formGridAddressTown.value;
-    //
-    //
-    //
-    // if (email.trim().length === 0 ) {
-    //   this.setState({ userAlert: "blank fields detected!!!...filling w/ previous data..."});
-    //   email = this.context.user.email;
-    // }
-    // if (password.trim().length === 0) {
-    //   this.setState({ userAlert: "blank fields detected!!!...filling w/ previous data..."});
-    //   password = this.context.user.password;
-    // }
-    // if (name.trim().length === 0) {
-    //   this.setState({ userAlert: "blank fields detected!!!...filling w/ previous data..."});
-    //   name = this.context.user.name;
-    // }
-    // // if (role.trim().length === 0) {
-    // //   console.log("blank fields detected!!!...filling w/ previous data...");
-    // //   role = this.state.user.role;
-    // // }
-    // if (dob.trim().length === 0) {
-    //   this.setState({ userAlert: "blank fields detected!!!...filling w/ previous data..."});
-    //   dob = this.context.user.dob;
-    // }
-    // if (phone.trim().length === 0) {
-    //   this.setState({ userAlert: "blank fields detected!!!...filling w/ previous data..."});
-    //   phone = this.context.user.phone;
-    // }
-    // if (addressNumber.trim().length === 0) {
-    //   this.setState({ userAlert: "blank fields detected!!!...filling w/ previous data..."});
-    //   addressNumber = this.context.user.address.number;
-    // }
-    // if (addressStreet.trim().length === 0) {
-    //   this.setState({ userAlert: "blank fields detected!!!...filling w/ previous data..."});
-    //   addressStreet = this.context.user.address.street;
-    // }
-    // if (addressTown.trim().length === 0) {
-    //   this.setState({ userAlert: "blank fields detected!!!...filling w/ previous data..."});
-    //   addressTown = this.context.user.address.town;
-    // }
-    //
-    // const requestBody = {
-    //   query: `
-    //     mutation {updateUser(userId:"${userId}",selectedUserId:"${userId}",userInput: {email:"${email}",password:"${password}",name:"${name}",dob:"${dob}",addressNumber:${addressNumber},addressStreet:"${addressStreet}",addressTown:"${addressTown}",addressParish:"${addressParish}", addressPostOffice:"${addressPostOffice}",phone:"${phone}",role:"${role}",employmentDate:"${employmentDate}",terminationDate:"${terminationDate}"})
-    //     {_id,email,password,name,dob,address{number,street,town,parish,postOffice},phone,role,employmentDate,terminationDate,attachments{name,format,path},attendance{date,status,description},leave{type,title,startDate,endDate}}}
-    //     `};
-    //
-    // // fetch('http://ec2-3-19-32-237.us-east-2.compute.amazonaws.com/graphql', {
-    // fetch('http://localhost:10000/graphql', {
-    //   method: 'POST',
-    //   body: JSON.stringify(requestBody),
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     Authorization: 'Bearer ' + token
-    //   }})
-    //   .then(res => {
-    //     if (res.status !== 200 && res.status !== 201) {
-    //       throw new Error('Failed!');
-    //     }
-    //     return res.json();
-    //   })
-    //   .then(resData => {
-    //     const updatedUser = resData.data.updateUser;
-    //     this.state.users.push(updatedUser);
-    //     this.context.users = this.state.users;
-    //     const responseAlert = JSON.stringify(resData.data).slice(2,25);
-    //
-    //     this.setState({ userAlert: responseAlert, user: updatedUser})
-    //     this.getThisUser();
-    //   })
-    //   .catch(err => {
-    //     this.setState({userAlert: err});
-    //   });
+    if (dob.trim().length === 0) {
+      this.setState({ userAlert: "blank fields detected!!!...filling w/ previous data..."});
+      dob = this.context.user.dob;
+    }
+    if (phone.trim().length === 0) {
+      this.setState({ userAlert: "blank fields detected!!!...filling w/ previous data..."});
+      phone = this.context.user.phone;
+    }
+    if (addressNumber.trim().length === 0) {
+      this.setState({ userAlert: "blank fields detected!!!...filling w/ previous data..."});
+      addressNumber = this.context.user.address.number;
+    }
+    if (addressStreet.trim().length === 0) {
+      this.setState({ userAlert: "blank fields detected!!!...filling w/ previous data..."});
+      addressStreet = this.context.user.address.street;
+    }
+    if (addressTown.trim().length === 0) {
+      this.setState({ userAlert: "blank fields detected!!!...filling w/ previous data..."});
+      addressTown = this.context.user.address.town;
+    }
+    if (addressCity.trim().length === 0) {
+      this.setState({ userAlert: "blank fields detected!!!...filling w/ previous data..."});
+      addressCity = this.context.user.address.city;
+    }
+    if (addressCountry.trim().length === 0) {
+      this.setState({ userAlert: "blank fields detected!!!...filling w/ previous data..."});
+      addressCountry = this.context.user.address.country;
+    }
+    if (addressPostalCode.trim().length === 0) {
+      this.setState({ userAlert: "blank fields detected!!!...filling w/ previous data..."});
+      addressPostalCode = this.context.user.address.postalCode;
+    }
+    if (bio.trim().length === 0) {
+      this.setState({ userAlert: "blank fields detected!!!...filling w/ previous data..."});
+      bio = this.context.user.bio;
+    }
+
+    const requestBody = {
+      query: `
+          query": "mutation {updateUser(activityId:"${activityId}", userId:"${activityId}",
+          userInput:{
+            password:"${password}",
+            name:"${name}",
+            username:"${username}",
+            dob:"${dob}",
+            addressNumber:${}addressNumber,
+            addressStreet:"${addressStreet}",
+            addressTown:"${addressTown}",
+            addressCity:"${addressCity}",
+            addressCountry:"${addressCountry}",
+            addressPostalCode:"${addressPostalCode}",
+            contactPhone:"${contactPhone}",
+            contactEmail:"${contactEmail}",
+            bio:"${bio}"})
+          {_id,name,role,dob,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{date,ref{_id}},viewedContent{date,ref{_id}},likedContent{date,ref{_id}},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+        `};
+
+    fetch('http://localhost:10000/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }})
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Failed!');
+        }
+        return res.json();
+      })
+      .then(resData => {
+        const updatedUser = resData.data.updateUser;
+        this.context.user = updatedUser;
+        const responseAlert = JSON.stringify(resData.data).slice(2,25);
+
+        this.setState({ userAlert: responseAlert, user: updatedUser})
+        this.getThisUser();
+      })
+      .catch(err => {
+        this.setState({userAlert: err});
+      });
     };
 
     modalConfirmUpdateFieldHandler = (event) => {
 
-      // const token = this.context.token;
-      // const userId = this.context.userId;
-      // let selectedUserId = this.context.selectedUser._id;
-      // if(userId !== selectedUserId && this.context.user.role !== 'admin') {
-      //   this.setState({userAlert: "Not the creator or Admin! No edit permission!!"});
-      //   selectedUserId = null;
-      // }
-      //
-      // this.setState({ updating: false, userAlert: "Updating selected Staff by Field..." });
-      //
-      // let field = null;
-      // let query = event.target.formGridQuery.value;
-      // if (event.target.formGridFieldSelect.value === "select") {
-      //   field = event.target.formGridField.value;
-      // } else {
-      //   field = event.target.formGridFieldSelect.value;
-      // }
-      //
-      // const requestBody = {
-      //   query:`
-      //     mutation{updateUserField(userId:"${userId}",selectedUserId:"${userId}",field:"${field}",query:"${query}")
-      //     {_id,email,password,name,dob,address{number,street,town,parish,postOffice},phone,role,employmentDate,terminationDate,attachments{name,format,path},attendance{date,status,description},leave{type,title,startDate,endDate}}}
-      //   `};
-      //
-      //
-      // fetch('http://localhost:10000/graphql', {
-      //   method: 'POST',
-      //   body: JSON.stringify(requestBody),
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     Authorization: 'Bearer ' + token
-      //   }
-      // })
-      //   .then(res => {
-      //     if (res.status !== 200 && res.status !== 201) {
-      //       throw new Error('Failed!');
-      //     }
-      //     return res.json();
-      //   })
-      //   .then(resData => {
-      //     const updatedUserId = resData.data.updateUserField._id;
-      //     const updatedUser = this.state.users.find(e => e._id === updatedUserId);
-      //     const updatedUserPos = this.state.users.indexOf(updatedUser);
-      //     const slicedArray = this.state.users.splice(updatedUserPos, 1);
-      //     this.state.users.push(resData.data.updateUserField);
-      //     this.context.users = this.state.users;
-      //
-      //     const responseAlert = JSON.stringify(resData.data).slice(2,25);
-      //     // console.log("responseAlert...", responseAlert);
-      //     this.setState({ userAlert: responseAlert})
-      //     this.getThisUser();
-      //   })
-      //   .catch(err => {
-      //     this.setState({userAlert: err});
-      //   });
+      const token = this.context.token;
+      const activityId = this.context.activityId;
+
+      this.setState({ updating: false, userAlert: "Updating selected Staff by Field..." });
+
+      let field = null;
+      let query = event.target.formGridQuery.value;
+      if (event.target.formGridFieldSelect.value === "select") {
+        field = event.target.formGridField.value;
+      } else {
+        field = event.target.formGridFieldSelect.value;
+      }
+
+      const requestBody = {
+        query:`
+          mutation {updateUserField(activityId:"${activityId}", userId:"${activityId}",field:"${field}", query:"${query}")
+          {_id,name,role,dob,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{date,ref{_id}},viewedContent{date,ref{_id}},likedContent{date,ref{_id}},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+        `};
+
+      fetch('http://localhost:10000/graphql', {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token
+        }
+      })
+        .then(res => {
+          if (res.status !== 200 && res.status !== 201) {
+            throw new Error('Failed!');
+          }
+          return res.json();
+        })
+        .then(resData => {
+          const updatedUser = resData.data.updateUserField
+          this.context.user = resData.data.updateUserField;
+
+          const responseAlert = JSON.stringify(resData.data).slice(2,25);
+          this.setState({ userAlert: responseAlert, user: resData.data.updateUserField})
+          this.getThisUser();
+        })
+        .catch(err => {
+          this.setState({userAlert: err});
+        });
     }
 
 
@@ -322,6 +337,22 @@ class UserProfile extends Component {
                         canDelete={this.state.canDelete}
                       />
                     )}
+                </Tab.Pane>
+
+                <Tab.Pane eventKey="Demographics">
+                  <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={this.startUpdateUserHandler}>Edit Demographics</Button>
+                  {this.state.updating === true &&
+                    this.state.user !== null && (
+                    <UpdateUserForm
+                    canCancelProfile
+                      canConfirm
+                      onCancel={this.modalCancelHandler}
+                      onConfirm={this.modalConfirmUpdateHandler}
+                      confirmText="Confirm"
+                      user={this.state.user}
+                      authId={this.context.activityId}
+                    />
+                  )}
                 </Tab.Pane>
 
                 <Tab.Pane eventKey="userEditField">

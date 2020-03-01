@@ -8,7 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import './CreateUserForm.css';
 
-const UpdateUserForm = (props) => {
+const UpdateModelForm = (props) => {
 
   const [dob, setDob] = useState(new Date());
 
@@ -133,4 +133,4 @@ return (
 
 )};
 
-export default UpdateUserForm;
+export default UpdateModelForm;

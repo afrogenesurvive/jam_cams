@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Accordion from 'react-bootstrap/Accordion';
 import './CreateUserForm.css';
 
-const UpdateModelFieldForm = (props) => {
+const UpdateUserFieldForm = (props) => {
 const {...user} = props.user;
 
 return (
@@ -69,4 +69,4 @@ return (
 
 )};
 
-export default UpdateModelFieldForm;
+export default UpdateUserFieldForm;
