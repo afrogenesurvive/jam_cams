@@ -5,24 +5,31 @@ import Col from 'react-bootstrap/Col';
 import Accordion from 'react-bootstrap/Accordion';
 import './CreateUserForm.css';
 
-const AddUserPerkForm = (props) => {
-const {...user} = props.user;
+const AddModelProfileImageForm = (props) => {
+const {...model} = props.model;
 
 return (
 <div className="UpdateFormContainer">
 <Form onSubmit={props.onConfirm}>
 
   <Form.Row>
-    <Form.Group as={Col} controlId="formGridName">
-    <Form.Label>Name:</Form.Label>
-    <Form.Control type="text" placeholder="Perk name"/>
+    <Form.Group as={Col} controlId="formGridFilename">
+    <Form.Label>Filename</Form.Label>
+    <Form.Control type="text" placeholder="Filename"/>
   </Form.Group>
   </Form.Row>
 
   <Form.Row>
-    <Form.Group as={Col} controlId="formGridDescription">
-    <Form.Label>Description:</Form.Label>
-    <Form.Control as="textarea" rows="7" placeholder="Perk description"/>
+    <Form.Group as={Col} controlId="formGridFiletype">
+    <Form.Label>Filetype</Form.Label>
+    <Form.Control type="text" placeholder="Filetype"/>
+  </Form.Group>
+  </Form.Row>
+
+  <Form.Row>
+    <Form.Group as={Col} controlId="formGridFilepath">
+    <Form.Label>Link Address</Form.Label>
+    <Form.Control type="text" placeholder="link address"/>
   </Form.Group>
   </Form.Row>
 
@@ -46,4 +53,4 @@ return (
 
 )};
 
-export default AddUserPerkForm;
+export default AddModelProfileImageForm;

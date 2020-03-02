@@ -5,8 +5,8 @@ import Col from 'react-bootstrap/Col';
 import Accordion from 'react-bootstrap/Accordion';
 import './CreateUserForm.css';
 
-const AddUserPerkForm = (props) => {
-const {...user} = props.user;
+const AddModelPerkForm = (props) => {
+const {...model} = props.model;
 
 return (
 <div className="UpdateFormContainer">
@@ -21,7 +21,7 @@ return (
 
   <Form.Row>
     <Form.Group as={Col} controlId="formGridDescription">
-    <Form.Label>Description:</Form.Label>
+    <Form.Label>Description</Form.Label>
     <Form.Control as="textarea" rows="7" placeholder="Perk description"/>
   </Form.Group>
   </Form.Row>
@@ -46,4 +46,4 @@ return (
 
 )};
 
-export default AddUserPerkForm;
+export default AddModelPerkForm;

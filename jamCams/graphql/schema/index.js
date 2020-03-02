@@ -466,7 +466,7 @@ module.exports = buildSchema(`
     addUserProfileImage(activityId: ID!, userId: ID!, userInput: UserInput): User
     addUserPerks(activityId: ID!, userId: ID!, perks: [PerkInput]): User
     addUserPerk(activityId: ID!, userId: ID!, userInput: UserInput): User
-    addUserToken(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    addUserTokens(activityId: ID!, userId: ID!, userInput: UserInput!): User
     addUserTags(activityId: ID!, userId: ID!, tags: [String!]): User
     addUserSearch(activityId: ID!, userId: ID!, userInput: UserInput!): User
     addUserBilling(activityId: ID!, userId: ID!, userInput: UserInput!): User
@@ -498,6 +498,7 @@ module.exports = buildSchema(`
     updateModel(activityId: ID!, modelId: ID!, modelInput: ModelInput!): Model
     updateModelField(activityId: ID!, modelId: ID!, field: String!, query: String!): Model
     addModelSocialMedia(activityId: ID!, modelId: ID!, socialMedia: [SocialMediaInput!]): Model
+    addModelTrait(activityId: ID!, modelId: ID!, modelInput: ModelInput!): Model
     addModelTraits(activityId: ID!, modelId: ID!, traits: [TraitInput!]): Model
     addModelProfileImage(activityId: ID!, modelId: ID!, modelInput: ModelInput): Model
     addModelInterests(activityId: ID!, modelId: ID!, interests: [String!]): Model

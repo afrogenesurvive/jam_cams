@@ -5,17 +5,24 @@ import Col from 'react-bootstrap/Col';
 import Accordion from 'react-bootstrap/Accordion';
 import './CreateUserForm.css';
 
-const AddUserTokensForm = (props) => {
-const {...user} = props.user;
+const AddModelTKeyForm = (props) => {
+const {...model} = props.model;
 
 return (
 <div className="UpdateFormContainer">
 <Form onSubmit={props.onConfirm}>
 
   <Form.Row>
-    <Form.Group as={Col} controlId="formGridTokens">
-    <Form.Label>Tokens</Form.Label>
-    <Form.Control type="number" placeholder="token amount"/>
+    <Form.Group as={Col} controlId="formGridKey">
+    <Form.Label>Key:</Form.Label>
+    <Form.Control type="text" placeholder="Key"/>
+  </Form.Group>
+  </Form.Row>
+
+  <Form.Row>
+    <Form.Group as={Col} controlId="formGridValue">
+    <Form.Label>Value:</Form.Label>
+    <Form.Control as="textarea" rows="5" placeholder="Value"/>
   </Form.Group>
   </Form.Row>
 
@@ -39,4 +46,4 @@ return (
 
 )};
 
-export default AddUserTokensForm;
+export default AddModelTKeyForm;

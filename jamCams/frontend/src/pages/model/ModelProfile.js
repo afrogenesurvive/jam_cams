@@ -19,6 +19,13 @@ import ThisModelProfile from '../../components/Models/thisModelProfile';
 import UpdateModelForm from '../../components/Forms/model/UpdateModelForm';
 import UpdateModelFieldForm from '../../components/Forms/model/UpdateModelFieldForm';
 
+import AddModelProfileImageForm from '../../components/Forms/model/AddModelProfileImageForm';
+import AddModelPerkForm from '../../components/Forms/model/AddModelPerkForm';
+import AddModelInterestsForm from '../../components/Forms/model/AddModelInterestsForm';
+import AddModelTagsForm from '../../components/Forms/model/AddModelTagsForm';
+import AddModelTokensForm from '../../components/Forms/model/AddModelTokensForm';
+import AddModelTraitForm from '../../components/Forms/model/AddModelTraitForm';
+
 import './Users.css';
 
 class ModelProfile extends Component {
@@ -27,6 +34,8 @@ class ModelProfile extends Component {
     models: [],
     updating: false,
     updatingField: false,
+    adding: false,
+    userAddField: null,
     isLoading: false,
     modelUpdateField: null,
     userAlert: null,
@@ -235,6 +244,8 @@ class ModelProfile extends Component {
         });
     }
 
+
+
   getThisModel() {
     // console.log("here");
     this.setState({ isLoading: true });
@@ -302,6 +313,11 @@ class ModelProfile extends Component {
         sidebarShow: false,
         mCol2Size: 11
       })
+  }
+
+  addUserField = (args) => {
+    console.log(args);
+    this.setState({adding: true, userAddField: args})
   }
 
 

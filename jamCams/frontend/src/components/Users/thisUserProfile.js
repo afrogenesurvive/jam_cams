@@ -70,6 +70,9 @@ const thisUserProfile = (props) => {
           <Card.Text>
             <span className="bold">Postal Code :</span> {userAddress.postalCode}
           </Card.Text>
+          <Card.Text>
+            <span className="bold">Tokens :</span> {user.tokens}
+          </Card.Text>
         </Col>
       </Row>
 

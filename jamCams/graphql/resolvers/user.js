@@ -548,7 +548,7 @@ module.exports = {
       throw err;
     }
   },
-  addUserToken: async (args, req) => {
+  addUserTokens: async (args, req) => {
 
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
