@@ -463,7 +463,9 @@ module.exports = buildSchema(`
     updateUser(activityId: ID!, userId: ID!, userInput: UserInput!): User
     updateUserField(activityId: ID!, userId: ID!, field: String!, query: String!): User
     addUserInterests(activityId: ID!, userId: ID!, interests: [String!]): User
+    addUserProfileImage(activityId: ID!, userId: ID!, userInput: UserInput): User
     addUserPerks(activityId: ID!, userId: ID!, perks: [PerkInput]): User
+    addUserPerk(activityId: ID!, userId: ID!, userInput: UserInput): User
     addUserToken(activityId: ID!, userId: ID!, userInput: UserInput!): User
     addUserTags(activityId: ID!, userId: ID!, tags: [String!]): User
     addUserSearch(activityId: ID!, userId: ID!, userInput: UserInput!): User

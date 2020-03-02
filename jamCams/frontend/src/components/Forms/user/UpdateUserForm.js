@@ -25,7 +25,7 @@ return (
 <Form.Row>
   <Form.Group as={Col} controlId="formGridEmail">
     <Form.Label>Email</Form.Label>
-    <Form.Control type="email" placeholder={user.email}/>
+    <Form.Control type="email" placeholder={user.contact.email}/>
   </Form.Group>
 
   <Form.Group as={Col} controlId="formGridPassword">
@@ -55,13 +55,13 @@ return (
 <Form.Row>
 <Form.Group as={Col} controlId="formGridPhone">
   <Form.Label>Phone</Form.Label>
-  <Form.Control type="number" placeholder={user.phone}/>
+  <Form.Control type="number" placeholder={user.contact.phone}/>
 </Form.Group>
 </Form.Row>
 
 <Form.Row>
 <Form.Group as={Col} controlId="formGridDob">
-  <Form.Label>D.O.B</Form.Label>
+  <Form.Label>D.O.B: {user.dob}</Form.Label>
   <Form.Control type="date" placeholder={user.dob}/>
 </Form.Group>
 
@@ -82,33 +82,33 @@ return (
 <Form.Row>
 <Form.Group as={Col} controlId="formGridAddressTown">
   <Form.Label>Town</Form.Label>
-  <Form.Control type="text" placeholder="addressTown"/>
+  <Form.Control type="text" placeholder={user.address.town}/>
 </Form.Group>
 
 <Form.Group as={Col} controlId="formGridAddressCity">
   <Form.Label>City</Form.Label>
-  <Form.Control type="text" placeholder="addressCity"/>
+  <Form.Control type="text" placeholder={user.address.city}/>
 </Form.Group>
 </Form.Row>
 
 <Form.Row>
 <Form.Group as={Col} controlId="formGridAddressCountry">
   <Form.Label>Country</Form.Label>
-  <Form.Control type="text" placeholder="addressCountry"/>
+  <Form.Control type="text" placeholder={user.address.country}/>
 </Form.Group>
 </Form.Row>
 
 <Form.Row>
 <Form.Group as={Col} controlId="formGridAddresspostalCode">
   <Form.Label>postalCode</Form.Label>
-  <Form.Control type="text" placeholder="addresspostalCode"/>
+  <Form.Control type="text" placeholder={user.address.postalCode}/>
 </Form.Group>
 </Form.Row>
 
 <Form.Row>
 <Form.Group as={Col} controlId="formGridBio">
   <Form.Label>Bio</Form.Label>
-  <Form.Control as="textarea"rows="7" placeholder="Bio"/>
+  <Form.Control as="textarea"rows="7" placeholder={user.bio}/>
 </Form.Group>
 </Form.Row>
 

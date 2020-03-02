@@ -16,7 +16,8 @@ import SidebarPage from '../Sidebar';
 import SidebarControl from '../../components/SidebarControl';
 
 import ThisUserProfile from '../../components/Users/thisUserProfile';
-// import UpdateUserFieldForm from '../components/Forms/UpdateUserFieldForm';
+import UpdateUserForm from '../../components/Forms/user/UpdateUserForm';
+import UpdateUserFieldForm from '../../components/Forms/user/UpdateUserFieldForm';
 
 import './Users.css';
 
@@ -25,6 +26,7 @@ class UserProfile extends Component {
     user: null,
     users: [],
     updating: false,
+    updatingField: false,
     isLoading: false,
     userUpdateField: null,
     userAlert: null,
@@ -52,6 +54,9 @@ class UserProfile extends Component {
   startUpdateUserHandler = () => {
     this.setState({ updating: true });
   };
+  startUpdateUserFieldHandler = () => {
+    this.setState({ updatingField: true });
+  };
 
   modalConfirmUpdateHandler = (event) => {
 
@@ -59,14 +64,14 @@ class UserProfile extends Component {
     const activityId = this.context.activityId;
 
     this.setState({ updating: false, userAlert: "Updating selected Staff ..." });
-    let email = event.target.formGridEmail.value;
+    let contactEmail = event.target.formGridEmail.value;
     let password = event.target.formGridPassword.value;
     let name = event.target.formGridName.value;
     let username = event.target.formGridUserame.value;
     let role = this.context.user.role;
     let dob = event.target.formGridDob.value;
 
-    let phone = event.target.formGridPhone.value;
+    let contactPhone = event.target.formGridPhone.value;
     let addressNumber = event.target.formGridAddressNumber.value;
     let addressStreet = event.target.formGridAddressStreet.value;
     let addressTown = event.target.formGridAddressTown.value;
@@ -77,9 +82,9 @@ class UserProfile extends Component {
 
 
 
-    if (email.trim().length === 0 ) {
+    if (contactEmail.trim().length === 0 ) {
       this.setState({ userAlert: "blank fields detected!!!...filling w/ previous data..."});
-      email = this.context.user.email;
+      contactEmail = this.context.user.contact.email;
     }
     if (password.trim().length === 0) {
       this.setState({ userAlert: "blank fields detected!!!...filling w/ previous data..."});
@@ -101,9 +106,9 @@ class UserProfile extends Component {
       this.setState({ userAlert: "blank fields detected!!!...filling w/ previous data..."});
       dob = this.context.user.dob;
     }
-    if (phone.trim().length === 0) {
+    if (contactPhone.trim().length === 0) {
       this.setState({ userAlert: "blank fields detected!!!...filling w/ previous data..."});
-      phone = this.context.user.phone;
+      contactPhone = this.context.user.contact.phone;
     }
     if (addressNumber.trim().length === 0) {
       this.setState({ userAlert: "blank fields detected!!!...filling w/ previous data..."});
@@ -142,7 +147,7 @@ class UserProfile extends Component {
             name:"${name}",
             username:"${username}",
             dob:"${dob}",
-            addressNumber:${}addressNumber,
+            addressNumber:${addressNumber},
             addressStreet:"${addressStreet}",
             addressTown:"${addressTown}",
             addressCity:"${addressCity}",
@@ -185,7 +190,7 @@ class UserProfile extends Component {
       const token = this.context.token;
       const activityId = this.context.activityId;
 
-      this.setState({ updating: false, userAlert: "Updating selected Staff by Field..." });
+      this.setState({ updatingField: false, userAlert: "Updating selected Staff by Field..." });
 
       let field = null;
       let query = event.target.formGridQuery.value;
@@ -254,7 +259,6 @@ class UserProfile extends Component {
       .then(resData => {
         const thisUser = resData.data.getThisUser;
         this.context.user = thisUser;
-        console.log("user:  ", JSON.stringify(thisUser));
         if (this.isActive) {
           this.setState({ user: thisUser, isLoading: false });
         }
@@ -269,7 +273,7 @@ class UserProfile extends Component {
 
 
   modalCancelHandler = () => {
-    this.setState({ updating: false  });
+    this.setState({ updating: false, updatingField: false  });
   };
 
 
@@ -279,6 +283,25 @@ class UserProfile extends Component {
     this.setState({ userUpdateField: field});
   }
 
+  showSidebar = () => {
+    console.log(`
+      showing sidebar...
+      `);
+      this.setState({
+        sidebarShow: true,
+        mCol2Size: 9
+      })
+  }
+
+  hideSidebar = () => {
+    console.log(`
+      hiding sidebar...
+      `);
+      this.setState({
+        sidebarShow: false,
+        mCol2Size: 11
+      })
+  }
 
 
   componentWillUnmount() {
@@ -325,6 +348,9 @@ class UserProfile extends Component {
                 <Nav.Item>
                   <Nav.Link eventKey="Detail">You</Nav.Link>
                 </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link eventKey="disabled" disabled>...</Nav.Link>
+                </Nav.Item>
               </Nav>
             </Col>
             <Col sm={10}>
@@ -337,34 +363,39 @@ class UserProfile extends Component {
                         canDelete={this.state.canDelete}
                       />
                     )}
+
+                    <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={this.startUpdateUserHandler}>Edit Demographics</Button>
+                    {this.state.updating === true &&
+                      this.state.user !== null && (
+                      <UpdateUserForm
+                      canCancelProfile
+                        canConfirm
+                        onCancel={this.modalCancelHandler}
+                        onConfirm={this.modalConfirmUpdateHandler}
+                        confirmText="Confirm"
+                        user={this.state.user}
+                        authId={this.context.activityId}
+                      />
+                    )}
+
+                    {this.state.user !== null && (
+                      <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={this.startUpdateUserFieldHandler}>Edit a Single Field</Button>
+                    )}
+                    {this.state.updatingField &&
+                      this.state.user !== null
+                      && (
+                        <UpdateUserFieldForm
+                          authId={this.context.activityId}
+                          canCancel
+                          canConfirm
+                          onCancel={this.modalCancelHandler}
+                          onConfirm={this.modalConfirmUpdateFieldHandler}
+                          confirmText="Confirm"
+                          user={this.state.user}
+                        />
+                    )}
                 </Tab.Pane>
 
-                <Tab.Pane eventKey="Demographics">
-                  <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={this.startUpdateUserHandler}>Edit Demographics</Button>
-                  {this.state.updating === true &&
-                    this.state.user !== null && (
-                    <UpdateUserForm
-                    canCancelProfile
-                      canConfirm
-                      onCancel={this.modalCancelHandler}
-                      onConfirm={this.modalConfirmUpdateHandler}
-                      confirmText="Confirm"
-                      user={this.state.user}
-                      authId={this.context.activityId}
-                    />
-                  )}
-                </Tab.Pane>
-
-                <Tab.Pane eventKey="userEditField">
-                  {this.state.user !== null && (
-                    <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={this.startUpdateUserHandler}>Edit a Single Field</Button>
-                  )}
-                  {this.state.updating &&
-                    this.state.user !== null
-                    && (
-                      <p>lol</p>
-                  )}
-                </Tab.Pane>
               </Tab.Content>
             </Col>
           </Row>

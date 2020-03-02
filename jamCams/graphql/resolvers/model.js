@@ -466,9 +466,9 @@ module.exports = {
     }
     try {
       const profileImage = {
-        name: profileImageName,
-        type: profileImagesType,
-        path: profileImagesPath
+        name: args.modelInput.profileImageName,
+        type: args.modelInput.profileImagesType,
+        path: args.modelInput.profileImagesPath
       };
       const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { profileImages: profileImage }},{new: true, useFindAndModify: false})
         return {

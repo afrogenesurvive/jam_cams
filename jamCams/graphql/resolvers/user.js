@@ -486,6 +486,28 @@ module.exports = {
       throw err;
     }
   },
+  addUserPerk: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const perk = {
+        date: args.userInput.date,
+        name: args.userInput.name,
+        description: args.userInput.description,
+      };
+      const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { perks: perk }},{new: true, useFindAndModify: false})
+        return {
+          ...user._doc,
+          _id: user.id,
+          email: user.contact.email,
+          name: user.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
   addUserPerks: async (args, req) => {
 
     if (!req.isAuth) {
@@ -493,6 +515,28 @@ module.exports = {
     }
     try {
       const perks = args.perks;
+      const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { perks: {$each: perks} }},{new: true, useFindAndModify: false})
+        return {
+          ...user._doc,
+          _id: user.id,
+          email: user.contact.email,
+          name: user.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addUserProfileImage: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const profileImage = {
+        name: args.userInput.profileImageName,
+        type: args.userInput.profileImagesType,
+        path: args.userInput.profileImagesPath
+      };
       const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { perks: {$each: perks} }},{new: true, useFindAndModify: false})
         return {
           ...user._doc,
