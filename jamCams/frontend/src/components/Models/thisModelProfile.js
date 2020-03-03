@@ -70,6 +70,9 @@ const thisModelProfile = (props) => {
           <Card.Text>
             <span className="bold">Postal Code :</span> {modelAddress.postalCode}
           </Card.Text>
+          <Card.Text>
+            <span className="bold">Tokens :</span> {model.tokens}
+          </Card.Text>
         </Col>
       </Row>
 

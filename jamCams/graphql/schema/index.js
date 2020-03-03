@@ -191,7 +191,7 @@ module.exports = buildSchema(`
     perkDate: String
     perkName: String
     perkDescription: String
-    token: Float
+    tokens: Float
     tag: String
     loggedIn: Boolean
     category: String
@@ -502,8 +502,9 @@ module.exports = buildSchema(`
     addModelTraits(activityId: ID!, modelId: ID!, traits: [TraitInput!]): Model
     addModelProfileImage(activityId: ID!, modelId: ID!, modelInput: ModelInput): Model
     addModelInterests(activityId: ID!, modelId: ID!, interests: [String!]): Model
+    addModelPerk(activityId: ID!, modelId: ID!, modelInput: ModelInput): Model
     addModelPerks(activityId: ID!, modelId: ID!, perks: [PerkInput!]): Model
-    addModelToken(activityId: ID!, modelId: ID!, modelInput: ModelInput): Model
+    addModelTokens(activityId: ID!, modelId: ID!, modelInput: ModelInput): Model
     addModelTags(activityId: ID!, modelId: ID!, tags: [String!]): Model
     addModelCategories(activityId: ID!, modelId: ID!, categories: [String!]): Model
     addModelFan(activityId: ID!, modelId: ID!, fanId: ID!): Model

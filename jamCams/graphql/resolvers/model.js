@@ -481,6 +481,28 @@ module.exports = {
       throw err;
     }
   },
+  addModelPerk: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const perk = {
+        date: args.modelInput.date,
+        name: args.modelInput.name,
+        description: args.modelInput.description,
+      };
+      const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { perks: perk }},{new: true, useFindAndModify: false})
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
   addModelPerks: async (args, req) => {
 
     if (!req.isAuth) {
@@ -499,7 +521,7 @@ module.exports = {
       throw err;
     }
   },
-  addModelToken: async (args, req) => {
+  addModelTokens: async (args, req) => {
 
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
@@ -508,7 +530,7 @@ module.exports = {
     try {
       const prevAmountModel = await Model.findById({_id: args.modelId});
       const prevAmount = prevAmountModel.tokens;
-      const amountToAdd = args.userInput.tokens;
+      const amountToAdd = args.modelInput.tokens;
       const newAmount = prevAmount + newAmount;
       const model = await Model.findOneAndUpdate({_id:args.modelId},{ tokens: newAmount },{new: true, useFindAndModify: false})
         return {

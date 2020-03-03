@@ -30,7 +30,7 @@ return (
 {props.canConfirm && (
   <Button variant="primary" className="formButton" type="submit">
   Submit
-  </Butmodel
+  </Button>
 )}
 </Form.Row>
 

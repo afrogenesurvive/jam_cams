@@ -633,7 +633,7 @@ class UserProfile extends Component {
                 </Nav.Item>
 
                 <Nav.Item>
-                  <Nav.Link eventKey="Perks">Perks...</Nav.Link>
+                  <Nav.Link eventKey="Perks">...</Nav.Link>
                 </Nav.Item>
               </Nav>
             </Col>

@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Accordion from 'react-bootstrap/Accordion';
 import './CreateUserForm.css';
 
-const AddUserTokensForm = (props) => {
+const AddModelTokensForm = (props) => {
 const {...model} = props.model;
 
 return (
@@ -39,4 +39,4 @@ return (
 
 )};
 
-export default AddUserTokensForm;
+export default AddModelTokensForm;

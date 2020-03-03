@@ -22,6 +22,7 @@ import UpdateModelFieldForm from '../../components/Forms/model/UpdateModelFieldF
 import AddModelProfileImageForm from '../../components/Forms/model/AddModelProfileImageForm';
 import AddModelPerkForm from '../../components/Forms/model/AddModelPerkForm';
 import AddModelInterestsForm from '../../components/Forms/model/AddModelInterestsForm';
+import AddModelCategoriesForm from '../../components/Forms/model/AddModelCategoriesForm';
 import AddModelTagsForm from '../../components/Forms/model/AddModelTagsForm';
 import AddModelTokensForm from '../../components/Forms/model/AddModelTokensForm';
 import AddModelTraitForm from '../../components/Forms/model/AddModelTraitForm';
@@ -35,7 +36,7 @@ class ModelProfile extends Component {
     updating: false,
     updatingField: false,
     adding: false,
-    userAddField: null,
+    modelAddField: null,
     isLoading: false,
     modelUpdateField: null,
     userAlert: null,
@@ -236,13 +237,313 @@ class ModelProfile extends Component {
           this.context.model = resData.data.updateModelField;
 
           const responseAlert = JSON.stringify(resData.data).slice(2,25);
-          this.setState({ userAlert: responseAlert, user: resData.data.updateModelField})
+          this.setState({ userAlert: responseAlert, model: resData.data.updateModelField})
           this.getThisModel();
         })
         .catch(err => {
           this.setState({userAlert: err});
         });
     }
+
+    addModelProfileImageHandler = (event) => {
+      const token = this.context.token;
+      const activityId = this.context.activityId;
+
+      this.setState({ adding: false, modelAddField: null, userAlert: "Updating selected Staff by Field..." });
+
+      const profileImagenName = event.target.formGridFilename.value;
+      const profileImageType = event.target.formGridFiletype.value;
+      const profileImagePath = event.target.formGridFilepath.value;
+
+      const requestBody = {
+        query:`
+        mutation {addModelProfileImage(activityId:"${activityId}", modelId:"${activityId}",modelInput:{
+          profileImagenName:"${profileImagenName}",
+          profileImageType:"${profileImageType}",
+          profileImagePath:"${profileImagePath}",
+        })
+        {_id,name,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
+        `};
+
+      fetch('http://localhost:9009/graphql', {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token
+        }
+      })
+        .then(res => {
+          if (res.status !== 200 && res.status !== 201) {
+            throw new Error('Failed!');
+          }
+          return res.json();
+        })
+        .then(resData => {
+          this.context.model = resData.data.addModelProfileImage;
+
+          const responseAlert = JSON.stringify(resData.data).slice(2,25);
+          this.setState({ userAlert: responseAlert, model: resData.data.addModelProfileImage})
+          this.getThisModel();
+        })
+        .catch(err => {
+          this.setState({userAlert: err});
+        });
+    };
+
+    addModelPerkHandler = (event) => {
+      const token = this.context.token;
+      const activityId = this.context.activityId;
+
+      this.setState({ adding: false, modelAddField: null, userAlert: "Updating selected Staff by Field..." });
+
+      const perkDate = new Date();
+      const perkName = event.target.formGridName.value;
+      const perkDescription = event.target.formGridDescription.value;
+
+      const requestBody = {
+        query:`
+        mutation {addModelPerk(activityId:"${activityId}", modelId:"${activityId}",modelInput: {
+          perkDate:"${perkDate}",
+          perkName:"${perkName}",
+          perkDescription:"${perkDescription}",
+        })
+        {_id,name,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
+        `};
+
+      fetch('http://localhost:9009/graphql', {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token
+        }
+      })
+        .then(res => {
+          if (res.status !== 200 && res.status !== 201) {
+            throw new Error('Failed!');
+          }
+          return res.json();
+        })
+        .then(resData => {
+          this.context.model = resData.data.addModelPerk;
+
+          const responseAlert = JSON.stringify(resData.data).slice(2,25);
+          this.setState({ userAlert: responseAlert, model: resData.data.addModelPerk})
+          this.getThisModel();
+        })
+        .catch(err => {
+          this.setState({userAlert: err});
+        });
+    };
+
+    addModelTraitHandler = (event) => {
+      const token = this.context.token;
+      const activityId = this.context.activityId;
+
+      this.setState({ adding: false, modelAddField: null, userAlert: "Updating selected Staff by Field..." });
+
+      const traitKey = event.target.formGridKey.value;
+      const traitValue = event.target.formGridValue.value;
+
+      const requestBody = {
+        query:`
+        mutation {addModelTrait(activityId:"${activityId}", modelId:"${activityId}",modelInput: {
+          traitKey:"${traitKey}",
+          traitValue:"${traitValue}",
+        })
+        {_id,name,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
+        `};
+
+      fetch('http://localhost:9009/graphql', {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token
+        }
+      })
+        .then(res => {
+          if (res.status !== 200 && res.status !== 201) {
+            throw new Error('Failed!');
+          }
+          return res.json();
+        })
+        .then(resData => {
+          this.context.model = resData.data.addModelTrait;
+
+          const responseAlert = JSON.stringify(resData.data).slice(2,25);
+          this.setState({ userAlert: responseAlert, model: resData.data.addModelTrait})
+          this.getThisModel();
+        })
+        .catch(err => {
+          this.setState({userAlert: err});
+        });
+    };
+
+    addModelInterestsHandler = (event) => {
+      const token = this.context.token;
+      const activityId = this.context.activityId;
+
+      this.setState({ adding: false, modelAddField: null, userAlert: "Updating selected Staff by Field..." });
+
+      const preInterests = event.target.formGridInterests.value;
+      const interests = preInterests.split("");
+
+      const requestBody = {
+        query:`
+        mutation {addModelInterests(activityId:"${activityId}", modelId:"${activityId}",interests:${interests})
+        {_id,name,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
+        `};
+
+      fetch('http://localhost:9009/graphql', {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token
+        }
+      })
+        .then(res => {
+          if (res.status !== 200 && res.status !== 201) {
+            throw new Error('Failed!');
+          }
+          return res.json();
+        })
+        .then(resData => {
+          this.context.model = resData.data.addModelInterests;
+
+          const responseAlert = JSON.stringify(resData.data).slice(2,25);
+          this.setState({ userAlert: responseAlert, model: resData.data.addModelInterests})
+          this.getThisModel();
+        })
+        .catch(err => {
+          this.setState({userAlert: err});
+        });
+    };
+
+    addModelCategoriesHandler = (event) => {
+      const token = this.context.token;
+      const activityId = this.context.activityId;
+
+      this.setState({ adding: false, modelAddField: null, userAlert: "Updating selected Staff by Field..." });
+
+      const preCategories = event.target.formGridCategories.value;
+      const categories = preCategories.split("");
+
+      const requestBody = {
+        query:`
+        mutation {addModelCategories(activityId:"${activityId}", modelId:"${activityId}",categories:${categories})
+        {_id,name,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
+        `};
+
+      fetch('http://localhost:9009/graphql', {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token
+        }
+      })
+        .then(res => {
+          if (res.status !== 200 && res.status !== 201) {
+            throw new Error('Failed!');
+          }
+          return res.json();
+        })
+        .then(resData => {
+          this.context.model = resData.data.addModelCategories;
+
+          const responseAlert = JSON.stringify(resData.data).slice(2,25);
+          this.setState({ userAlert: responseAlert, model: resData.data.addModelCategories})
+          this.getThisModel();
+        })
+        .catch(err => {
+          this.setState({userAlert: err});
+        });
+    };
+
+    addModelTagsHandler = (event) => {
+      const token = this.context.token;
+      const activityId = this.context.activityId;
+
+      this.setState({ adding: false, modelAddField: null, userAlert: "Updating selected Staff by Field..." });
+
+      const preTags = event.target.formGridTags.value;
+      const tags = preTags.split("");
+
+      const requestBody = {
+        query:`
+        mutation {addModelTags(activityId:"${activityId}", modelId:"${activityId}",tags:${tags})
+        {_id,name,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
+        `};
+
+      fetch('http://localhost:9009/graphql', {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token
+        }
+      })
+        .then(res => {
+          if (res.status !== 200 && res.status !== 201) {
+            throw new Error('Failed!');
+          }
+          return res.json();
+        })
+        .then(resData => {
+          this.context.model = resData.data.addModelTags;
+
+          const responseAlert = JSON.stringify(resData.data).slice(2,25);
+          this.setState({ userAlert: responseAlert, model: resData.data.addModelTags})
+          this.getThisModel();
+        })
+        .catch(err => {
+          this.setState({userAlert: err});
+        });
+    };
+
+    addModelTokensHandler = (event) => {
+      const token = this.context.token;
+      const activityId = this.context.activityId;
+
+      this.setState({ adding: false, modelAddField: null, userAlert: "Updating selected Staff by Field..." });
+
+      const tokens = event.target.formGridTokens.value;
+      console.log(parseInt(tokens));
+
+      const requestBody = {
+        query:`
+        mutation{addModelTokens(activityId:"${activityId}",modelId:"${activityId}",modelInput:{tokens:${tokens}})
+        {_id,name,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
+        `};
+
+      fetch('http://localhost:9009/graphql', {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token
+        }
+      })
+        .then(res => {
+          if (res.status !== 200 && res.status !== 201) {
+            throw new Error('Failed!');
+          }
+          return res.json();
+        })
+        .then(resData => {
+          this.context.model = resData.data.addModelTokens;
+
+          const responseAlert = JSON.stringify(resData.data).slice(2,25);
+          this.setState({ userAlert: responseAlert, model: resData.data.addModelTokens})
+          this.getThisModel();
+        })
+        .catch(err => {
+          this.setState({userAlert: err});
+        });
+    };
 
 
 
@@ -315,9 +616,9 @@ class ModelProfile extends Component {
       })
   }
 
-  addUserField = (args) => {
-    console.log(args);
-    this.setState({adding: true, userAddField: args})
+  addModelField = (args) => {
+
+    this.setState({adding: true, modelAddField: args})
   }
 
 
@@ -366,7 +667,11 @@ class ModelProfile extends Component {
                   <Nav.Link eventKey="Detail">You</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey="disabled" disabled>...</Nav.Link>
+                  <Nav.Link eventKey="disabled" disabled>Add:</Nav.Link>
+                </Nav.Item>
+
+                <Nav.Item>
+                  <Nav.Link eventKey="Perks">...</Nav.Link>
                 </Nav.Item>
               </Nav>
             </Col>
@@ -411,6 +716,111 @@ class ModelProfile extends Component {
                           model={this.state.model}
                         />
                     )}
+                </Tab.Pane>
+
+                <Tab.Pane eventKey="Perks">
+                {this.state.model !== null && (
+                  <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={this.addModelField.bind(this, "profileImage")}>Add ProfileImage</Button>
+                )}
+
+                {this.state.modelAddField === "profileImage" &&
+                  this.state.model !== null && (
+                    <AddModelProfileImageForm
+                      authId={this.context.activityId}
+                      canCancel
+                      canConfirm
+                      onCancel={this.modalCancelHandler}
+                      onConfirm={this.addModelProfileImageHandler}
+                      confirmText="Confirm"
+                      model={this.state.model}
+                    />
+                )}
+
+                {this.state.model !== null && (
+                  <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={this.addModelField.bind(this, "perk")}>Add Perk</Button>
+                )}
+
+                {this.state.modelAddField === "perk" &&
+                  this.state.model !== null && (
+                    <AddModelPerkForm
+                      authId={this.context.activityId}
+                      canCancel
+                      canConfirm
+                      onCancel={this.modalCancelHandler}
+                      onConfirm={this.addModelPerkHandler}
+                      confirmText="Confirm"
+                      model={this.state.model}
+                    />
+                )}
+
+                {this.state.model !== null && (
+                  <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={this.addModelField.bind(this, "trait")}>Add Traits</Button>
+                )}
+
+                {this.state.modelAddField === "trait" &&
+                  this.state.model !== null && (
+                    <AddModelTraitForm
+                      authId={this.context.activityId}
+                      canCancel
+                      canConfirm
+                      onCancel={this.modalCancelHandler}
+                      onConfirm={this.addModelTraitHandler}
+                      confirmText="Confirm"
+                      model={this.state.model}
+                    />
+                )}
+
+                {this.state.model !== null && (
+                  <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={this.addModelField.bind(this, "interest")}>Add Interests</Button>
+                )}
+
+                {this.state.modelAddField === "interest" &&
+                  this.state.model !== null && (
+                    <AddModelInterestsForm
+                      authId={this.context.activityId}
+                      canCancel
+                      canConfirm
+                      onCancel={this.modalCancelHandler}
+                      onConfirm={this.addModelInterestsHandler}
+                      confirmText="Confirm"
+                      model={this.state.model}
+                    />
+                )}
+
+                {this.state.model !== null && (
+                  <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={this.addModelField.bind(this, "category")}>Add Categories</Button>
+                )}
+
+                {this.state.modelAddField === "category" &&
+                  this.state.model !== null && (
+                    <AddModelCategoriesForm
+                      authId={this.context.activityId}
+                      canCancel
+                      canConfirm
+                      onCancel={this.modalCancelHandler}
+                      onConfirm={this.addModelCategoriesHandler}
+                      confirmText="Confirm"
+                      model={this.state.model}
+                    />
+                )}
+
+                {this.state.model !== null && (
+                  <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={this.addModelField.bind(this, "tokens")}>Add Tokens</Button>
+                )}
+
+                {this.state.modelAddField === "tokens" &&
+                  this.state.model !== null && (
+                    <AddModelTokensForm
+                      authId={this.context.activityId}
+                      canCancel
+                      canConfirm
+                      onCancel={this.modalCancelHandler}
+                      onConfirm={this.addModelTokensHandler}
+                      confirmText="Confirm"
+                      model={this.state.model}
+                    />
+                )}
+
                 </Tab.Pane>
 
               </Tab.Content>
