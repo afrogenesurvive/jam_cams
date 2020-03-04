@@ -11,18 +11,13 @@ const userProfileImageItem = props => (
 
     <Card className="card">
       <Card.Body>
-        <Card.Title>
-          ProfileImage
-        </Card.Title>
-
 
         <ul className="cardUl">
           <li>
-          <Image src={props.path} fluid />
+          <Image src={props.path} className="profileImageImg" fluid />
 
           </li>
           <li className="cardLi">
-          <p className="userItemHeading"> Name:</p>
           <p className="userItemText">
           {props.name}
           </p>

@@ -474,7 +474,7 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-      const tags = args.tags;
+      const tags = args.userInput.tags;
       const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { tags: {$each: tags} }},{new: true, useFindAndModify: false})
         return {
           ...user._doc,
@@ -496,6 +496,7 @@ module.exports = {
         date: args.userInput.perkDate,
         name: args.userInput.perkName,
         description: args.userInput.perkDescription,
+        imageLink: args.userInput.perkImageLink,
       };
       const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { perks: perk }},{new: true, useFindAndModify: false})
         return {
@@ -824,15 +825,42 @@ module.exports = {
       throw err;
     }
   },
-  deleteUserPerks: async (args, req) => {
+  deleteUserPerk: async (args, req) => {
 
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
-        const perks = args.perkNames;
-        const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { 'perks.name': perkNames }},{new: true, useFindAndModify: false});
-        // const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { interest: { date: new Date(attendanceDate) }}},{new: true, useFindAndModify: false})
+        const perk = {
+          date: args.userInput.perkDate,
+          name: args.userInput.perkName,
+          description: args.userInput.perkDescription,
+          imageLink: args.userInput.perkImageLink,
+        };
+        const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { perks: perk }},{new: true, useFindAndModify: false});
+
+        return {
+          ...user._doc,
+          _id: user.id,
+          email: user.contact.email ,
+          name: user.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteUserProfileImage: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const profileImage = {
+          name: args.userInput.profileImageName,
+          type: args.userInput.profileImageType,
+          path: args.userInput.profileImagePath,
+        }
+        const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { profileImages: profileImage }},{new: true, useFindAndModify: false});
 
         return {
           ...user._doc,

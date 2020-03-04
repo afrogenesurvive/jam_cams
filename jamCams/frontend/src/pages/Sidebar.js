@@ -51,18 +51,6 @@ class SidebarPage extends Component {
 
       </Col>
       </Row>
-      <Row className="sidebarRow2">
-      <Col md={12} className="apptSidebarCol">
-      <h5 className="apptSidebarTitle">Appointments Today</h5>
-
-      </Col>
-      </Row>
-      <Row className="apptSidebarRow">
-      <Col md={12} className="">
-      <h5 className="apptSidebarTitle">Appointments InProgress</h5>
-
-      </Col>
-      </Row>
       </Container>
       </React.Fragment>
     );

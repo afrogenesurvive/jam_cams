@@ -56,6 +56,7 @@ module.exports = buildSchema(`
     date: String
     name: String
     description: String
+    imageLink: String
   }
   input PerkInput {
     date: String
@@ -103,8 +104,10 @@ module.exports = buildSchema(`
     perkDate: String
     perkName: String
     perkDescription: String
+    perkImageLink: String
     tokens: Float
     tag: String
+    tags: [String]
     loggedIn: Boolean
     searchDate: String
     searchQuery: String
@@ -467,7 +470,7 @@ module.exports = buildSchema(`
     addUserPerks(activityId: ID!, userId: ID!, perks: [PerkInput]): User
     addUserPerk(activityId: ID!, userId: ID!, userInput: UserInput): User
     addUserTokens(activityId: ID!, userId: ID!, userInput: UserInput!): User
-    addUserTags(activityId: ID!, userId: ID!, tags: [String!]!): User
+    addUserTags(activityId: ID!, userId: ID!, userInput: UserInput!): User
     addUserSearch(activityId: ID!, userId: ID!, userInput: UserInput!): User
     addUserBilling(activityId: ID!, userId: ID!, userInput: UserInput!): User
     editUserBillingPaid(activityId: ID!, userId: ID!, date: String!, amount: Float!): User
@@ -483,7 +486,9 @@ module.exports = buildSchema(`
     deleteUser(activityId: ID!, userId: ID!): User
     deleteUserInterests(activityId: ID!, userId: ID!, interests: [String!]): User
     deleteUserPerks(activityId: ID!, userId: ID!, perkNames: [String!]): User
+    deleteUserPerk(activityId: ID!, userId: ID!, userInput: UserInput!): User
     deleteUserTags(activityId: ID!, userId: ID!, tags: [String!]!): User
+    deleteUserProfileImage(activityId: ID!, userId: ID!, userInput: UserInput!): User
     deleteUserSearches(activityId: ID!, userId: ID!, searchQueries: [String!]): User
     deleteUserBilling(activityId: ID!, userId: ID!, userInput: UserInput!): User
     deleteUserComplaint(activityId: ID!, userId: ID!, userInput: UserInput!): User

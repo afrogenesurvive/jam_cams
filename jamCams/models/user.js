@@ -30,7 +30,8 @@ const userSchema = new Schema({
   perks: [{
     date: {type: Date},
     name: {type: String},
-    description: {type: String}
+    description: {type: String},
+    imageLink: {type: String}
   }],
   models:[{type: Schema.Types.ObjectId,ref: 'Model'}],
   tokens: {type: Number},

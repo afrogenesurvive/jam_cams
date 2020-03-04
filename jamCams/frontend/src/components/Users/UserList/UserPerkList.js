@@ -18,7 +18,10 @@ const userPerkList = props => {
         name={perk.name}
         date={perkDate}
         description={perk.description}
+        imageLink={perk.imageLink}
         perk={perk}
+        onDelete={props.onDelete}
+        canDelete={props.canDelete}
       />
     );
   });

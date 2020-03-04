@@ -13,6 +13,11 @@ import UserTagList from './UserList/UserTagList';
 import UserBillingList from './UserList/UserBillingList';
 import UserComplaintList from './UserList/UserComplaintList';
 
+import UpdateUserForm from '../Forms/user/UpdateUserForm';
+import UpdateUserFieldForm from '../Forms/user/UpdateUserFieldForm';
+import AddUserProfileImageForm from '../Forms/user/AddUserProfileImageForm';
+import AddUserPerkForm from '../Forms/user/AddUserPerkForm';
+
 import './thisUserProfile.css';
 
 const thisUserProfile = (props) => {
@@ -81,20 +86,50 @@ const thisUserProfile = (props) => {
         </Col>
       </Row>
 
-    {
-      // <UserAttendanceList
-      //   userAttendance={userAttendance}
-      //   authUserId={authUserId}
-      //   canDelete={props.canDelete}
-      //   onDelete={props.attendanceDelete}
-      // />
-    }
+      <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartUpdate}>Edit</Button>
+      <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartUpdateField}>Edit 1 Field</Button>
 
+      {props.updating === true &&(
+        <UpdateUserForm
+        canCancelProfile
+          canConfirm
+          onCancel={props.onCancel}
+          onConfirm={props.onEdit}
+          confirmText="Confirm"
+          user={props.user}
+          authId={props.authId}
+        />
+      )}
+
+      {props.updatingField === true && (
+          <UpdateUserFieldForm
+            canCancel
+            canConfirm
+            onCancel={props.onCancel}
+            onConfirm={props.onEditField}
+            confirmText="Confirm"
+            user={props.user}
+            authId={props.authId}
+          />
+      )}
     </Card.Body>
     </Card>
     </Tab>
 
     <Tab eventKey="profileImages" title="profileImages">
+
+    <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartAddProfileImage}>Add Image</Button>
+    {props.userAddField === "profileImage" && (
+        <AddUserProfileImageForm
+          user={props.user}
+          authId={props.authId}
+          canCancel
+          canConfirm
+          onCancel={props.onCancel}
+          onConfirm={props.addProfileImage}
+          confirmText="Confirm"
+        />
+    )}
 
     {user.profileImages !== null &&
       user.profileImages !== [] && (
@@ -102,13 +137,26 @@ const thisUserProfile = (props) => {
           userProfileImages={user.profileImages}
           authId={props.authId}
           canDelete={props.canDelete}
-          onDelete={props.attendanceDelete}
+          onDelete={props.onProfileImageDelete}
         />
       ) }
 
     </Tab>
 
     <Tab eventKey="perks" title="perks">
+    <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartAddPerk}>Add Perk</Button>
+
+    {props.userAddField === "perk" && (
+        <AddUserPerkForm
+          canCancel
+          canConfirm
+          onCancel={props.onCancel}
+          onConfirm={props.addPerk}
+          confirmText="Confirm"
+          user={props.user}
+          authId={props.authId}
+        />
+    )}
 
     {user.perks !== null &&
       user.perks !== [] && (
@@ -116,7 +164,7 @@ const thisUserProfile = (props) => {
           userPerks={user.perks}
           authId={props.authId}
           canDelete={props.canDelete}
-          onDelete={props.attendanceDelete}
+          onDelete={props.onPerkDelete}
         />
       ) }
 

@@ -40,7 +40,10 @@ class App extends Component {
     this.setState({
       token: token,
       activityId: activityId,
-      role: role });
+      role: role
+    });
+
+
   };
 
   logout = () => {
@@ -128,7 +131,9 @@ class App extends Component {
               logout: this.logout,
             }}
           >
-            <MainNavigation />
+            <MainNavigation
+              role={this.state.role}
+            />
             <main className="main-content">
               <Switch>
 

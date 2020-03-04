@@ -30,12 +30,16 @@ const mainNavigation = props => (
               )}
               {context.token && (
                 <React.Fragment>
-                  <li>
-                    <NavLink to="/userProfile">My Profile (User)</NavLink>
-                  </li>
-                  <li>
-                    <NavLink to="/modelProfile">My Profile (Model)</NavLink>
-                  </li>
+                  {props.role === "User" && (
+                    <li>
+                      <NavLink to="/userProfile">My Profile (User)</NavLink>
+                    </li>
+                  )}
+                  {props.role === "Model" && (
+                    <li>
+                      <NavLink to="/modelProfile">My Profile (Model)</NavLink>
+                    </li>
+                  )}
                   <li>
                     <NavLink to="/users">Users</NavLink>
                   </li>

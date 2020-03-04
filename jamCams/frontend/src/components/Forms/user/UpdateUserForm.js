@@ -10,6 +10,7 @@ import './CreateUserForm.css';
 
 const UpdateUserForm = (props) => {
 
+  const {...user} = props.user;
   const [dob, setDob] = useState(new Date());
   const prevDob = new Date(user.dob.substr(0,9)*1000).toISOString().slice(0,10)
 
@@ -17,8 +18,6 @@ const UpdateUserForm = (props) => {
     setDob(date);
     console.log(`Dob ${dob}`);
    }
-
-const {...user} = props.user;
 
 return (
 <div className="UpdateFormContainer">

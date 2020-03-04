@@ -53,10 +53,12 @@ class UserProfile extends Component {
   static contextType = AuthContext;
 
   componentDidMount() {
-    if (this.context.user.name === "Lord-of-the-Manor"){
-      this.setState({canDelete: true})
-    }
     this.getThisUser();
+    // if (this.context.user.name === "Lord-of-the-Manor"){
+    //   console.log("Welcome back my Mi'Lord...");
+    //   this.setState({canDelete: true})
+    // }
+
   }
 
   startUpdateUserHandler = () => {
@@ -167,7 +169,7 @@ class UserProfile extends Component {
             contactEmail:"${contactEmail}",
             bio:"${bio}"
           })
-          {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+          {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
         `};
 
         console.log(requestBody);
@@ -216,7 +218,7 @@ class UserProfile extends Component {
       const requestBody = {
         query:`
           mutation {updateUserField(activityId:"${activityId}",userId:"${activityId}",field:"${field}",query:"${query}")
-          {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+          {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
         `};
 
       fetch('http://localhost:9009/graphql', {
@@ -263,7 +265,7 @@ class UserProfile extends Component {
           profileImageType:"${profileImageType}",
           profileImagePath:"${profileImagePath}",
         })
-        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
         `};
 
       fetch('http://localhost:9009/graphql', {
@@ -301,6 +303,7 @@ class UserProfile extends Component {
       const perkDate = new Date();
       const perkName = event.target.formGridName.value;
       const perkDescription = event.target.formGridDescription.value;
+      const perkImageLink = event.target.formGridImageLink.value;
 
       const requestBody = {
         query:`
@@ -308,8 +311,10 @@ class UserProfile extends Component {
         userInput: {
           perkDate:"${perkDate}",
           perkName:"${perkName}",
-          perkDescription:"${perkDescription}"})
-        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+          perkDescription:"${perkDescription}",
+          perkImageLink:"${perkImageLink}",
+        })
+        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
         `};
 
       fetch('http://localhost:9009/graphql', {
@@ -351,7 +356,7 @@ class UserProfile extends Component {
       const requestBody = {
         query:`
         mutation {addUserInterests(activityId:"${activityId}", userId:"${activityId}",interests:${interests})
-        {_id,name,role,dob,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{date,ref{_id}},viewedContent{date,ref{_id}},likedContent{date,ref{_id}},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
         `};
 
       fetch('http://localhost:9009/graphql', {
@@ -389,11 +394,17 @@ class UserProfile extends Component {
       const preTags = event.target.formGridTags.value;
       const tags = preTags.split(",");
 
+
       const requestBody = {
-        query:`
-        mutation {addUserTags(activityId:"${activityId}", userId:"${activityId}",tags:${tags})
-        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
-        `};
+        query:
+        `
+        mutation {addUserTags(activityId:"${activityId}", userId:"${activityId}",
+        userInput:{tags:\"${tags}\"})
+        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+        `
+      };
+
+        console.log(preTags, tags, JSON.stringify(requestBody));
 
       fetch('http://localhost:9009/graphql', {
         method: 'POST',
@@ -433,7 +444,7 @@ class UserProfile extends Component {
       const requestBody = {
         query:`
         mutation {addUserTokens(activityId:"${activityId}", userId:"${activityId}",userInput:{tokens:${tokens}})
-        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
         `};
 
       fetch('http://localhost:9009/graphql', {
@@ -481,7 +492,7 @@ class UserProfile extends Component {
           complaintType:"${complaintType}",
           complaintDescription:"${complaintDescription}",
         })
-        {_id,name,role,dob,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{date,ref{_id}},viewedContent{date,ref{_id}},likedContent{date,ref{_id}},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
         `};
 
       fetch('http://localhost:9009/graphql', {
@@ -499,17 +510,113 @@ class UserProfile extends Component {
           return res.json();
         })
         .then(resData => {
-          this.context.user = resData.data.addUserComplaint;
 
           const responseAlert = JSON.stringify(resData.data).slice(2,25);
           this.setState({ userAlert: responseAlert, user: resData.data.addUserComplaint})
-          this.getThisUser();
+          this.context.user = this.state.user;
+          // this.getThisUser();
         })
         .catch(err => {
           this.setState({userAlert: err});
         });
     };
 
+
+  deleteUserProfileImage = (event) => {
+
+    const token = this.context.token;
+    const activityId = this.context.activityId;
+
+    const profileImageName = event.name;
+    const profileImageType = event.type;
+    const profileImagePath = event.path;
+    console.log(profileImageName,profileImageType,profileImagePath);
+
+    const requestBody = {
+      query:`
+        mutation {deleteUserProfileImage(activityId:"${activityId}",userId:"${activityId}",
+        userInput:{
+          profileImageName:"${profileImageName}",
+          profileImageType:"${profileImageType}",
+          profileImagePath:"${profileImagePath}",
+        })
+        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+      `};
+
+    fetch('http://localhost:9009/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Failed!');
+        }
+        return res.json();
+      })
+      .then(resData => {
+        console.log("here",resData.data.deleteUserProfileImage);
+        const responseAlert = JSON.stringify(resData.data).slice(2,25);
+        this.setState({ userAlert: responseAlert, user: resData.data.deleteUserProfileImage})
+        this.context.user = this.state.user;
+        // this.getThisUser();
+      })
+      .catch(err => {
+        this.setState({userAlert: err});
+      });
+  }
+
+  deleteUserPerk = (event) => {
+
+    const token = this.context.token;
+    const activityId = this.context.activityId;
+
+    const perkDate = event.date;
+    const perkName = event.name;
+    const perkDescription = event.description;
+    const perkImageLink = event.imageLink;
+    console.log(perkDate,perkName,perkDescription);
+
+    const requestBody = {
+      query:`
+        mutation {deleteUserPerk(activityId:"${activityId}",userId:"${activityId}",
+        userInput:{
+          perkDate:${perkDate},
+          perkName:${perkName},
+          perkDescription:${perkDescription},
+          perkImageLink:${perkImageLink},
+        })
+        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+      `};
+
+    fetch('http://localhost:9009/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Failed!');
+        }
+        return res.json();
+      })
+      .then(resData => {
+        console.log("here",resData.data.deleteUserProfileImage);
+        const responseAlert = JSON.stringify(resData.data).slice(2,25);
+        this.setState({ userAlert: responseAlert, user: resData.data.deleteUserProfileImage})
+        this.context.user = this.state.user;
+        // this.getThisUser();
+      })
+      .catch(err => {
+        this.setState({userAlert: err});
+      });
+  }
 
 
   getThisUser() {
@@ -518,7 +625,7 @@ class UserProfile extends Component {
     const requestBody = {
       query: `
       query {getThisUser(activityId:"${activityId}")
-      {_id,name,role,username,dob,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+      {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
         `};
 
     fetch('http://localhost:9009/graphql', {
@@ -539,6 +646,11 @@ class UserProfile extends Component {
         this.context.user = thisUser;
         if (this.isActive) {
           this.setState({ user: thisUser, isLoading: false });
+          }
+
+          if (thisUser.name === "Lord-of-the-Manor"){
+            console.log("Welcome back my Mi'Lord...");
+            this.setState({canDelete: true})
         }
       })
       .catch(err => {
@@ -582,10 +694,15 @@ class UserProfile extends Component {
   }
 
   addUserField = (args) => {
-    console.log(args);
     this.setState({adding: true, userAddField: args})
   }
-
+  addUserProfileImage = () => {
+    this.setState({adding: true, userAddField: "profileImage"})
+    console.log(JSON.stringify(this.state));
+  }
+  addUserPerk = () => {
+    this.setState({adding: true, userAddField: "perk"})
+  }
 
 
 
@@ -616,7 +733,7 @@ class UserProfile extends Component {
       <Row>
 
       {this.state.sidebarShow === true && (
-        <Col md={3} className="MasterCol1">
+        <Col md={2} className="MasterCol1">
         <SidebarPage
           you={this.state.user}
         />
@@ -624,7 +741,7 @@ class UserProfile extends Component {
       )}
 
       <Col md={this.state.mCol2Size} className="MasterCol2">
-        <Container className="containerProfile">
+        <div className="containerProfile">
 
         <Tab.Container id="left-tabs-example" defaultActiveKey="Detail">
           <Row>
@@ -651,56 +768,24 @@ class UserProfile extends Component {
                         user={this.state.user}
                         authId={this.context.activityId}
                         canDelete={this.state.canDelete}
-                      />
-                    )}
-
-                    <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={this.startUpdateUserHandler}>Edit Demographics</Button>
-                    {this.state.updating === true &&
-                      this.state.user !== null && (
-                      <UpdateUserForm
-                      canCancelProfile
-                        canConfirm
+                        onEdit={this.modalConfirmUpdateHandler}
+                        onEditField={this.modalConfirmUpdateFieldHandler}
+                        addProfileImage={this.addUserProfileImageHandler}
+                        addPerk={this.addUserPerkHandler}
+                        onProfileImageDelete={this.deleteUserProfileImage}
+                        onPerkDelete={this.deleteUserPerk}
                         onCancel={this.modalCancelHandler}
-                        onConfirm={this.modalConfirmUpdateHandler}
-                        confirmText="Confirm"
-                        user={this.state.user}
-                        authId={this.context.activityId}
+                        onStartUpdate={this.startUpdateUserHandler}
+                        onStartUpdateField={this.startUpdateUserFieldHandler}
+                        onStartAddProfileImage={this.addUserProfileImage}
+                        onStartAddPerk={this.addUserPerk}
+                        updating={this.state.updating}
+                        updatingField={this.state.updatingField}
+                        userAddField={this.state.userAddField}
                       />
                     )}
 
-                    {this.state.user !== null && (
-                      <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={this.startUpdateUserFieldHandler}>Edit a Single Field</Button>
-                    )}
-                    {this.state.updatingField &&
-                      this.state.user !== null
-                      && (
-                        <UpdateUserFieldForm
-                          authId={this.context.activityId}
-                          canCancel
-                          canConfirm
-                          onCancel={this.modalCancelHandler}
-                          onConfirm={this.modalConfirmUpdateFieldHandler}
-                          confirmText="Confirm"
-                          user={this.state.user}
-                        />
-                    )}
 
-                    {this.state.user !== null && (
-                      <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={this.addUserField.bind(this, "profileImage")}>Add Profile Image</Button>
-                    )}
-
-                    {this.state.userAddField === "profileImage" &&
-                      this.state.user !== null && (
-                        <AddUserProfileImageForm
-                          authId={this.context.activityId}
-                          canCancel
-                          canConfirm
-                          onCancel={this.modalCancelHandler}
-                          onConfirm={this.addUserProfileImageHandler}
-                          confirmText="Confirm"
-                          user={this.state.user}
-                        />
-                    )}
 
                 </Tab.Pane>
 
@@ -773,22 +858,24 @@ class UserProfile extends Component {
                       />
                   )}
 
-                  {this.state.user !== null && (
-                    <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={this.addUserField.bind(this, "complaint")}>Add Complaint</Button>
-                  )}
-
-                  {this.state.userAddField === "complaint" &&
-                    this.state.user !== null && (
-                      <AddUserComplaintForm
-                        authId={this.context.activityId}
-                        canCancel
-                        canConfirm
-                        onCancel={this.modalCancelHandler}
-                        onConfirm={this.addUserComplaintHandler}
-                        confirmText="Confirm"
-                        user={this.state.user}
-                      />
-                  )}
+                  {
+                  //   {this.state.user !== null && (
+                  //   <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={this.addUserField.bind(this, "complaint")}>Add Complaint</Button>
+                  // )}
+                  //
+                  // {this.state.userAddField === "complaint" &&
+                  //   this.state.user !== null && (
+                  //     <AddUserComplaintForm
+                  //       authId={this.context.activityId}
+                  //       canCancel
+                  //       canConfirm
+                  //       onCancel={this.modalCancelHandler}
+                  //       onConfirm={this.addUserComplaintHandler}
+                  //       confirmText="Confirm"
+                  //       user={this.state.user}
+                  //     />
+                  // )}
+                }
 
                 </Tab.Pane>
 
@@ -796,7 +883,7 @@ class UserProfile extends Component {
             </Col>
           </Row>
         </Tab.Container>
-        </Container>
+        </div>
       </Col>
       </Row>
       </React.Fragment>

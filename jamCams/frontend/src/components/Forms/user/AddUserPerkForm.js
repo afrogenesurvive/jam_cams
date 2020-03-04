@@ -26,6 +26,13 @@ return (
   </Form.Group>
   </Form.Row>
 
+  <Form.Row>
+    <Form.Group as={Col} controlId="formGridImageLink">
+    <Form.Label>ImageLink</Form.Label>
+    <Form.Control type="text" placeholder="Image Path"/>
+  </Form.Group>
+  </Form.Row>
+
 <Form.Row>
 {props.canCancel && (
   <Button variant="danger" className="formButton" onClick={props.onCancel}>Cancel</Button>

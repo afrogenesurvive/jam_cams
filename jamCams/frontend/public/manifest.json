@@ -1,9 +1,9 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Jam_Cams",
+  "name": "Jam_Cams: Personal Skin-out",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "jam_cams_ico.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },

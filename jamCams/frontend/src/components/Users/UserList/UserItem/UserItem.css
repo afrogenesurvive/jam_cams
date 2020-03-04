@@ -7,7 +7,20 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* width: 30vw; */
+  width: 15rem;
+  float: left;
+}
+.users__list-item_detail1 {
+  margin: 1rem 1rem;
+  padding: .5rem;
+  /* border: 1px solid #5101d1; */
+  box-shadow: 5px 5px 3px 2px #888888;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 25rem;
+  float: left;
 }
 
 .users__list-item_master {
@@ -63,4 +76,9 @@
 }
 .cardLi {
   padding: 0;
+}
+
+.profileImageImg {
+  height: 20rem;
+  width: 20rem;
 }
