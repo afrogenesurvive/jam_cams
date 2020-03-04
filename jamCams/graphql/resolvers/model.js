@@ -531,7 +531,7 @@ module.exports = {
       const prevAmountModel = await Model.findById({_id: args.modelId});
       const prevAmount = prevAmountModel.tokens;
       const amountToAdd = args.modelInput.tokens;
-      const newAmount = prevAmount + newAmount;
+      let newAmount = prevAmount + amountToAdd;
       const model = await Model.findOneAndUpdate({_id:args.modelId},{ tokens: newAmount },{new: true, useFindAndModify: false})
         return {
           ...model._doc,
@@ -929,9 +929,9 @@ module.exports = {
   createModel: async (args, req) => {
 
     try {
-      const existingModelName = await Model.findOne({ name: args.modelInput.name, username: args.modelInput.username});
+      const existingModelName = await Model.findOne({ username: args.modelInput.username});
       if (existingModelName) {
-        throw new Error('Model w/ that name & username exists already.');
+        throw new Error('Model w/ that username exists already.');
       }
       const hashedPassword = await bcrypt.hash(args.modelInput.password, 12);
       const model = new Model({

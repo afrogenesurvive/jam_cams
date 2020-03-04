@@ -96,7 +96,7 @@ module.exports = buildSchema(`
     contactPhone: String
     contactEmail: String
     bio: String
-    profileImagenName: String
+    profileImageName: String
     profileImageType: String
     profileImagePath: String
     interest: String
@@ -467,7 +467,7 @@ module.exports = buildSchema(`
     addUserPerks(activityId: ID!, userId: ID!, perks: [PerkInput]): User
     addUserPerk(activityId: ID!, userId: ID!, userInput: UserInput): User
     addUserTokens(activityId: ID!, userId: ID!, userInput: UserInput!): User
-    addUserTags(activityId: ID!, userId: ID!, tags: [String!]): User
+    addUserTags(activityId: ID!, userId: ID!, tags: [String!]!): User
     addUserSearch(activityId: ID!, userId: ID!, userInput: UserInput!): User
     addUserBilling(activityId: ID!, userId: ID!, userInput: UserInput!): User
     editUserBillingPaid(activityId: ID!, userId: ID!, date: String!, amount: Float!): User
@@ -483,7 +483,7 @@ module.exports = buildSchema(`
     deleteUser(activityId: ID!, userId: ID!): User
     deleteUserInterests(activityId: ID!, userId: ID!, interests: [String!]): User
     deleteUserPerks(activityId: ID!, userId: ID!, perkNames: [String!]): User
-    deleteUserTags(activityId: ID!, userId: ID!, tags: [String!]): User
+    deleteUserTags(activityId: ID!, userId: ID!, tags: [String!]!): User
     deleteUserSearches(activityId: ID!, userId: ID!, searchQueries: [String!]): User
     deleteUserBilling(activityId: ID!, userId: ID!, userInput: UserInput!): User
     deleteUserComplaint(activityId: ID!, userId: ID!, userInput: UserInput!): User

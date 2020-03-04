@@ -4,41 +4,41 @@ import Card from 'react-bootstrap/Card'
 
 import './UserItem.css';
 
-const userLeaveItem = props => (
+const userPerkItem = props => (
   <li key={props.userId} className="users__list-item_detail">
     <div>
 
     <Card className="card">
       <Card.Body>
         <Card.Title>
-          Leave
+          Perk
         </Card.Title>
 
-        
+
         <ul className="cardUl">
           <li className="cardLi">
-          <p className="userItemHeading"> Type:</p>
+          <p className="userItemHeading"> date:</p>
           <p className="userItemText">
-          {props.type}
+          {props.date}
           </p>
           </li>
           <li>
-          <p className="userItemHeading"> Start Date:</p>
+          <p className="userItemHeading"> name:</p>
           <p className="userItemText">
-          {props.startDate}
+          {props.name}
           </p>
           </li>
           <li>
-          <p className="userItemHeading"> End Date:</p>
+          <p className="userItemHeading"> description:</p>
           <p className="userItemText">
-          {props.endDate}
+          {props.description}
           </p>
           </li>
         </ul>
-        
+
         <Card.Link href="">
         { props.canDelete === true && (
-          <Button variant="danger" onClick={props.onDelete.bind(this, props.leave)}>
+          <Button variant="danger" onClick={props.onDelete.bind(this, props.perk)}>
             Delete
           </Button>
         )}
@@ -50,4 +50,4 @@ const userLeaveItem = props => (
   </li>
 );
 
-export default userLeaveItem;
+export default userPerkItem;

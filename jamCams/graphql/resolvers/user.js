@@ -493,9 +493,9 @@ module.exports = {
     }
     try {
       const perk = {
-        date: args.userInput.date,
-        name: args.userInput.name,
-        description: args.userInput.description,
+        date: args.userInput.perkDate,
+        name: args.userInput.perkName,
+        description: args.userInput.perkDescription,
       };
       const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { perks: perk }},{new: true, useFindAndModify: false})
         return {
@@ -534,10 +534,10 @@ module.exports = {
     try {
       const profileImage = {
         name: args.userInput.profileImageName,
-        type: args.userInput.profileImagesType,
-        path: args.userInput.profileImagesPath
+        type: args.userInput.profileImageType,
+        path: args.userInput.profileImagePath
       };
-      const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { perks: {$each: perks} }},{new: true, useFindAndModify: false})
+      const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { profileImages: profileImage }},{new: true, useFindAndModify: false})
         return {
           ...user._doc,
           _id: user.id,
@@ -558,7 +558,7 @@ module.exports = {
       const prevAmountUser = await User.findById({_id: args.userId});
       const prevAmount = prevAmountUser.tokens;
       const amountToAdd = args.userInput.tokens;
-      const newAmount = prevAmount + amountToAdd;
+      let newAmount = prevAmount + amountToAdd;
       const user = await User.findOneAndUpdate({_id:args.userId},{ tokens: newAmount },{new: true, useFindAndModify: false})
         return {
           ...user._doc,
@@ -616,6 +616,7 @@ module.exports = {
       throw err;
     }
   },
+
   editUserBillingPaid: async (args, req) => {
 
     if (!req.isAuth) {
@@ -1061,9 +1062,9 @@ module.exports = {
   createUser: async (args, req) => {
 
     try {
-      const existingUserName = await User.findOne({ name: args.userInput.name, username: args.userInput.username});
+      const existingUserName = await User.findOne({ username: args.userInput.username});
       if (existingUserName) {
-        throw new Error('User w/ that name & username exists already.');
+        throw new Error('User w/ that username exists already.');
       }
       const hashedPassword = await bcrypt.hash(args.userInput.password, 12);
       const user = new User({

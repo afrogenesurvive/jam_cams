@@ -77,6 +77,7 @@ class AuthPage extends Component {
         if (res.status !== 200 && res.status !== 201) {
           throw new Error('Failed!');
         }
+
         return res.json();
       })
       .then(resData => {
@@ -86,7 +87,6 @@ class AuthPage extends Component {
 
 
         if (resData.data.modelLogin) {
-          console.log("2");
           this.context.login(
             resData.data.modelLogin.token,
             resData.data.modelLogin.activityId,
@@ -105,7 +105,6 @@ class AuthPage extends Component {
         }
 
         if (resData.data.userLogin.token) {
-          console.log("1");
           this.context.login(
             resData.data.userLogin.token,
             resData.data.userLogin.activityId,

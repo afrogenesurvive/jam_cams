@@ -36,7 +36,7 @@ return (
   <Form.Row>
     <Form.Group as={Col} controlId="formGridField">
     <Form.Label>Field</Form.Label>
-    <Form.Control type="text" placeholder="Query"/>
+    <Form.Control type="text" placeholder="field"/>
   </Form.Group>
   </Form.Row>
 

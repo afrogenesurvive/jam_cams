@@ -1,43 +1,62 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card'
+
 import './UserItem.css';
 
-const userAttendanceItem = props => (
+const userBillingItem = props => (
   <li key={props.userId} className="users__list-item_detail">
     <div>
 
     <Card className="card">
       <Card.Body>
         <Card.Title>
-          Attendance
+          Billing
         </Card.Title>
 
-        
+
         <ul className="cardUl">
           <li className="cardLi">
-          <p className="userItemHeading"> Date:</p>
+          <p className="userItemHeading"> date:</p>
           <p className="userItemText">
           {props.date}
           </p>
           </li>
           <li>
-          <p className="userItemHeading"> Status:</p>
+          <p className="userItemHeading"> type:</p>
           <p className="userItemText">
-          {props.status}
+          {props.type}
           </p>
           </li>
           <li>
-          <p className="userItemHeading"> Description:</p>
+          <p className="userItemHeading"> description:</p>
           <p className="userItemText">
           {props.description}
           </p>
           </li>
+          <li>
+          <p className="userItemHeading"> amount:</p>
+          <p className="userItemText">
+          {props.amount}
+          </p>
+          </li>
+          <li>
+          <p className="userItemHeading"> paid:</p>
+          <p className="userItemText">
+          {props.paid}
+          </p>
+          </li>
+          <li>
+          <p className="userItemHeading"> payment:</p>
+          <p className="userItemText">
+          {props.payment}
+          </p>
+          </li>
         </ul>
-        
+
         <Card.Link href="">
         { props.canDelete === true && (
-          <Button variant="danger" onClick={props.onDelete.bind(this, props.attendance)}>
+          <Button variant="danger" onClick={props.onDelete.bind(this, props.billing)}>
             Delete
           </Button>
         )}
@@ -45,7 +64,8 @@ const userAttendanceItem = props => (
       </Card.Body>
     </Card>
     </div>
+
   </li>
 );
 
-export default userAttendanceItem;
+export default userBillingItem;

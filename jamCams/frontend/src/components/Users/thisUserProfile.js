@@ -6,7 +6,12 @@ import Tab from 'react-bootstrap/Tab';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-// import UserAttendanceList from './UserList/UserAttendanceList';
+import UserProfileImageList from './UserList/UserProfileImageList';
+import UserPerkList from './UserList/UserPerkList';
+import UserInterestList from './UserList/UserInterestList';
+import UserTagList from './UserList/UserTagList';
+import UserBillingList from './UserList/UserBillingList';
+import UserComplaintList from './UserList/UserComplaintList';
 
 import './thisUserProfile.css';
 
@@ -15,7 +20,7 @@ const thisUserProfile = (props) => {
   const authId = props.authId;
   const userAddress = user.address;
 
-  const userDob = new Date(user.dob.substr(0,10)*1000).toISOString().slice(0,10);
+  const userDob = new Date(user.dob.substr(0,9)*1000).toISOString().slice(0,10);
 
   return (
 
@@ -76,10 +81,102 @@ const thisUserProfile = (props) => {
         </Col>
       </Row>
 
+    {
+      // <UserAttendanceList
+      //   userAttendance={userAttendance}
+      //   authUserId={authUserId}
+      //   canDelete={props.canDelete}
+      //   onDelete={props.attendanceDelete}
+      // />
+    }
+
     </Card.Body>
     </Card>
     </Tab>
 
+    <Tab eventKey="profileImages" title="profileImages">
+
+    {user.profileImages !== null &&
+      user.profileImages !== [] && (
+        <UserProfileImageList
+          userProfileImages={user.profileImages}
+          authId={props.authId}
+          canDelete={props.canDelete}
+          onDelete={props.attendanceDelete}
+        />
+      ) }
+
+    </Tab>
+
+    <Tab eventKey="perks" title="perks">
+
+    {user.perks !== null &&
+      user.perks !== [] && (
+        <UserPerkList
+          userPerks={user.perks}
+          authId={props.authId}
+          canDelete={props.canDelete}
+          onDelete={props.attendanceDelete}
+        />
+      ) }
+
+    </Tab>
+
+    <Tab eventKey="interests" title="interests">
+
+    {user.interests !== null &&
+      user.interests !== [] && (
+        <UserInterestList
+          userInterests={user.interests}
+          authId={props.authId}
+          canDelete={props.canDelete}
+          onDelete={props.attendanceDelete}
+        />
+      ) }
+
+    </Tab>
+
+    <Tab eventKey="tags" title="tags">
+
+    {user.tags !== null &&
+      user.tags !== [] && (
+        <UserTagList
+          userTags={user.tags}
+          authId={props.authId}
+          canDelete={props.canDelete}
+          onDelete={props.attendanceDelete}
+        />
+      ) }
+
+    </Tab>
+
+    <Tab eventKey="billing" title="billing">
+
+    {user.billing !== null &&
+      user.billing !== [] && (
+        <UserBillingList
+          userBilling={user.billing}
+          authId={props.authId}
+          canDelete={props.canDelete}
+          onDelete={props.attendanceDelete}
+        />
+      ) }
+
+    </Tab>
+
+    <Tab eventKey="complaints" title="complaints">
+
+    {user.complaints !== null &&
+      user.complaints !== [] && (
+        <UserComplaintList
+          userComplaints={user.complaints}
+          authId={props.authId}
+          canDelete={props.canDelete}
+          onDelete={props.attendanceDelete}
+        />
+      ) }
+
+    </Tab>
   </Tabs>
   );
 }

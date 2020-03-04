@@ -22,18 +22,9 @@ import SidebarControl from '../../components/SidebarControl';
 import AlertBox from '../../components/AlertBox';
 import LoadingOverlay from '../../components/LoadingOverlay';
 import AttachmentViewer from '../../components/AttachmentViewer';
-//
-// import CreateUserForm from '../components/Forms/CreateUserForm';
-// import UpdateUserForm from '../components/Forms/UpdateUserForm';
-// import UpdateUserFieldForm from '../components/Forms/UpdateUserFieldForm';
-// import UpdateUserAttendanceForm from '../components/Forms/UpdateUserAttendanceForm';
-// import UpdateUserAttachmentForm from '../components/Forms/UpdateUserAttachmentForm';
-// import UpdateUserLeaveForm from '../components/Forms/UpdateUserLeaveForm';
+
 // import SearchUserForm from '../components/Forms/SearchUserForm';
 // import SearchUserIdForm from '../components/Forms/SearchUserIdForm';
-// import SearchUserNameForm from '../components/Forms/SearchUserNameForm';
-// import SearchUserAttendanceDateForm from '../components/Forms/SearchUserAttendanceDateForm';
-// import SearchUserLeaveDateRangeForm from '../components/Forms/SearchUserLeaveDateRangeForm';
 
 import './Users.css';
 
@@ -59,13 +50,9 @@ class UsersPage extends Component {
     showAttachment: false,
     showThisAttachmentFile: null,
     showThisAttachmentType: null,
-    creatingDocument: false,
-    createPdf: false,
-    pdfData: null,
-    pdfType: null,sidebarShow: true,
+    sidebarShow: true,
     mCol1Size: 3,
     mCol2Size: 9,
-    creds: null
   };
   isActive = true;
 
@@ -82,103 +69,9 @@ class UsersPage extends Component {
     }
 
     this.fetchUsers();
-    this.getCreds();
   }
 
-  startCreateUserHandler = () => {
-    this.setState({ creating: true });
-  };
-  startUpdateUserHandler = () => {
-    this.setState({ updating: true });
-  };
-  startSearchUserHandler = () => {
-    this.setState({ searching: true });
-  };
 
-  modalConfirmHandler = (event) => {
-
-    this.setState({ creating: false, userAlert: "Creating new user..." });
-
-    const email = event.target.formGridEmail.value;
-    const password = event.target.formGridPassword.value;
-    const name = event.target.formGridName.value;
-    const role = event.target.formGridRole.value;
-    const dob = event.target.formGridDob.value;
-    const phone = event.target.formGridPhone.value;
-    const addressNumber = event.target.formGridAddressNumber.value;
-    const addressStreet = event.target.formGridAddressStreet.value;
-    const addressTown = event.target.formGridAddressTown.value;
-    const addressParish = event.target.formGridAddressParish.value;
-    const addressPostOffice = event.target.formGridAddressPostOffice.value;
-
-    let employmentDate = new Date(event.target.staffCalendarEmploymentDate.value).toISOString().slice(0,10);
-    if (event.target.formGridEmploymentDateTodayCheckbox.checked === true) {
-      employmentDate = new Date().toISOString().slice(0,10);
-    }
-
-
-    let terminationDate = new Date(event.target.staffCalendarTerminationDate.value).toISOString().slice(0,10);
-    if (event.target.formGridTerminationDateTodayCheckbox.checked === true) {
-      terminationDate = new Date().toISOString().slice(0,10);
-    }
-
-
-    if (
-      email.trim().length === 0 ||
-      password.trim().length === 0 ||
-      name.trim().length === 0 ||
-      role.trim().length === 0 ||
-      dob.trim().length === 0 ||
-      phone.trim().length === 0 ||
-      addressNumber.trim().length === 0 ||
-      addressStreet.trim().length === 0 ||
-      addressTown.trim().length === 0 ||
-      addressParish.trim().length === 0 ||
-      addressPostOffice.trim().length === 0 ||
-      employmentDate.trim().length === 0
-    ) {
-      this.setState({userAlert: "blank fields detected!!!...Please try again..."});
-      return;
-    }
-
-    const token = this.context.token;
-    const userId = this.context.userId;
-    const requestBody = {
-      query: `
-          mutation {createUser(userInput: {email:"${email}",password:"${password}",name:"${name}",dob:"${dob}",addressNumber:${addressNumber},addressStreet:"${addressStreet}",addressTown:"${addressTown}",addressParish:"${addressParish}", addressPostOffice:"${addressPostOffice}",phone:"${phone}",role:"${role}",employmentDate:"${employmentDate}",terminationDate:"${terminationDate}"})
-          {_id,email,password,name,dob,address{number,street,town,parish,postOffice},phone,role,employmentDate,terminationDate,attachments{name,format,path},attendance{date,status,description},leave{type,title,startDate,endDate}}
-        }`
-      };
-
-    // fetch('http://ec2-3-19-32-237.us-east-2.compute.amazonaws.com/graphql', {
-    fetch('http://localhost:10000/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-      .then(res => {
-        if (res.status !== 200 && res.status !== 201) {
-          throw new Error('Failed!');
-        }
-        return res.json();
-      })
-      .then(resData => {
-        this.setState(prevState => {
-          const updatedUsers = [...prevState.users];
-          updatedUsers.push(resData.data.createUser);
-          return { users: updatedUsers };
-        });
-        this.context.users.push(resData.data.createUser);
-        const responseAlert = JSON.stringify(resData.data).slice(0,8);
-        this.setState({userAlert: responseAlert, selectedUser: resData.data.createUser});
-      })
-      .catch(err => {
-        this.setState({userAlert: err});
-      });
-  };
 
   modalConfirmSearchHandler = (event) => {
 
@@ -239,44 +132,6 @@ class UsersPage extends Component {
       });
   }
 
-  modalConfirmSearchIdHandler = (event) => {
-
-    let userId = this.context.userId;
-    const token = this.context.token;
-    this.setState({ searching: false, userAlert: "Searching for Staff by Id #..." });
-    let selectedUserId = event.target.formBasicId.value;
-    const requestBody = {
-      query: `
-        query {getUserId(userId:"${userId}",selectedUserId:"${selectedUserId}")
-        {_id,email,password,name,dob,address{number,street,town,parish,postOffice},phone,role,employmentDate,terminationDate,attachments{name,format,path},attendance{date,status,description},leave{type,title,startDate,endDate}}}
-      `}
-
-    fetch('http://localhost:10000/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-      .then(res => {
-        if (res.status !== 200 && res.status !== 201) {
-          throw new Error('Failed!');
-        }
-        return res.json();
-      })
-      .then(resData => {
-        const responseAlert = JSON.stringify(resData.data).slice(2,25);
-        const searchUsers = resData.data.getUserId;
-
-        this.setState({ searchUsers: [searchUsers], userAlert: responseAlert });
-        // this.fetchUsers();
-      })
-      .catch(err => {
-        this.setState({userAlert: err});
-      });
-  }
-
 
 
   modalCancelHandler = () => {
@@ -285,12 +140,12 @@ class UsersPage extends Component {
 
   fetchUsers() {
 
-    const userId = this.context.userId;
+    const activityId = this.context.activityId;
     this.setState({ isLoading: true, userAlert: "Fetching Staff Master List..." });
     const requestBody = {
       query: `
-          query {users (userId:"${userId}")
-          {_id,email,password,name,dob,address{number,street,town,parish,postOffice},phone,role,employmentDate,terminationDate,attachments{name,format,path},attendance{date,status,description},leave{type,title,startDate,endDate}}}
+          query {users(activityId:"${activityId}")
+          {_id,name,role,dob,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
         `};
 
     fetch('http://localhost:10000/graphql', {
@@ -321,170 +176,7 @@ class UsersPage extends Component {
       });
   }
 
-  fetchUsersAsc = () => {
 
-    this.setState({ userAlert: "Fetching Staff Master List in Ascending order..."})
-    const userId = this.context.userId;
-    const requestBody = {
-      query: `
-          query {usersNameAsc (userId:"${userId}")
-          {_id,email,password,name,dob,address{number,street,town,parish,postOffice},phone,role,employmentDate,terminationDate,attachments{name,format,path},attendance{date,status,description},leave{type,title,startDate,endDate}}}
-        `};
-
-    fetch('http://localhost:10000/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + this.context.token
-      }
-    })
-      .then(res => {
-        if (res.status !== 200 && res.status !== 201) {
-          this.context.userAlert = 'Failed!';
-          throw new Error('Failed!');
-        }
-        return res.json();
-      })
-      .then(resData => {
-        const users = resData.data.usersNameAsc;
-        const responseAlert = JSON.stringify(resData.data).slice(0,8);
-        this.setState({userAlert: responseAlert, users: users});
-        this.context.users = this.state.users;
-      })
-      .catch(err => {
-        this.setState({userAlert: err});
-      });
-  }
-  fetchUsersDesc = () => {
-
-    this.setState({ userAlert: "Fetching Staff Master List in Descending order ..."})
-    const userId = this.context.userId;
-    const requestBody = {
-      query: `
-          query {usersNameDesc (userId:"${userId}")
-          {_id,email,password,name,dob,address{number,street,town,parish,postOffice},phone,role,employmentDate,terminationDate,attachments{name,format,path},attendance{date,status,description},leave{type,title,startDate,endDate}}}
-        `};
-
-    fetch('http://localhost:10000/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + this.context.token
-      }
-    })
-      .then(res => {
-        if (res.status !== 200 && res.status !== 201) {
-          this.context.userAlert = 'Failed!';
-          throw new Error('Failed!');
-        }
-        return res.json();
-      })
-      .then(resData => {
-        const users = resData.data.usersNameDesc;
-        const responseAlert = JSON.stringify(resData.data).slice(0,8);
-        this.setState({userAlert: responseAlert, users: users});
-        this.context.users = this.state.users;
-      })
-      .catch(err => {
-        this.setState({userAlert: err});
-      });
-  }
-
-modalDeleteHandler = () => {
-
-  const userId = this.context.userId;
-  const selectedUserId = this.context.selectedUser._id;
-  if(this.context.user.role !== 'admin') {
-    this.setState({userAlert: "Not the Admin! No edit permission!!"})
-  }
-
-  this.setState({deleting: true, userAlert: "deleting user.."});
-
-  const requestBody = {
-    query: `
-        mutation {
-          deleteUser(userId: "${userId}", selectedUserId: "${selectedUserId}")
-          {_id,email,password,name,dob,address{number,street,town,parish,postOffice},phone,role,employmentDate,terminationDate,attachments{name,format,path},attendance{date,status,description},leave{type,title,startDate,endDate}}
-        }`
-      };
-
-  fetch('http://localhost:10000/graphql', {
-    method: 'POST',
-    body: JSON.stringify(requestBody),
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + this.context.token
-    }
-  })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-      }
-      return res.json();
-    })
-    .then(resData => {
-      const responseAlert = JSON.stringify(resData.data).slice(0,8);
-      this.setState({userAlert: responseAlert});
-      let deletedUser = resData.data.deleteUser;
-      let deletedUserId = deletedUser._id;
-      deletedUser = this.state.users.find(e => e._id === deletedUserId);
-      const deletedUserPos = this.state.users.indexOf(deletedUser);
-      const slicedArray = this.state.users.splice(deletedUserPos, 1);
-      this.setState({ deleting: false });
-      this.fetchUsers();
-    })
-    .catch(err => {
-      this.setState({userAlert: err});
-      if (this.isActive) {
-        this.setState({ deleting: false });
-      }
-    });
-}
-
-deleteUserAttendanceItem = (props) => {
-
-  this.setState({ userAlert: "Deleting Staff Attendance Item..."})
-  let token = this.context.token;
-  let userId = this.context.userId;
-  let selectedUserId = this.state.selectedUser._id;
-  let date = new Date(props.date.substr(0,10)*1000).toISOString().slice(0,10);
-  const requestBody = {
-    query: `
-     mutation{deleteUserAttendance(userId:"${userId}",selectedUserId:"${selectedUserId}",attendanceDate:"${date}")
-     {_id,email,password,name,dob,address{number,street,town,parish,postOffice},phone,role,employmentDate,terminationDate,attachments{name,format,path},attendance{date,status,description},leave{type,title,startDate,endDate}}}
-  `};
-
-    fetch('http://localhost:10000/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-      .then(res => {
-        if (res.status !== 200 && res.status !== 201) {
-          throw new Error('Failed!');
-        }
-        return res.json();
-      })
-      .then(resData => {
-        const updatedUserId = resData.data.deleteUserAttendance._id;
-        const updatedUser = this.state.users.find(e => e._id === updatedUserId);
-        const updatedUserPos = this.state.users.indexOf(updatedUser);
-        const slicedArray = this.state.users.splice(updatedUserPos, 1);
-        this.state.users.push(resData.data.deleteUserAttendance);
-        this.context.users = this.state.users;
-        const responseAlert = JSON.stringify(resData.data).slice(2,25);
-        this.setState({ userAlert: responseAlert})
-        this.fetchUsers();
-      })
-      .catch(err => {
-        this.setState({ userAlert: err })
-      });
-}
 
 
 showDetailHandler = userId => {
@@ -578,15 +270,12 @@ showDetailHandler = userId => {
 
         <Col md={this.state.mCol2Size} className="MasterCol2">
             <Container className="containerCombinedDetail">
-              <Tab.Container id="left-tabs-example" defaultActiveKey="userDetail">
+              <Tab.Container id="left-tabs-example" defaultActiveKey="MasterList">
                 <Row>
                   <Col sm={2}>
                     <Nav variant="pills" className="flex-column">
                       <Nav.Item>
                         <Nav.Link eventKey="MasterList">MASTER LIST</Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item>
-                        <Nav.Link eventKey="disabled" disabled>Search:</Nav.Link>
                       </Nav.Item>
                       <Nav.Item>
                         <Nav.Link eventKey="SearchInput">Input</Nav.Link>
@@ -597,32 +286,7 @@ showDetailHandler = userId => {
                       <Nav.Item>
                         <Nav.Link eventKey="userDetail">Selected</Nav.Link>
                       </Nav.Item>
-                      { this.context.user.role === "admin" && (
-                      <Nav.Item>
-                        <Nav.Link eventKey="userCreate">Create New</Nav.Link>
-                      </Nav.Item>
-                      )}
-                      <Nav.Item>
-                        <Nav.Link eventKey="disabled" disabled>Edit:</Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item>
-                        <Nav.Link eventKey="userEditDemographics">Demographics</Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item>
-                        <Nav.Link eventKey="userEditField">Single Field</Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item>
-                        <Nav.Link eventKey="disabled" disabled>Add:</Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item>
-                        <Nav.Link eventKey="userEditAttendance">Attendance</Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item>
-                        <Nav.Link eventKey="userEditLeave">Leave</Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item>
-                        <Nav.Link eventKey="userEditAttachment">Attachment</Nav.Link>
-                      </Nav.Item>
+
 
                     </Nav>
                   </Col>
@@ -639,272 +303,24 @@ showDetailHandler = userId => {
                           this.state.selectedUser !== null
                           && (
                             <UserDetail
-                            authUserId={this.context.userId}
+                            authId={this.context.activityId}
                             AuthContext={this.context}
                             user={this.state.selectedUser}
-                            onEdit={this.startUpdateUserHandler}
-                            canDelete={this.state.canDelete}
-                            onDelete={this.modalDeleteHandler}
-                            attendanceDelete={this.deleteUserAttendanceItem}
-                            leaveDelete={this.deleteUserLeaveItem}
-                            attachmentDelete={this.deleteUserAttachmentItem}
                             onViewAttachment={this.onViewAttachment}
-                            onCreatePdf={this.createPdf}
                             />
                           )}
-                      </Tab.Pane>
-
-                      { this.context.user.role === "admin" && (
-                        <Tab.Pane eventKey="userCreate">
-                        <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={this.startCreateUserHandler} >Create a NEW Staff Profile</Button>
-                          {this.state.creating && (
-                            <CreateUserForm
-                              authUserId={this.context.userId}
-                              canCancel
-                              canConfirm
-                              onCancel={this.modalCancelHandler}
-                              onConfirm={this.modalConfirmHandler}
-                              onSubmit={this.modalConfirmHandler}
-                              confirmText="Confirm"
-                            />
-                          )}
-                        </Tab.Pane>
-                      )}
-
-
-                      <Tab.Pane eventKey="userEditDemographics">
-                        {this.state.selectedUser === null && (
-                          <Button variant="outline-warning" className="confirmEditButton" size="lg">
-                            Select a Staff member from the Master List
-                          </Button>
-                        )}
-                        {this.state.selectedUser !== null &&
-                          this.context.user.role === "admin"
-                          && (
-                          <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={this.startUpdateUserHandler}>Edit Demographics as Admin</Button>
-                        )}
-                        {this.state.selectedUser !== null &&
-                          this.state.selectedUser._id === this.context.user._id
-                          && (
-                          <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={this.startUpdateUserHandler}>Edit Demographics</Button>
-                        )}
-                        {this.state.selectedUser !== null &&
-                          this.state.selectedUser._id === this.context.user._id && (
-                          <Button variant="outline-danger" className="confirmEditButton" size="lg">
-                            Your Profile
-                          </Button>
-                        )}
-                        {this.state.selectedUser !== null &&
-                          this.state.selectedUser._id !== this.context.user._id && (
-                          <Button variant="outline-danger" className="confirmEditButton" size="lg">
-                            Not my profile
-                          </Button>
-                        )}
-                        {this.state.updating &&
-                          this.state.selectedUser !== null
-                          && (
-                          <UpdateUserForm
-                            authUserId={this.context.userId}
-                            canCancel
-                            canConfirm
-                            onCancel={this.modalCancelHandler}
-                            onConfirm={this.modalConfirmUpdateHandler}
-                            confirmText="Confirm"
-                            user={this.context.selectedUser}
-                          />
-                        )}
-                      </Tab.Pane>
-
-                      <Tab.Pane eventKey="userEditField">
-                        {this.state.selectedUser === null && (
-                          <Button variant="outline-warning" className="confirmEditButton" size="lg">
-                            Select a Staff member from the Master List
-                          </Button>
-                        )}
-
-                        {this.state.selectedUser !== null &&
-                          this.context.user.role === "admin"
-                          && (
-                          <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={this.startUpdateUserHandler}>Edit Field as Admin</Button>
-                        )}
-                        {this.state.selectedUser !== null &&
-                          this.state.selectedUser._id === this.context.user._id
-                          && (
-                          <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={this.startUpdateUserHandler}>Edit a Single Field</Button>
-                        )}
-                        {this.state.selectedUser !== null &&
-                          this.state.selectedUser._id === this.context.user._id && (
-                          <Button variant="outline-success" className="confirmEditButton" size="lg">
-                            Your Profile
-                          </Button>
-                        )}
-                        {this.state.selectedUser !== null &&
-                          this.state.selectedUser._id !== this.context.user._id && (
-                          <Button variant="outline-danger" className="confirmEditButton" size="lg">
-                            Not my profile
-                          </Button>
-                        )}
-                        {this.state.updating &&
-                          this.state.selectedUser !== null
-                          && (
-                            <UpdateUserFieldForm
-                              authUserId={this.context.userId}
-                              canCancel
-                              canConfirm
-                              onCancel={this.modalCancelHandler}
-                              onConfirm={this.modalConfirmUpdateFieldHandler}
-                              confirmText="Confirm"
-                              user={this.state.selectedUser}
-                            />
-                        )}
-                      </Tab.Pane>
-
-                      <Tab.Pane eventKey="userEditAttendance">
-                        {this.state.selectedUser === null && (
-                          <Button variant="outline-warning" className="confirmEditButton" size="lg">
-                            Select a Staff member from the Master List below
-                          </Button>
-                        )}
-
-                        {this.state.selectedUser !== null &&
-                          this.context.user.role === "admin"
-                          && (
-                          <Button variant="outline-primary" size="lg" className="confirmEditButton" value='attendance' onClick={this.updateUserSpecial.bind(this)}>Add Attendance as Admin</Button>
-                        )}
-                        {this.state.selectedUser !== null &&
-                          this.state.selectedUser._id === this.context.user._id
-                          && (
-                          <Button variant="outline-primary" size="lg" className="confirmEditButton" value='attendance' onClick={this.updateUserSpecial.bind(this)}>Add Attendance</Button>
-                        )}
-                        {this.state.selectedUser !== null &&
-                          this.state.selectedUser._id === this.context.user._id && (
-                          <Button variant="outline-success" className="confirmEditButton" size="lg">
-                            Your Profile
-                          </Button>
-                        )}
-                        {this.state.selectedUser !== null &&
-                          this.state.selectedUser._id !== this.context.user._id && (
-                          <Button variant="outline-danger" className="confirmEditButton" size="lg">
-                            Not my profile
-                          </Button>
-                        )}
-
-                        {this.state.userUpdateField === 'attendance' &&
-                        this.state.selectedUser !== null
-                         && (
-                           <UpdateUserAttendanceForm
-                          authUserId={this.context.userId}
-                          canCancel
-                            canConfirm
-                            onCancel={this.modalCancelHandler}
-                            onConfirm={this.updateUserAttendanceHandler}
-                            confirmText="Confirm"
-                            user={this.state.selectedUser}
-                          />
-                        )}
-                      </Tab.Pane>
-
-                      <Tab.Pane eventKey="userEditLeave">
-                      {this.state.selectedUser === null && (
-                        <Button variant="outline-warning" className="confirmEditButton" size="lg">
-                          Select a Staff member from the Master List
-                        </Button>
-                      )}
-
-                      {this.state.selectedUser !== null &&
-                        this.context.user.role === "admin"
-                        && (
-                        <Button variant="outline-primary" size="lg" className="confirmEditButton" value='leave' onClick={this.updateUserSpecial.bind(this)}>Add Leave as Admin</Button>
-                      )}
-                      {this.state.selectedUser !== null &&
-                        this.state.selectedUser._id === this.context.user._id
-                        && (
-                        <Button variant="outline-primary" size="lg" className="confirmEditButton" value='leave' onClick={this.updateUserSpecial.bind(this)}>Add Leave</Button>
-                      )}
-                      {this.state.selectedUser !== null &&
-                        this.state.selectedUser._id === this.context.user._id && (
-                        <Button variant="outline-success" className="confirmEditButton" size="lg">
-                          Your Profile
-                        </Button>
-                      )}
-                      {this.state.selectedUser !== null &&
-                        this.state.selectedUser._id !== this.context.user._id && (
-                        <Button variant="outline-danger" className="confirmEditButton" size="lg">
-                          Not my profile
-                        </Button>
-                      )}
-
-                      {this.state.userUpdateField === 'leave' &&
-                      this.state.selectedUser !== null
-                      && (<UpdateUserLeaveForm
-                        authUserId={this.context.userId}
-                        canCancel
-                          canConfirm
-                          onCancel={this.modalCancelHandler}
-                          onConfirm={this.updateUserLeaveHandler}
-                          confirmText="Confirm"
-                          user={this.state.selectedUser}
-                        />)}
-                      </Tab.Pane>
-
-                      <Tab.Pane eventKey="userEditAttachment">
-                      {this.state.selectedUser === null && (
-                        <Button variant="outline-warning" className="confirmEditButton" size="lg">
-                          Select a Staff member from the Master List
-                        </Button>
-                      )}
-
-                      {this.state.selectedUser !== null &&
-                        this.context.user.role === "admin"
-                        && (
-                        <Button variant="outline-primary" size="lg" className="confirmEditButton" value='attachments' onClick={this.updateUserSpecial.bind(this)}>Add Attachment as Admin</Button>
-                      )}
-                      {this.state.selectedUser !== null &&
-                        this.state.selectedUser._id === this.context.user._id
-                        && (
-                        <Button variant="outline-primary" size="lg" className="confirmEditButton" value='attachments' onClick={this.updateUserSpecial.bind(this)}>Add Attachment</Button>
-                      )}
-                      {this.state.selectedUser !== null &&
-                        this.state.selectedUser._id === this.context.user._id && (
-                        <Button variant="outline-success" className="confirmEditButton" size="lg">
-                          Your Profile
-                        </Button>
-                      )}
-                      {this.state.selectedUser !== null &&
-                        this.state.selectedUser._id !== this.context.user._id && (
-                        <Button variant="outline-danger" className="confirmEditButton" size="lg">
-                          Not my profile
-                        </Button>
-                      )}
-
-                      {this.state.userUpdateField === 'attachments' &&
-                      this.state.selectedUser !== null
-                      && (<UpdateUserAttachmentForm
-                        authUserId={this.context.userId}
-                        canCancel
-                          canConfirm
-                          onCancel={this.modalCancelHandler}
-                          onConfirm={this.updateUserAttachmentHandler}
-                          confirmText="Confirm"
-                          user={this.state.selectedUser}
-                        />)}
                       </Tab.Pane>
 
                       <Tab.Pane eventKey="MasterList">
                         <Container className="containerUserMasterList">
                         <Row className="searchListRow">
-                        <Button variant="primary" size="sm" onClick={this.fetchUsersAsc}>
-                           Sort Asc
-                         </Button>
-                        <Button variant="info" size="sm" onClick={this.fetchUsersDesc}>
-                           Sort Desc
-                         </Button>
+
                          {this.state.isLoading ? (
                            <Spinner />
                          ) : (
                            <UserList
                              users={this.state.users}
-                             authUserId={this.context.userId}
+                             authId={this.context.activityId}
                              onViewDetail={this.showDetailHandler}
                            />
                          )}
@@ -941,78 +357,8 @@ showDetailHandler = userId => {
                             user={this.context.selectedUser}
                           />)}
                         </Tab>
-                        <Tab eventKey="Id" title="Search by ID:">
-                        {this.state.searching !== true && (
-                          <Button variant="outline-warning" className="confirmEditButton" size="lg">
-                            Click the 'Search' Button start
-                          </Button>
-                        )}
-                        {this.state.searching === true && (
-                          <SearchUserIdForm
-                          authUserId={this.context.userId}
-                          canCancel
-                            canConfirm
-                            onCancel={this.modalCancelHandler}
-                            onConfirm={this.modalConfirmSearchIdHandler}
-                            confirmText="Search"
-                            user={this.context.selectedUser}
-                          />
-                          )}
-                        </Tab>
-                        <Tab eventKey="Attendance" title="Search by Attendance:">
-                        {this.state.searching !== true && (
-                          <Button variant="outline-warning" className="confirmEditButton" size="lg">
-                            Click the 'Search' Button start
-                          </Button>
-                        )}
-                        {this.state.searching === true && (
-                          <SearchUserAttendanceDateForm
-                          authUserId={this.context.userId}
-                          canCancel
-                            canConfirm
-                            onCancel={this.modalCancelHandler}
-                            onConfirm={this.modalConfirmSearchAttendanceDateHandler}
-                            confirmText="Search"
-                            user={this.context.selectedUser}
-                          />
-                          )}
-                        </Tab>
-                        <Tab eventKey="Leave" title="Search by Leave:">
-                        {this.state.searching !== true && (
-                          <Button variant="outline-warning" className="confirmEditButton" size="lg">
-                            Click the 'Search' Button start
-                          </Button>
-                        )}
-                        {this.state.searching === true && (
-                          <SearchUserLeaveDateRangeForm
-                          authUserId={this.context.userId}
-                          canCancel
-                            canConfirm
-                            onCancel={this.modalCancelHandler}
-                            onConfirm={this.modalConfirmSearchLeaveDateRangeHandler}
-                            confirmText="Search"
-                            user={this.context.selectedUser}
-                          />
-                          )}
-                        </Tab>
-                        <Tab eventKey="Name" title="Search by Name:">
-                        {this.state.searching !== true && (
-                          <Button variant="outline-warning" className="confirmEditButton" size="lg">
-                            Click the 'Search' Button start
-                          </Button>
-                        )}
-                        {this.state.searching === true && (
-                          <SearchUserNameForm
-                          authUserId={this.context.userId}
-                          canCancel
-                            canConfirm
-                            onCancel={this.modalCancelHandler}
-                            onConfirm={this.modalConfirmSearchNameHandler}
-                            confirmText="Search"
-                            user={this.context.selectedUser}
-                          />
-                        )}
-                        </Tab>
+
+
                         </Tabs>
                         </Col>
                         <Col md={10}>

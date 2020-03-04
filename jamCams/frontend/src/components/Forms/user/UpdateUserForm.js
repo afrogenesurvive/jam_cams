@@ -11,6 +11,7 @@ import './CreateUserForm.css';
 const UpdateUserForm = (props) => {
 
   const [dob, setDob] = useState(new Date());
+  const prevDob = new Date(user.dob.substr(0,9)*1000).toISOString().slice(0,10)
 
   const handleChangeDob = date => {
     setDob(date);
@@ -61,7 +62,7 @@ return (
 
 <Form.Row>
 <Form.Group as={Col} controlId="formGridDob">
-  <Form.Label>D.O.B: {user.dob}</Form.Label>
+  <Form.Label>D.O.B: {prevDob}</Form.Label>
   <Form.Control type="date" placeholder={user.dob}/>
 </Form.Group>
 
@@ -99,7 +100,7 @@ return (
 </Form.Row>
 
 <Form.Row>
-<Form.Group as={Col} controlId="formGridAddresspostalCode">
+<Form.Group as={Col} controlId="formGridAddressPostalCode">
   <Form.Label>postalCode</Form.Label>
   <Form.Control type="text" placeholder={user.address.postalCode}/>
 </Form.Group>

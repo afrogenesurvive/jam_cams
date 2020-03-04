@@ -75,7 +75,7 @@ class UserProfile extends Component {
     let contactEmail = event.target.formGridEmail.value;
     let password = event.target.formGridPassword.value;
     let name = event.target.formGridName.value;
-    let username = event.target.formGridUserame.value;
+    let username = event.target.formGridUsername.value;
     let role = this.context.user.role;
     let dob = event.target.formGridDob.value;
 
@@ -149,7 +149,9 @@ class UserProfile extends Component {
 
     const requestBody = {
       query: `
-          query": "mutation {updateUser(activityId:"${activityId}", userId:"${activityId}",
+          mutation {updateUser(
+            activityId:"${activityId}",
+            userId:"${activityId}",
           userInput:{
             password:"${password}",
             name:"${name}",
@@ -163,9 +165,12 @@ class UserProfile extends Component {
             addressPostalCode:"${addressPostalCode}",
             contactPhone:"${contactPhone}",
             contactEmail:"${contactEmail}",
-            bio:"${bio}"})
-          {_id,name,role,dob,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{date,ref{_id}},viewedContent{date,ref{_id}},likedContent{date,ref{_id}},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+            bio:"${bio}"
+          })
+          {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
         `};
+
+        console.log(requestBody);
 
     fetch('http://localhost:9009/graphql', {
       method: 'POST',
@@ -210,8 +215,8 @@ class UserProfile extends Component {
 
       const requestBody = {
         query:`
-          mutation {updateUserField(activityId:"${activityId}", userId:"${activityId}",field:"${field}", query:"${query}")
-          {_id,name,role,dob,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{date,ref{_id}},viewedContent{date,ref{_id}},likedContent{date,ref{_id}},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+          mutation {updateUserField(activityId:"${activityId}",userId:"${activityId}",field:"${field}",query:"${query}")
+          {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
         `};
 
       fetch('http://localhost:9009/graphql', {
@@ -247,18 +252,18 @@ class UserProfile extends Component {
 
       this.setState({ adding: false, userAddField: null, userAlert: "Updating selected Staff by Field..." });
 
-      const profileImagenName = event.target.formGridFilename.value;
+      const profileImageName = event.target.formGridFilename.value;
       const profileImageType = event.target.formGridFiletype.value;
       const profileImagePath = event.target.formGridFilepath.value;
 
       const requestBody = {
         query:`
         mutation {addUserProfileImage(activityId:"${activityId}", userId:"${activityId}",userInput:{
-          profileImagenName:"${profileImagenName}",
+          profileImageName:"${profileImageName}",
           profileImageType:"${profileImageType}",
           profileImagePath:"${profileImagePath}",
         })
-        {_id,name,role,dob,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{date,ref{_id}},viewedContent{date,ref{_id}},likedContent{date,ref{_id}},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
         `};
 
       fetch('http://localhost:9009/graphql', {
@@ -276,11 +281,11 @@ class UserProfile extends Component {
           return res.json();
         })
         .then(resData => {
-          this.context.user = resData.data.addUserProfileImage;
-
+          console.log("11",resData.data.addUserProfileImage);
           const responseAlert = JSON.stringify(resData.data).slice(2,25);
           this.setState({ userAlert: responseAlert, user: resData.data.addUserProfileImage})
-          this.getThisUser();
+          this.context.user = this.state.user;
+          // this.getThisUser();
         })
         .catch(err => {
           this.setState({userAlert: err});
@@ -299,12 +304,12 @@ class UserProfile extends Component {
 
       const requestBody = {
         query:`
-        mutation {addUserPerk(activityId:"${activityId}", userId:"${activityId}",userInput: {
+        mutation {addUserPerk(activityId:"${activityId}", userId:"${activityId}",
+        userInput: {
           perkDate:"${perkDate}",
           perkName:"${perkName}",
-          perkDescription:"${perkDescription}",
-        })
-        {_id,name,role,dob,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{date,ref{_id}},viewedContent{date,ref{_id}},likedContent{date,ref{_id}},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+          perkDescription:"${perkDescription}"})
+        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
         `};
 
       fetch('http://localhost:9009/graphql', {
@@ -340,7 +345,8 @@ class UserProfile extends Component {
       this.setState({ adding: false, userAddField: null, userAlert: "Updating selected Staff by Field..." });
 
       const preInterests = event.target.formGridInterests.value;
-      const interests = preInterests.split("");
+      const interests = preInterests.split(",");
+
 
       const requestBody = {
         query:`
@@ -381,12 +387,12 @@ class UserProfile extends Component {
       this.setState({ adding: false, userAddField: null, userAlert: "Updating selected Staff by Field..." });
 
       const preTags = event.target.formGridTags.value;
-      const tags = preTags.split("");
+      const tags = preTags.split(",");
 
       const requestBody = {
         query:`
         mutation {addUserTags(activityId:"${activityId}", userId:"${activityId}",tags:${tags})
-        {_id,name,role,dob,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{date,ref{_id}},viewedContent{date,ref{_id}},likedContent{date,ref{_id}},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
         `};
 
       fetch('http://localhost:9009/graphql', {
