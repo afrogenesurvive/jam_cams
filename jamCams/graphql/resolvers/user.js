@@ -456,8 +456,9 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-      const interests = args.interests;
-      const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { interests: {$each: interests} }},{new: true, useFindAndModify: false})
+      const interests = args.userInput.interests;
+      const splitInterests = interests.split(",");
+      const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { interests: {$each: splitInterests} }},{new: true, useFindAndModify: false})
         return {
           ...user._doc,
           _id: user.id,
@@ -475,7 +476,8 @@ module.exports = {
     }
     try {
       const tags = args.userInput.tags;
-      const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { tags: {$each: tags} }},{new: true, useFindAndModify: false})
+      const splitTags = tags.split(",");
+      const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { tags: {$each: splitTags} }},{new: true, useFindAndModify: false})
         return {
           ...user._doc,
           _id: user.id,

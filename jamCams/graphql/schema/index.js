@@ -101,13 +101,14 @@ module.exports = buildSchema(`
     profileImageType: String
     profileImagePath: String
     interest: String
+    interests: String
     perkDate: String
     perkName: String
     perkDescription: String
     perkImageLink: String
     tokens: Float
     tag: String
-    tags: [String]
+    tags: String
     loggedIn: Boolean
     searchDate: String
     searchQuery: String
@@ -465,7 +466,7 @@ module.exports = buildSchema(`
     createUser(userInput: UserInput!): User
     updateUser(activityId: ID!, userId: ID!, userInput: UserInput!): User
     updateUserField(activityId: ID!, userId: ID!, field: String!, query: String!): User
-    addUserInterests(activityId: ID!, userId: ID!, interests: [String!]): User
+    addUserInterests(activityId: ID!, userId: ID!, userInput: UserInput!): User
     addUserProfileImage(activityId: ID!, userId: ID!, userInput: UserInput): User
     addUserPerks(activityId: ID!, userId: ID!, perks: [PerkInput]): User
     addUserPerk(activityId: ID!, userId: ID!, userInput: UserInput): User
@@ -506,7 +507,7 @@ module.exports = buildSchema(`
     addModelTrait(activityId: ID!, modelId: ID!, modelInput: ModelInput!): Model
     addModelTraits(activityId: ID!, modelId: ID!, traits: [TraitInput!]): Model
     addModelProfileImage(activityId: ID!, modelId: ID!, modelInput: ModelInput): Model
-    addModelInterests(activityId: ID!, modelId: ID!, interests: [String!]): Model
+    addModelInterests(activityId: ID!, modelId: ID!, userInput: UserInput!): Model
     addModelPerk(activityId: ID!, modelId: ID!, modelInput: ModelInput): Model
     addModelPerks(activityId: ID!, modelId: ID!, perks: [PerkInput!]): Model
     addModelTokens(activityId: ID!, modelId: ID!, modelInput: ModelInput): Model

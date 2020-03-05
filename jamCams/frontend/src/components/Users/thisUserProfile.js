@@ -17,6 +17,8 @@ import UpdateUserForm from '../Forms/user/UpdateUserForm';
 import UpdateUserFieldForm from '../Forms/user/UpdateUserFieldForm';
 import AddUserProfileImageForm from '../Forms/user/AddUserProfileImageForm';
 import AddUserPerkForm from '../Forms/user/AddUserPerkForm';
+import AddUserInterestsForm from '../Forms/user/AddUserInterestsForm';
+import AddUserTagsForm from '../Forms/user/AddUserTagsForm';
 
 import './thisUserProfile.css';
 
@@ -172,6 +174,20 @@ const thisUserProfile = (props) => {
 
     <Tab eventKey="interests" title="interests">
 
+    <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartAddInterests}>Add Interests</Button>
+
+    {props.userAddField === "interests" && (
+        <AddUserInterestsForm
+          canCancel
+          canConfirm
+          onCancel={props.onCancel}
+          onConfirm={props.addInterests}
+          confirmText="Confirm"
+          user={props.user}
+          authId={props.authId}
+        />
+    )}
+
     {user.interests !== null &&
       user.interests !== [] && (
         <UserInterestList
@@ -185,6 +201,20 @@ const thisUserProfile = (props) => {
     </Tab>
 
     <Tab eventKey="tags" title="tags">
+
+    <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartAddTags}>Add Tags</Button>
+
+    {props.userAddField === "tags" && (
+        <AddUserTagsForm
+          canCancel
+          canConfirm
+          onCancel={props.onCancel}
+          onConfirm={props.addTags}
+          confirmText="Confirm"
+          user={props.user}
+          authId={props.authId}
+        />
+    )}
 
     {user.tags !== null &&
       user.tags !== [] && (

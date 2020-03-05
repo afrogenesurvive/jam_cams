@@ -351,12 +351,11 @@ class UserProfile extends Component {
 
       const preInterests = event.target.formGridInterests.value;
       const interests = preInterests.split(",");
-
-
+      console.log(preInterests,interests,JSON.stringify(interests));
       const requestBody = {
         query:`
-        mutation {addUserInterests(activityId:"${activityId}", userId:"${activityId}",interests:${interests})
-        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+          mutation {addUserInterests(activityId:"${activityId}",userId:"${activityId}",userInput:{interests:"${preInterests}"})
+          {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
         `};
 
       fetch('http://localhost:9009/graphql', {
@@ -374,11 +373,11 @@ class UserProfile extends Component {
           return res.json();
         })
         .then(resData => {
-          this.context.user = resData.data.addUserInterests;
-
+          console.log(resData.data.addUserInterests);
           const responseAlert = JSON.stringify(resData.data).slice(2,25);
           this.setState({ userAlert: responseAlert, user: resData.data.addUserInterests})
-          this.getThisUser();
+          this.context.user = this.state.user;
+          // this.getThisUser();
         })
         .catch(err => {
           this.setState({userAlert: err});
@@ -393,16 +392,12 @@ class UserProfile extends Component {
 
       const preTags = event.target.formGridTags.value;
       const tags = preTags.split(",");
-
-
+      console.log(preTags,tags,JSON.stringify(tags));
       const requestBody = {
-        query:
-        `
-        mutation {addUserTags(activityId:"${activityId}", userId:"${activityId}",
-        userInput:{tags:\"${tags}\"})
-        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
-        `
-      };
+        query:`
+          mutation {addUserTags(activityId:"${activityId}",userId:"${activityId}",userInput:{tags:"${preTags}"})
+          {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+        `};
 
         console.log(preTags, tags, JSON.stringify(requestBody));
 
@@ -703,7 +698,12 @@ class UserProfile extends Component {
   addUserPerk = () => {
     this.setState({adding: true, userAddField: "perk"})
   }
-
+  addUserInterests = () => {
+    this.setState({adding: true, userAddField: "interests"})
+  }
+  addUserTags = () => {
+    this.setState({adding: true, userAddField: "tags"})
+  }
 
 
   componentWillUnmount() {
@@ -772,6 +772,8 @@ class UserProfile extends Component {
                         onEditField={this.modalConfirmUpdateFieldHandler}
                         addProfileImage={this.addUserProfileImageHandler}
                         addPerk={this.addUserPerkHandler}
+                        addInterests={this.addUserInterestsHandler}
+                        addTags={this.addUserTagsHandler}
                         onProfileImageDelete={this.deleteUserProfileImage}
                         onPerkDelete={this.deleteUserPerk}
                         onCancel={this.modalCancelHandler}
@@ -779,6 +781,8 @@ class UserProfile extends Component {
                         onStartUpdateField={this.startUpdateUserFieldHandler}
                         onStartAddProfileImage={this.addUserProfileImage}
                         onStartAddPerk={this.addUserPerk}
+                        onStartAddInterests={this.addUserInterests}
+                        onStartAddTags={this.addUserTags}
                         updating={this.state.updating}
                         updatingField={this.state.updatingField}
                         userAddField={this.state.userAddField}
