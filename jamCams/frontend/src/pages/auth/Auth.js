@@ -141,9 +141,6 @@ class AuthPage extends Component {
 
 
   showSidebar = () => {
-      console.log(`
-        showing sidebar...
-        `);
         this.setState({
           sidebarShow: true,
           mCol2Size: 9
@@ -151,101 +148,11 @@ class AuthPage extends Component {
     }
 
     hideSidebar = () => {
-      console.log(`
-        hiding sidebar...
-        `);
         this.setState({
           sidebarShow: false,
           mCol2Size: 11
         })
     }
-
-  // <Row className="loginTabContainer">
-  // <AlertBox
-  //   authUserId={this.context.userId}
-  //   alert={this.state.userAlert}
-  // />
-  //
-  // {this.state.overlay === true && (
-  //   <LoadingOverlay
-  //     status={this.state.overlayStatus}
-  //   />
-  // )}
-  //
-  //
-  // <Tab.Container id="left-tabs-example"  defaultActiveKey="first">
-  //   <Row>
-  //     <Col sm={3}>
-  //       <Nav variant="pills" className="flex-column">
-  //         <Nav.Item>
-  //           <Nav.Link eventKey="1" onClick={this.changeLoginMode.bind(this, "User")}>
-  //           Users
-  //           </Nav.Link>
-  //         </Nav.Item>
-  //         <Nav.Item>
-  //           <Nav.Link eventKey="2" onClick={this.changeLoginMode.bind(this, "Model")}>
-  //           Models
-  //           </Nav.Link>
-  //         </Nav.Item>
-  //       </Nav>
-  //     </Col>
-  //     <Col sm={9}>
-  //       <Tab.Content>
-  //         <Tab.Pane eventKey="1">
-  //           <Form className="auth-form" onSubmit={this.submitHandler}>
-  //             <Form.Group controlId="formBasicEmail">
-  //               <Form.Label>Email address</Form.Label>
-  //               <Form.Control type="email" placeholder="Enter email"/>
-  //               <Form.Text className="text-muted">
-  //                 User Login
-  //               </Form.Text>
-  //             </Form.Group>
-  //
-  //             <Form.Group controlId="formBasicPassword">
-  //               <Form.Label>Password</Form.Label>
-  //               <Form.Control type="password" placeholder="Password" />
-  //             </Form.Group>
-  //             <Button variant="outline-success" type="submit" className="loginButton" size="lg">
-  //               Login
-  //             </Button>
-  //
-  //             <Button variant="outline-warning" className="loginButton" size="lg">
-  //               <NavLink to="/signup">Signup as User</NavLink>
-  //             </Button>
-  //           </Form>
-  //         </Tab.Pane>
-  //
-  //         <Tab.Pane eventKey="2">
-  //           <Form className="auth-form" onSubmit={this.submitHandler}>
-  //             <Form.Group controlId="formBasicEmail">
-  //               <Form.Label>Email address</Form.Label>
-  //               <Form.Control type="email" placeholder="Enter email"/>
-  //               <Form.Text className="text-muted">
-  //                 Model Login
-  //               </Form.Text>
-  //             </Form.Group>
-  //
-  //             <Form.Group controlId="formBasicPassword">
-  //               <Form.Label>Password</Form.Label>
-  //               <Form.Control type="password" placeholder="Password" />
-  //             </Form.Group>
-  //             <Button variant="outline-success" type="submit" className="loginButton" size="lg">
-  //               Login
-  //             </Button>
-  //
-  //             <Button variant="outline-warning" className="loginButton" size="lg">
-  //               <NavLink to="/signup">Signup as Model</NavLink>
-  //             </Button>
-  //           </Form>
-  //         </Tab.Pane>
-  //
-  //       </Tab.Content>
-  //     </Col>
-  //   </Row>
-  // </Tab.Container>
-  //
-  // </Row>
-
 
   render() {
     return (
@@ -261,10 +168,19 @@ class AuthPage extends Component {
         />
       )}
 
-        <Row className="loginPageContainerRow">
-        <Col className="loginPageContainerCol">
-        <Button variant="primary" size="lg" onClick={this.changeLoginMode.bind(this, "User")}>User Login</Button>
-        <Button variant="success" size="lg" onClick={this.changeLoginMode.bind(this, "Model")}>Model Login</Button>
+        <Row className="loginPageContainerRow1">
+
+
+        <Col className="loginPageContainerCol1">
+        <h4 className="loginPageTitle"> Welcome Back you Perv: Login </h4>
+        <Button variant="primary" className="loginButton1" size="lg" onClick={this.changeLoginMode.bind(this, "User")}>User Login</Button>
+        <Button variant="success" className="loginButton1" size="lg" onClick={this.changeLoginMode.bind(this, "Model")}>Model Login</Button>
+        </Col>
+
+        </Row>
+
+        <Row className="loginPageContainerRow2">
+        <Col className="loginPageContainerCol2">
 
         {this.state.role === "User" && (
           <Form className="auth-form" onSubmit={this.submitHandler}>

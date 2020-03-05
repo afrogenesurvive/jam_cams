@@ -40,7 +40,7 @@ mongoose.connect('mongodb://localhost:27017/jam_cams_dev',{useNewUrlParser: true
 // mongoose.connect("mongodb+srv://"+creds.atlas.user+":"+creds.atlas.pw+"@cluster0-5iwfn.mongodb.net/"+creds.atlas.db+"?retryWrites=true&w=majority",{useNewUrlParser: true, useUnifiedTopology: true})
   .then(() => {
     console.log(`
-      DB connected... on 9009
+      DB connected... Now Serving Port: 9009
       `);
     app.listen(9009);
   })

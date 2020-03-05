@@ -11,6 +11,8 @@ const userTagList = props => {
         key={tag}
         authId={props.authId}
         tag={tag}
+        onDelete={props.onDelete}
+        canDelete={props.canDelete}
       />
     );
   });

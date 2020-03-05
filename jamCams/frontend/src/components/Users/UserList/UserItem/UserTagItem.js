@@ -5,14 +5,14 @@ import Card from 'react-bootstrap/Card'
 import './UserItem.css';
 
 const userTagItem = props => (
-  <li key={props.userId} className="users__list-item_detail">
+  <li key={props.userId} className="users__list-item_detail users__list-item_detail2">
     <div>
 
     <Card className="card">
       <Card.Body>
-        <Card.Title>
+        <Card.Text>
           {props.tag}
-        </Card.Title>
+        </Card.Text>
 
         <Card.Link href="">
         { props.canDelete === true && (

@@ -6,7 +6,7 @@ import Image from 'react-bootstrap/Image';
 import './UserItem.css';
 
 const userPerkItem = props => (
-  <li key={props.userId} className="users__list-item_detail1">
+  <li key={props.userId} className="users__list-item_detail1 users__list-item_detail">
     <div>
 
     <Card className="card">

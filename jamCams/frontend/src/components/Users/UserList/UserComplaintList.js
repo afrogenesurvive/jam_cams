@@ -16,6 +16,8 @@ const userComplaintList = props => {
         description={complaint.description}
         complainant={complaint.complainant}
         complaint={complaint}
+        onDelete={props.onDelete}
+        canDelete={props.canDelete}
       />
     );
   });

@@ -111,7 +111,6 @@ class App extends Component {
               modelId: null,
               contentId: null,
               showId: null,
-              userId: null,
               user: {},
               users:[],
               selectedUser: {},

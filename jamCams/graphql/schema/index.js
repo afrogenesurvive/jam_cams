@@ -485,10 +485,10 @@ module.exports = buildSchema(`
     addUserTransaction(activityId: ID!, userId: ID!, transactionId: ID!): User
 
     deleteUser(activityId: ID!, userId: ID!): User
-    deleteUserInterests(activityId: ID!, userId: ID!, interests: [String!]): User
+    deleteUserInterests(activityId: ID!, userId: ID!, userInput: UserInput!): User
     deleteUserPerks(activityId: ID!, userId: ID!, perkNames: [String!]): User
     deleteUserPerk(activityId: ID!, userId: ID!, userInput: UserInput!): User
-    deleteUserTags(activityId: ID!, userId: ID!, tags: [String!]!): User
+    deleteUserTags(activityId: ID!, userId: ID!, userInput: UserInput!): User
     deleteUserProfileImage(activityId: ID!, userId: ID!, userInput: UserInput!): User
     deleteUserSearches(activityId: ID!, userId: ID!, searchQueries: [String!]): User
     deleteUserBilling(activityId: ID!, userId: ID!, userInput: UserInput!): User

@@ -17,6 +17,8 @@ const userBillingList = props => {
         paid={billing.paid}
         payment={billing.payment}
         billing={billing}
+        onDelete={props.onDelete}
+        canDelete={props.canDelete}
       />
     );
   });

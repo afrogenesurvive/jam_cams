@@ -19,12 +19,14 @@ import AddUserProfileImageForm from '../Forms/user/AddUserProfileImageForm';
 import AddUserPerkForm from '../Forms/user/AddUserPerkForm';
 import AddUserInterestsForm from '../Forms/user/AddUserInterestsForm';
 import AddUserTagsForm from '../Forms/user/AddUserTagsForm';
+import AddUserTokensForm from '../Forms/user/AddUserTokensForm';
+import AddUserComplaintForm from '../Forms/user/AddUserComplaintForm';
+import AddUserBillingForm from '../Forms/user/AddUserBillingForm';
 
 import './thisUserProfile.css';
 
 const thisUserProfile = (props) => {
   const {...user} = props.user;
-  const authId = props.authId;
   const userAddress = user.address;
 
   const userDob = new Date(user.dob.substr(0,9)*1000).toISOString().slice(0,10);
@@ -90,6 +92,7 @@ const thisUserProfile = (props) => {
 
       <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartUpdate}>Edit</Button>
       <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartUpdateField}>Edit 1 Field</Button>
+      <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartAddTokens}>+ Tokens</Button>
 
       {props.updating === true &&(
         <UpdateUserForm
@@ -114,13 +117,26 @@ const thisUserProfile = (props) => {
             authId={props.authId}
           />
       )}
+
+      {props.userAddField === "tokens" && (
+          <AddUserTokensForm
+            canCancel
+            canConfirm
+            onCancel={props.onCancel}
+            onConfirm={props.addTokens}
+            confirmText="Confirm"
+            user={props.user}
+            authId={props.authId}
+          />
+      )}
+
     </Card.Body>
     </Card>
     </Tab>
 
     <Tab eventKey="profileImages" title="profileImages">
 
-    <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartAddProfileImage}>Add Image</Button>
+    <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartAddProfileImage}>+ Image</Button>
     {props.userAddField === "profileImage" && (
         <AddUserProfileImageForm
           user={props.user}
@@ -146,7 +162,7 @@ const thisUserProfile = (props) => {
     </Tab>
 
     <Tab eventKey="perks" title="perks">
-    <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartAddPerk}>Add Perk</Button>
+    <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartAddPerk}>+ Perk</Button>
 
     {props.userAddField === "perk" && (
         <AddUserPerkForm
@@ -174,7 +190,7 @@ const thisUserProfile = (props) => {
 
     <Tab eventKey="interests" title="interests">
 
-    <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartAddInterests}>Add Interests</Button>
+    <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartAddInterests}>+ Interests</Button>
 
     {props.userAddField === "interests" && (
         <AddUserInterestsForm
@@ -194,7 +210,7 @@ const thisUserProfile = (props) => {
           userInterests={user.interests}
           authId={props.authId}
           canDelete={props.canDelete}
-          onDelete={props.attendanceDelete}
+          onDelete={props.onInterestDelete}
         />
       ) }
 
@@ -202,7 +218,7 @@ const thisUserProfile = (props) => {
 
     <Tab eventKey="tags" title="tags">
 
-    <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartAddTags}>Add Tags</Button>
+    <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartAddTags}>+ Tags</Button>
 
     {props.userAddField === "tags" && (
         <AddUserTagsForm
@@ -222,7 +238,7 @@ const thisUserProfile = (props) => {
           userTags={user.tags}
           authId={props.authId}
           canDelete={props.canDelete}
-          onDelete={props.attendanceDelete}
+          onDelete={props.onTagsDelete}
         />
       ) }
 
@@ -230,13 +246,27 @@ const thisUserProfile = (props) => {
 
     <Tab eventKey="billing" title="billing">
 
+    <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartAddBilling}>+ Billing</Button>
+
+    {props.userAddField === "billing" && (
+        <AddUserBillingForm
+          canCancel
+          canConfirm
+          onCancel={props.onCancel}
+          onConfirm={props.addBilling}
+          confirmText="Confirm"
+          user={props.user}
+          authId={props.authId}
+        />
+    )}
+
     {user.billing !== null &&
       user.billing !== [] && (
         <UserBillingList
           userBilling={user.billing}
           authId={props.authId}
           canDelete={props.canDelete}
-          onDelete={props.attendanceDelete}
+          onDelete={props.onBillingDelete}
         />
       ) }
 
@@ -244,13 +274,27 @@ const thisUserProfile = (props) => {
 
     <Tab eventKey="complaints" title="complaints">
 
+    <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartAddComplaint}>+ Complaint</Button>
+
+    {props.userAddField === "complaint" && (
+        <AddUserComplaintForm
+          canCancel
+          canConfirm
+          onCancel={props.onCancel}
+          onConfirm={props.addComplaint}
+          confirmText="Confirm"
+          user={props.user}
+          authId={props.authId}
+        />
+    )}
+
     {user.complaints !== null &&
       user.complaints !== [] && (
         <UserComplaintList
           userComplaints={user.complaints}
           authId={props.authId}
           canDelete={props.canDelete}
-          onDelete={props.attendanceDelete}
+          onDelete={props.onComplaintDelete}
         />
       ) }
 

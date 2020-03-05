@@ -19,10 +19,6 @@ const { pocketVariables } = require('../../helpers/pocketVars');
 
 module.exports = {
   users: async (args, req) => {
-    // console.log(`
-    //   users...args: ${util.inspect(args)},
-    //   isAuth: ${req.isAuth},
-    //   `);
 
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
@@ -194,7 +190,6 @@ module.exports = {
 
       const dbQueryKey = `billing.${args.billingKey}`;
       // const dbQueryKey = "billing."+args.billingKey+"";
-      // console.log(JSON.stringify(dbQueryKey));
       const users = await User.find({dbQueryKey: args.billingValue});
 
       return users.map(user => {
@@ -213,7 +208,6 @@ module.exports = {
 
       const dbQueryKey = `complaint.${args.complaintKey}`;
       // const dbQueryKey = "complaint."+args.complaintKey+"";
-      // console.log(JSON.stringify(dbQueryKey));
       const users = await User.find({dbQueryKey: args.complaintValue});
 
       return users.map(user => {
@@ -813,9 +807,8 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-        const interests = args.userInput.interest;
-        const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { interests: interests }},{new: true, useFindAndModify: false});
-        // const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { interest: { date: new Date(attendanceDate) }}},{new: true, useFindAndModify: false})
+        const interests = args.userInput.interest.split(",");
+        const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { interests: {$in: interests} }},{new: true, useFindAndModify: false});
 
         return {
           ...user._doc,
@@ -857,6 +850,7 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
+        console.log("here");
         const profileImage = {
           name: args.userInput.profileImageName,
           type: args.userInput.profileImageType,
@@ -880,9 +874,8 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-        const tags = args.tags;
-        const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { 'tags': tags }},{new: true, useFindAndModify: false});
-        // const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { interest: { date: new Date(attendanceDate) }}},{new: true, useFindAndModify: false})
+        const tags = args.userInput.tags.split(",");
+        const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { tags: {$in: tags} }},{new: true, useFindAndModify: false});
 
         return {
           ...user._doc,

@@ -5,7 +5,7 @@ import Card from 'react-bootstrap/Card'
 import './UserItem.css';
 
 const userBillingItem = props => (
-  <li key={props.userId} className="users__list-item_detail">
+  <li key={props.userId} className="users__list-item_detail users__list-item_detail3">
     <div>
 
     <Card className="card">

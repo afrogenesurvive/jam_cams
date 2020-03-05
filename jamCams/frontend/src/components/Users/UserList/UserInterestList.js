@@ -11,6 +11,8 @@ const userInterestList = props => {
         key={interest}
         authId={props.authId}
         interest={interest}
+        onDelete={props.onDelete}
+        canDelete={props.canDelete}
       />
     );
   });
