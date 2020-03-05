@@ -226,54 +226,6 @@ class UserProfile extends Component {
         });
     }
 
-  addUserComplaintHandler = (event) => {
-
-    this.setState({ adding: false, userAddField: null, userAlert: "Updating selected Staff by Field..." });
-
-    const token = this.context.token;
-    const activityId = this.context.activityId;
-    const complaintDate = new Date();
-    const complaintType = event.target.formGridTypeSelect.value;
-    const complaintDescription = event.target.formGridDescription.value;
-    const complainantId = "5e5432e6e1d489135ff955c2";
-    const testOfffenderId = "5e569ead200d2a03d8036405";
-
-    const requestBody = {
-      query:`
-      mutation {addUserComplaint(activityId:"${activityId}", userId:"${testOfffenderId}"complainantId:"${complainantId}",userInput:{
-        complaintDate:"${complaintDate}",
-        complaintType:"${complaintType}",
-        complaintDescription:"${complaintDescription}",
-      })
-      {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
-      `};
-
-    fetch('http://localhost:9009/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-      .then(res => {
-        if (res.status !== 200 && res.status !== 201) {
-          throw new Error('Failed!');
-        }
-        return res.json();
-      })
-      .then(resData => {
-
-        const responseAlert = JSON.stringify(resData.data).slice(2,25);
-        this.setState({ userAlert: responseAlert, user: resData.data.addUserComplaint});
-        this.context.user = this.state.user;
-        // this.getThisUser();
-      })
-      .catch(err => {
-        this.setState({userAlert: err});
-      });
-  };
-
   addUserTokensHandler = (event) => {
         const token = this.context.token;
         const activityId = this.context.activityId;
@@ -704,7 +656,6 @@ class UserProfile extends Component {
     console.log(event);
     const token = this.context.token;
     const activityId = this.context.activityId;
-    const billing = event.billing;
 
     // const requestBody = {
     //   query:`
@@ -737,6 +688,95 @@ class UserProfile extends Component {
     //   .then(resData => {
     //     const responseAlert = JSON.stringify(resData.data).slice(2,25);
     //     this.setState({ userAlert: responseAlert, user: resData.data.deleteUserBilling})
+    //     this.context.user = this.state.user;
+    //     // this.getThisUser();
+    //   })
+    //   .catch(err => {
+    //     this.setState({userAlert: err});
+    //   });
+  }
+
+  addUserComplaintHandler = (event) => {
+
+      this.setState({ adding: false, userAddField: null, userAlert: "Updating selected Staff by Field..." });
+
+      const token = this.context.token;
+      const activityId = this.context.activityId;
+      const complaintDate = new Date();
+      const complaintType = event.target.formGridTypeSelect.value;
+      const complaintDescription = event.target.formGridDescription.value;
+      const complainantId = "5e5432e6e1d489135ff955c2";
+      const testOfffenderId = "5e569ead200d2a03d8036405";
+
+      const requestBody = {
+        query:`
+        mutation {addUserComplaint(activityId:"${activityId}", userId:"${testOfffenderId}"complainantId:"${complainantId}",userInput:{
+          complaintDate:"${complaintDate}",
+          complaintType:"${complaintType}",
+          complaintDescription:"${complaintDescription}",
+        })
+        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+        `};
+
+      fetch('http://localhost:9009/graphql', {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token
+        }
+      })
+        .then(res => {
+          if (res.status !== 200 && res.status !== 201) {
+            throw new Error('Failed!');
+          }
+          return res.json();
+        })
+        .then(resData => {
+
+          const responseAlert = JSON.stringify(resData.data).slice(2,25);
+          this.setState({ userAlert: responseAlert, user: resData.data.addUserComplaint});
+          this.context.user = this.state.user;
+          // this.getThisUser();
+        })
+        .catch(err => {
+          this.setState({userAlert: err});
+        });
+    };
+  deleteUserComplaint = (event) => {
+    console.log(event);
+    const token = this.context.token;
+    const activityId = this.context.activityId;
+
+    // const requestBody = {
+    //   query:`
+    //     "mutation {deleteUserComplaint(activityId:"${activityId}", userId:"${activityId}",
+    //     userInput:{
+    //       complaintDate: ${complaintDate},
+    //       complaintType: ${complaintType},
+    //       complaintDescription: ${complaintDescription},
+    //       complaintComplainant: ${complaintComplainant}
+    //     })
+    //     {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+    // //   `};
+    //
+    // fetch('http://localhost:9009/graphql', {
+    //   method: 'POST',
+    //   body: JSON.stringify(requestBody),
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     Authorization: 'Bearer ' + token
+    //   }
+    // })
+    //   .then(res => {
+    //     if (res.status !== 200 && res.status !== 201) {
+    //       throw new Error('Failed!');
+    //     }
+    //     return res.json();
+    //   })
+    //   .then(resData => {
+    //     const responseAlert = JSON.stringify(resData.data).slice(2,25);
+    //     this.setState({ userAlert: responseAlert, user: resData.data.deleteUserComplaint})
     //     this.context.user = this.state.user;
     //     // this.getThisUser();
     //   })
@@ -847,7 +887,7 @@ class UserProfile extends Component {
       <React.Fragment>
 
       <AlertBox
-        authUserId={this.context.userId}
+        authId={this.context.activityId}
         alert={this.state.userAlert}
       />
 
@@ -867,6 +907,7 @@ class UserProfile extends Component {
         <Col md={2} className="MasterCol1">
         <SidebarPage
           you={this.state.user}
+          alert={this.state.userAlert}
         />
         </Col>
       )}
@@ -918,7 +959,7 @@ class UserProfile extends Component {
                         onStartAddTags={this.addUserTags}
                         onStartAddTokens={this.addUserTokens}
                         onStartAddComplaint={this.addUserComplaint}
-                        onStartAddBillingt={this.addUserBilling}
+                        onStartAddBilling={this.addUserBilling}
                         updating={this.state.updating}
                         updatingField={this.state.updatingField}
                         userAddField={this.state.userAddField}
