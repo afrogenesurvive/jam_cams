@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import { NavLink } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
@@ -16,6 +17,9 @@ import AlertBox from '../../components/AlertBox';
 import LoadingOverlay from '../../components/LoadingOverlay';
 import SidebarControl from '../../components/SidebarControl';
 
+import UserProfile from '../user/UserProfile';
+import ModelProfile from '../model/ModelProfile';
+
 
 class AuthPage extends Component {
   state = {
@@ -24,24 +28,42 @@ class AuthPage extends Component {
     overlay: false,
     overlayStatus: "test",
     activeTab: "choose",
+    userSeshStore: false,
+    modelSeshStore: false,
+    user: {},
+    model: {},
   };
   static contextType = AuthContext;
 
 
   componentDidMount() {
 
-    if (sessionStorage.getItem('login info')) {
-      this.setState({ userAlert: "sesh cookie present" });
-    } else {
-      this.setState({ userAlert: "Alerts shown here" });
+    const token = sessionStorage.getItem('token');
+    const activityId = sessionStorage.getItem('activityId');
+    const role = sessionStorage.getItem('role');
+    const tokenExpiration = sessionStorage.getItem('tokenExpiration');
+    if ( role !== "" ) {
+      this.setState({userAlert: "sesh store found... logging you in...",userSeshStore: true });
+      this.retrieveLogin()
+    }
+    if (role === "") {
+      this.setState({ userAlert: "Alerts shown here..." });
     }
   }
+
+  retrieveLogin = () => {
+    this.context.login(
+      sessionStorage.getItem('token'),
+      sessionStorage.getItem('activityId'),
+      sessionStorage.getItem('role'),
+      sessionStorage.getItem('tokenExpiration'),
+    );
+  };
 
   submitHandler = event => {
     event.preventDefault();
 
-    this.setState({ userAlert: "Signing you in..."})
-
+    this.setState({ userAlert: "Logging you in..."})
 
     const email = event.target.formBasicEmail.value;
     const password = event.target.formBasicPassword.value;
@@ -100,8 +122,10 @@ class AuthPage extends Component {
           //   role: resData.data.modelLogin.role,
           //   tokenExpiration: resData.data.modelLogin.tokenExpiration
           // };
-          // sessionStorage.setItem('login info', sessionStorageLoginInfo);
-          // sessionStorage.setItem('login info', JSON.stringify(sessionStorageLoginInfo));
+          sessionStorage.setItem('token', resData.data.modelLogin.token);
+          sessionStorage.setItem('activityId', resData.data.modelLogin.activityId);
+          sessionStorage.setItem('role', resData.data.modelLogin.role);
+          sessionStorage.setItem('tokenExpiration', resData.data.modelLogin.tokenExpiration);
         }
 
         if (resData.data.userLogin.token) {
@@ -112,17 +136,18 @@ class AuthPage extends Component {
             resData.data.userLogin.tokenExpiration
           );
 
-          sessionStorageLoginInfo = {
-           token: resData.data.userLogin.token,
-           activityId: resData.data.userLogin.activityId,
-           role: resData.data.userLogin.role,
-           tokenExpiration: resData.data.userLogin.tokenExpiration
-         };
-         // sessionStorage.setItem('login info', sessionStorageLoginInfo);
-         sessionStorage.setItem('login info', JSON.stringify(sessionStorageLoginInfo));
+         //  sessionStorageLoginInfo = {
+         //   token: resData.data.userLogin.token,
+         //   activityId: resData.data.userLogin.activityId,
+         //   role: resData.data.userLogin.role,
+         //   tokenExpiration: resData.data.userLogin.tokenExpiration
+         // };
+         sessionStorage.setItem('token', resData.data.userLogin.token);
+         sessionStorage.setItem('activityId', resData.data.userLogin.activityId);
+         sessionStorage.setItem('role', resData.data.userLogin.role);
+         sessionStorage.setItem('tokenExpiration', resData.data.userLogin.tokenExpiration);
 
         }
-
       })
       .catch(err => {
         if (this.isActive) {

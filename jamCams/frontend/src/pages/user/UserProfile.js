@@ -815,9 +815,11 @@ class UserProfile extends Component {
           this.setState({ user: thisUser, isLoading: false });
           }
 
+          if (sessionStorage.getItem('token')) {
+            this.setState({userAlert: "Welcome Back..."})
+          }
           if (thisUser.name === "Lord-of-the-Manor"){
-            console.log("Welcome back my Mi'Lord...");
-            this.setState({canDelete: true})
+            this.setState({canDelete: true, userAlert: "Mi'Lord!!"})
         }
       })
       .catch(err => {
@@ -908,6 +910,7 @@ class UserProfile extends Component {
         <SidebarPage
           you={this.state.user}
           alert={this.state.userAlert}
+          authId={this.context.activityId}
         />
         </Col>
       )}

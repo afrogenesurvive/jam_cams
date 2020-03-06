@@ -89,10 +89,10 @@ class App extends Component {
 
       let seshStore = sessionStorage.getItem('login info');
       this.context.token = seshStore.token;
-      // this.context.userId = seshStore.userId;
+      this.context.activityId = seshStore.activityId;
+      this.context.role = seshStore.role;
       this.setState({
         sessionCookiePresent: true,
-
         token: seshStore.token,
         });
     }
