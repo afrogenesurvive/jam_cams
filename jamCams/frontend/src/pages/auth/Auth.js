@@ -42,16 +42,27 @@ class AuthPage extends Component {
     const activityId = sessionStorage.getItem('activityId');
     const role = sessionStorage.getItem('role');
     const tokenExpiration = sessionStorage.getItem('tokenExpiration');
-    if ( role !== "" ) {
-      this.setState({userAlert: "sesh store found... logging you in...",userSeshStore: true });
-      this.retrieveLogin()
+    if ( role === "User" ) {
+      console.log("sessionStorage found: User");
+      this.setState({userAlert: "sessionStorage found...",userSeshStore: true });
+      this.getThisUser();
+      this.retrieveLogin();
     }
-    if (role === "") {
+    if ( role === "Model" ) {
+      console.log("sessionStorage found: Model");
+      this.setState({userAlert: "sessionStorage found...",userSeshStore: true });
+      this.getThisModel();
+      this.retrieveLogin();
+    }
+    if (role === "No sessionStorage found") {
+      console.log();
       this.setState({ userAlert: "Alerts shown here..." });
     }
   }
 
+
   retrieveLogin = () => {
+    console.log("retrieving login");
     this.context.login(
       sessionStorage.getItem('token'),
       sessionStorage.getItem('activityId'),
@@ -59,6 +70,8 @@ class AuthPage extends Component {
       sessionStorage.getItem('tokenExpiration'),
     );
   };
+
+
 
   submitHandler = event => {
     event.preventDefault();
@@ -177,6 +190,71 @@ class AuthPage extends Component {
           sidebarShow: false,
           mCol2Size: 11
         })
+    }
+
+    getThisUser() {
+      console.log("getThisUser");
+      const activityId = sessionStorage.getItem('activityId');
+      const token = sessionStorage.getItem('token');
+      const requestBody = {
+        query: `
+        query {getThisUser(activityId:"${activityId}")
+        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+          `};
+
+      fetch('http://localhost:9009/graphql', {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token
+        }})
+        .then(res => {
+          if (res.status !== 200 && res.status !== 201) {
+            throw new Error('Failed!');
+          }
+          return res.json();
+        })
+        .then(resData => {
+          const thisUser = resData.data.getThisUser;
+          this.context.user = thisUser;
+
+        })
+        .catch(err => {
+          this.setState({userAlert: err});
+        });
+    }
+
+    getThisModel() {
+      console.log("getThisModel");
+      const activityId = sessionStorage.getItem('activityId');
+      const token = sessionStorage.getItem('token');
+      const requestBody = {
+        query: `
+        query {getThisModel(activityId:"${activityId}")
+        {_id,name,role,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
+          `};
+
+      fetch('http://localhost:9009/graphql', {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token
+        }})
+        .then(res => {
+          if (res.status !== 200 && res.status !== 201) {
+            throw new Error('Failed!');
+          }
+          return res.json();
+        })
+        .then(resData => {
+          const thisModel = resData.data.getThisModel;
+          this.context.model = thisModel;
+        })
+        .catch(err => {
+          this.setState({userAlert: err});
+        });
     }
 
   render() {

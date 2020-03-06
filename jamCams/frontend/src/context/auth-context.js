@@ -20,7 +20,7 @@ export default React.createContext({
     show: {},
     shows:[],
     selectedShow: {},
-    userAlert: null,
+    userAlert: "...",
     file: null,
     fancyDate: null,
     login: (token, activityId, role, tokenExpiration) => {},

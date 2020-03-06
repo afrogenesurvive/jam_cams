@@ -11,9 +11,12 @@ const userList = props => {
         key={user._id}
         userId={props.authUserId}
         _id={user._id}
-        name={user.name}
-        email={user.email}
-        role={user.role}
+        username={user.username}
+        topImage={user.profileImages[0].path}
+        bio={user.bio}
+        interest1={user.interests[0]}
+        interest2={user.interests[1]}
+        interest3={user.interests[2]}
         onDetail={props.onViewDetail}
       />
     );

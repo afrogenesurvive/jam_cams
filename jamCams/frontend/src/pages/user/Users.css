@@ -15,14 +15,14 @@
   left: 5rem;
 }
 
-.containerCombinedDetail {
+.containerCombinedDetail1 {
   height: 80vh;
   /* width: 50vw; */
   /* margin: 5rem 2rem 0 2rem; */
   margin-top: 7rem;
   margin-left: 1rem;
   width: 100%;
-  overflow: scroll;
+  /* overflow: scroll; */
   padding: 0;
 }
 .containerProfile {
@@ -47,8 +47,8 @@
   margin-top: 5rem;
   width: 95%;
 }
-.containerSearchUserInput {
-  margin-top: 3rem;
+.containerSearchUserInput1 {
+  /* margin-top: 3rem; */
   width: 100%;
   /* padding: 2rem; */
 }
@@ -82,10 +82,10 @@
   text-align: center;
   overflow: scroll;
 }
-.searchUserRowForm {
+.searchUserRowForm1 {
   /* border: 1.5px solid blue; */
   border-radius: 5px;
-  height: 23rem;
+  height: 10rem;
   text-align: center;
   overflow: scroll;
 }
@@ -97,6 +97,12 @@
 
 .searchListRow {
   height: 40rem;
+  border: 1px solid blue;
+  border-radius: 5px;
+  overflow: scroll;
+}
+.searchListRow1 {
+  height: 35rem;
   border: 1px solid blue;
   border-radius: 5px;
   overflow: scroll;
@@ -138,4 +144,21 @@
 
 .searchButton {
 
+}
+
+.userListRow {
+  height: 85vh;
+}
+
+.userListMainCol {
+  overflow: scroll;
+}
+
+.searchFormBtn {
+  height: 3rem;
+  margin: 1.5rem;
+}
+
+.searchInput {
+  margin: 1.5rem;
 }

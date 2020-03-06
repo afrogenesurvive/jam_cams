@@ -6,7 +6,7 @@ import SignupPage from './pages/auth/Signup';
 
 import UserProfile from './pages/user/UserProfile';
 import ModelProfile from './pages/model/ModelProfile';
-// import UsersPage from './pages/user/Users';
+import UsersPage from './pages/user/Users';
 // import ModelsPage from './pages/user/Users';
 // import ContentPage from './pages/user/Users';
 // import ShowsPage from './pages/user/Users';
@@ -74,7 +74,7 @@ class App extends Component {
       show: {},
       shows:[],
       selectedShow: {},
-      userAlert: "",
+      userAlert: "...",
       file: null,
       fancyDate: null,
       login: this.login,
@@ -123,7 +123,7 @@ class App extends Component {
               show: {},
               shows:[],
               selectedShow: {},
-              userAlert: "",
+              userAlert: "...",
               file: null,
               fancyDate: null,
               login: this.login,
@@ -142,9 +142,20 @@ class App extends Component {
                 {this.state.token &&
                   this.state.role === "Model" && <Redirect from="/" to="/modelProfile" exact />}
 
-                {
-                  // this.state.token && (<Route path="/users" component={UsersPage} />)
-                }
+                {this.state.token &&
+                  this.state.role === "User" && (<Route path="/userProfile" component={UserProfile} />)}
+                {this.state.token &&
+                  this.state.role === "Model" && (<Route path="/modelProfile" component={ModelProfile} />)}
+
+                {this.state.token &&
+                  this.state.role === "User" && (
+                    <Redirect from="/auth" to="/userProfile" exact />
+                )}
+                {this.state.token && this.state.role === "Model" && (
+                    <Redirect from="/auth" to="/modelProfile" exact />
+                )}
+
+                {this.state.token && (<Route path="/users" component={UsersPage} />)}
                 {
                   // this.state.token && (<Route path="/models" component={ModelsPage} />)
                 }
@@ -155,19 +166,7 @@ class App extends Component {
                   // this.state.token && (<Route path="/shows" component={ShowsPage} />)
                 }
 
-                {this.state.token &&
-                  this.state.role === "User" && (<Route path="/userProfile" component={UserProfile} />)}
-                {this.state.token &&
-                  this.state.role === "Model" && (<Route path="/modelProfile" component={ModelProfile} />)}
 
-                {this.state.token &&
-                  this.state.role === "User" && (
-                    <Redirect from="/auth" to="/userProfile" exact />
-                )}
-                {this.state.token &&
-                  this.state.role === "Model" && (
-                    <Redirect from="/auth" to="/modelProfile" exact />
-                )}
 
                 { //if not logged in -> go to login page
                 !this.state.token && (<Route path="/auth" component={AuthPage} />)}

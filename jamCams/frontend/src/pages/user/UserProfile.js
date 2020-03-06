@@ -785,7 +785,6 @@ class UserProfile extends Component {
     //   });
   }
 
-
   getThisUser() {
     this.setState({ isLoading: true });
     const activityId = this.context.activityId;
@@ -830,18 +829,9 @@ class UserProfile extends Component {
       });
   }
 
-
   modalCancelHandler = () => {
     this.setState({ updating: false, updatingField: false, adding: false, userAddField: null  });
   };
-
-
-  updateUserSpecialProfile (event) {
-
-    const field = event.target.value;
-    this.setState({ userUpdateField: field});
-  }
-
   showSidebar = () => {
       this.setState({
         sidebarShow: true,
@@ -888,10 +878,12 @@ class UserProfile extends Component {
     return (
       <React.Fragment>
 
-      <AlertBox
-        authId={this.context.activityId}
-        alert={this.state.userAlert}
-      />
+      {
+      //   <AlertBox
+      //   authId={this.context.activityId}
+      //   alert={this.state.userAlert}
+      // />
+    }
 
       {this.state.overlay === true && (
         <LoadingOverlay

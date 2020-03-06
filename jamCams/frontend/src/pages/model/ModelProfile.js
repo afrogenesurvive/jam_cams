@@ -27,7 +27,7 @@ import AddModelTagsForm from '../../components/Forms/model/AddModelTagsForm';
 import AddModelTokensForm from '../../components/Forms/model/AddModelTokensForm';
 import AddModelTraitForm from '../../components/Forms/model/AddModelTraitForm';
 
-import './Users.css';
+import './Model.css';
 
 class ModelProfile extends Component {
   state = {
@@ -631,10 +631,12 @@ class ModelProfile extends Component {
       <React.Fragment>
 
 
-      <AlertBox
-        authId={this.context.activityId}
-        alert={this.state.userAlert}
-      />
+      {
+      //   <AlertBox
+      //   authId={this.context.activityId}
+      //   alert={this.state.userAlert}
+      // />
+    }
 
       {this.state.overlay === true && (
         <LoadingOverlay

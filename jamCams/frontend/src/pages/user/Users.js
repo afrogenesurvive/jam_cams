@@ -17,14 +17,14 @@ import SearchUserList from '../../components/Users/UserList/SearchUserList';
 import UserDetail from '../../components/Users/UserDetail';
 
 import Spinner from '../../components/Spinner/Spinner';
-import SidebarPage from './Sidebar';
+import SidebarPage from '../Sidebar';
 import SidebarControl from '../../components/SidebarControl';
 import AlertBox from '../../components/AlertBox';
 import LoadingOverlay from '../../components/LoadingOverlay';
 import AttachmentViewer from '../../components/AttachmentViewer';
+import UserDetailViewer from '../../components/UserDetailViewer';
 
-// import SearchUserForm from '../components/Forms/SearchUserForm';
-// import SearchUserIdForm from '../components/Forms/SearchUserIdForm';
+import SearchUserForm from '../../components/Forms/user/SearchUserForm';
 
 import './Users.css';
 
@@ -47,6 +47,7 @@ class UsersPage extends Component {
     overlay: false,
     overlayStatus: "test",
     file: null,
+    showDetail: false,
     showAttachment: false,
     showThisAttachmentFile: null,
     showThisAttachmentType: null,
@@ -145,10 +146,10 @@ class UsersPage extends Component {
     const requestBody = {
       query: `
           query {users(activityId:"${activityId}")
-          {_id,name,role,dob,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+          {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
         `};
 
-    fetch('http://localhost:10000/graphql', {
+    fetch('http://localhost:9009/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -176,6 +177,9 @@ class UsersPage extends Component {
       });
   }
 
+  deleteListUser = () => {
+    console.log("delete listed user");
+  }
 
 
 
@@ -184,10 +188,14 @@ showDetailHandler = userId => {
   this.setState(prevState => {
     const selectedUser = prevState.users.find(e => e._id === userId);
     this.context.selectedUser = selectedUser;
-    this.setState({selectedUser: selectedUser});
+    this.setState({selectedUser: selectedUser, showDetail: true});
     return { selectedUser: selectedUser };
   });
 };
+
+hideDetailHandler = () => {
+  this.setState({showDetail: false, overlay: false})
+}
 
   onViewAttachment = (attachment) => {
 
@@ -209,9 +217,6 @@ showDetailHandler = userId => {
   }
 
   showSidebar = () => {
-    console.log(`
-      showing sidebar...
-      `);
       this.setState({
         sidebarShow: true,
         mCol2Size: 9
@@ -219,9 +224,6 @@ showDetailHandler = userId => {
   }
 
   hideSidebar = () => {
-    console.log(`
-      hiding sidebar...
-      `);
       this.setState({
         sidebarShow: false,
         mCol2Size: 11
@@ -242,10 +244,20 @@ showDetailHandler = userId => {
           attachmentType={this.state.showThisAttachmentType}
         />
       )}
-      <AlertBox
-        authUserId={this.context.userId}
-        alert={this.state.userAlert}
-      />
+      {
+      //   <AlertBox
+      //   authId={this.context.activityId}
+      //   alert={this.state.userAlert}
+      // />
+    }
+      {this.state.showDetail === true && (
+        <UserDetailViewer
+          user={this.state.selectedUser}
+          onHideUserDetail={this.hideDetailHandler}
+          canDelete={this.state.canDelete}
+          onDelete={this.deleteListUser}
+        />
+      )}
       <SidebarControl
         onShowSidebar={this.showSidebar}
         onHideSidebar={this.hideSidebar}
@@ -261,7 +273,7 @@ showDetailHandler = userId => {
         <Row>
 
         {this.state.sidebarShow === true && (
-          <Col md={3} className="MasterCol1">
+          <Col md={2} className="MasterCol1">
           <SidebarPage
             you={this.state.selectedUser}
           />
@@ -269,51 +281,25 @@ showDetailHandler = userId => {
         )}
 
         <Col md={this.state.mCol2Size} className="MasterCol2">
-            <Container className="containerCombinedDetail">
+            <Container className="containerCombinedDetail1">
               <Tab.Container id="left-tabs-example" defaultActiveKey="MasterList">
                 <Row>
-                  <Col sm={2}>
+                  <Col sm={2} className="userListSubMenuCol">
                     <Nav variant="pills" className="flex-column">
                       <Nav.Item>
-                        <Nav.Link eventKey="MasterList">MASTER LIST</Nav.Link>
+                        <Nav.Link eventKey="MasterList">List</Nav.Link>
                       </Nav.Item>
                       <Nav.Item>
-                        <Nav.Link eventKey="SearchInput">Input</Nav.Link>
+                        <Nav.Link eventKey="SearchInput">Search</Nav.Link>
                       </Nav.Item>
-                      <Nav.Item>
-                        <Nav.Link eventKey="SearchResult">Results</Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item>
-                        <Nav.Link eventKey="userDetail">Selected</Nav.Link>
-                      </Nav.Item>
-
-
                     </Nav>
                   </Col>
 
-                  <Col sm={10}>
+                  <Col sm={10} className="userListMainCol">
                     <Tab.Content>
-                      <Tab.Pane eventKey="userDetail">
-                        {this.state.selectedUser === null && (
-                          <Button variant="outline-warning" size="lg" className="confirmEditButton">
-                            Select a Staff member from the Master List
-                          </Button>
-                        )}
-                        {this.state.isLoading === false &&
-                          this.state.selectedUser !== null
-                          && (
-                            <UserDetail
-                            authId={this.context.activityId}
-                            AuthContext={this.context}
-                            user={this.state.selectedUser}
-                            onViewAttachment={this.onViewAttachment}
-                            />
-                          )}
-                      </Tab.Pane>
 
                       <Tab.Pane eventKey="MasterList">
-                        <Container className="containerUserMasterList">
-                        <Row className="searchListRow">
+                        <Row className="userListRow">
 
                          {this.state.isLoading ? (
                            <Spinner />
@@ -325,28 +311,16 @@ showDetailHandler = userId => {
                            />
                          )}
                         </Row>
-                        </Container>
                       </Tab.Pane>
 
                       <Tab.Pane eventKey="SearchInput">
-                        <Container className="containerSearchUserInput">
+                        <Container className="containerSearchUserInput1">
 
-                        <Row className="searchUserRowAdd">
-                        <Button variant="primary" className="searchButton" size="lg" onClick={this.startSearchUserHandler}>Search</Button>
-                        </Row>
-
-                        <Row className="searchUserRowForm">
+                        <Row className="searchUserRowForm1">
                         <Col md={10} className="searchUserColForm">
                         <Tabs defaultActiveKey="Field" id="uncontrolled-tab-example">
-                        <Tab eventKey="Search" title="Search:" disabled>
-                        </Tab>
+
                         <Tab eventKey="Field" title="Search by Field:">
-                        {this.state.searching !== true && (
-                          <Button variant="outline-warning" className="confirmEditButton" size="lg">
-                            Click the 'Search' Button start
-                          </Button>
-                        )}
-                        {this.state.searching === true && (
                           <SearchUserForm
                           authUserId={this.context.userId}
                           canCancel
@@ -355,35 +329,23 @@ showDetailHandler = userId => {
                             onConfirm={this.modalConfirmSearchHandler}
                             confirmText="Search"
                             user={this.context.selectedUser}
-                          />)}
+                          />
                         </Tab>
-
-
                         </Tabs>
-                        </Col>
-                        <Col md={10}>
                         </Col>
                         </Row>
 
-                        </Container>
-                      </Tab.Pane>
-
-                      <Tab.Pane eventKey="SearchResult">
-                        <Container className="containerSearchUserResults">
                         <Row>
                           <Card className="searchCard">
                             <Card.Body className="searchCardBody">
-                              <Card.Title>Your Search</Card.Title>
+                              <Card.Title>This Search</Card.Title>
                               <Card.Text>
-                                Field: {this.state.userSearchField}
-                              </Card.Text>
-                              <Card.Text>
-                                Query: {this.state.userSearchQuery}
+                                Field: {this.state.userSearchField}  ,   Query: {this.state.userSearchQuery}
                               </Card.Text>
                             </Card.Body>
                           </Card>
                         </Row>
-                        <Row className="searchListRow">
+                        <Row className="searchListRow1">
 
                         {this.state.searchUsers !== [] && (
                           <SearchUserList
@@ -393,6 +355,7 @@ showDetailHandler = userId => {
                           />
                         )}
                         </Row>
+
                         </Container>
                       </Tab.Pane>
                     </Tab.Content>

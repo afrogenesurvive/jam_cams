@@ -1,10 +1,10 @@
 .alertBox {
   margin: 1rem auto;
-    width: 16rem;
-    /* max-height: 3rem; */
+    width: 15rem;
+    max-height: 3.5rem;
     position: fixed;
     z-index: 10000;
     top: -.7rem;
-    left: 15rem;
+    left: 10rem;
     overflow-x: scroll;
 }

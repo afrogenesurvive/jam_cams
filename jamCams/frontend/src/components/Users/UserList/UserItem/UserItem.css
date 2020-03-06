@@ -13,11 +13,15 @@
   width: 25rem;
 }
 .users__list-item_detail2 {
-  width: 5rem;
+  width: 5rems;
   /* text-align: center; */
 }
 .users__list-item_detail3 {
   width: 15rem;
+}
+.users__list-item_detail4 {
+  width: 20rem;
+  margin: 1.5rem;
 }
 
 .users__list-item_master {

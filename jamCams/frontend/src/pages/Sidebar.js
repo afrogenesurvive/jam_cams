@@ -49,14 +49,32 @@ class SidebarPage extends Component {
         </Card.Text>
       </Card.Body>
       </Card>
+
+      <Card border="secondary" className="sidebarCard">
+      <Card.Body>
+        <Card.Title className="cardTitle">Selection</Card.Title>
+        <Card.Subtitle className="mb-2">Staff:</Card.Subtitle>
+        <Card.Text>
+          {this.context.selectedUser._id}
+        </Card.Text>
+        <Card.Text>
+          {this.context.selectedUser.name}
+        </Card.Text>
+
+      </Card.Body>
+      </Card>
+      <AlertBox
+        authId={this.context.activityId}
+        alert={this.context.userAlert}
+      />
+      </Col>
+      </Row>
       {
         // <AlertBox
         //   authId={props.authId}
         //   alert={props.alert}
         // />
       }
-      </Col>
-      </Row>
       </Container>
       </React.Fragment>
     );

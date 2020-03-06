@@ -22,7 +22,7 @@
   margin-top: 7rem;
   margin-left: 1rem;
   width: 100%;
-  overflow: scroll;
+  /* overflow: scroll; */
   padding: 0;
 }
 .containerProfile {
