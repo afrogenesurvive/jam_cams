@@ -35,13 +35,14 @@ const modelSchema = new Schema({
   profileImages: [{
     name: {type:String},
     type: {type: String},
-    path: {type: String}
+    path: {type: String},
   }],
   interests: [{type: String}],
   perks: [{
     date: {type: Date},
     name: {type: String},
-    description: {type: String}
+    description: {type: String},
+    imageLink: {type: String}
   }],
   tokens: {type: Number},
   fans: [

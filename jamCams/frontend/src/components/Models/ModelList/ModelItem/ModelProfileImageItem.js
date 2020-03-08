@@ -3,9 +3,9 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
 
-import './UserItem.css';
+import './ModelItem.css';
 
-const userProfileImageItem = props => (
+const modelProfileImageItem = props => (
   <li key={props.authId} className="users__list-item_detail users__list-item_detail1">
     <div>
 
@@ -38,4 +38,4 @@ const userProfileImageItem = props => (
   </li>
 );
 
-export default userProfileImageItem;
+export default modelProfileImageItem;

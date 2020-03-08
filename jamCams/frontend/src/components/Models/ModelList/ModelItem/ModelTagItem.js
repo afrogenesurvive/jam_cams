@@ -2,10 +2,10 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card'
 
-import './UserItem.css';
+import './ModelItem.css';
 
-const userTagItem = props => (
-  <li key={props.authId} className="users__list-item_detail users__list-item_detail2">
+const modelTagItem = props => (
+  <li key={props.userId} className="users__list-item_detail users__list-item_detail2">
     <div>
 
     <Card className="card">
@@ -28,4 +28,4 @@ const userTagItem = props => (
   </li>
 );
 
-export default userTagItem;
+export default modelTagItem;

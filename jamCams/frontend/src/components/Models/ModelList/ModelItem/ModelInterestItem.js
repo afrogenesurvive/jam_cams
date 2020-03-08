@@ -2,21 +2,21 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card'
 
-import './UserItem.css';
+import './ModelItem.css';
 
-const userTagItem = props => (
-  <li key={props.authId} className="users__list-item_detail users__list-item_detail2">
-    <div>
+const userInterestItem = props => (
+  <li key={props.userId} className="users__list-item_detail2 users__list-item_detail">
+    <div className="tag_card_body">
 
     <Card className="card">
       <Card.Body>
         <Card.Text>
-          {props.tag}
+          {props.interest}
         </Card.Text>
 
         <Card.Link href="">
         { props.canDelete === true && (
-          <Button variant="danger" onClick={props.onDelete.bind(this, props.tag)}>
+          <Button variant="danger" onClick={props.onDelete.bind(this, props.interest)}>
             Delete
           </Button>
         )}
@@ -28,4 +28,4 @@ const userTagItem = props => (
   </li>
 );
 
-export default userTagItem;
+export default userInterestItem;

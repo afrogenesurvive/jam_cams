@@ -407,6 +407,24 @@ module.exports = {
       throw err;
     }
   },
+  addModelModelName: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const modelName = args.modelInput.modelName;
+      const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { modelNames: modelName }},{new: true, useFindAndModify: false})
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email ,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
   addModelInterests: async (args, req) => {
 
     if (!req.isAuth) {
@@ -431,8 +449,11 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-      const socialMedia = args.socialMedia;
-      const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { socialMedia: {$each: socialMedia} }},{new: true, useFindAndModify: false})
+      const socialMedia = {
+        platform: args.modelInput.socialMediaPlatform,
+        handle: args.modelInput.socialMediaHandle
+      }
+      const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { socialMedia: socialMedia }},{new: true, useFindAndModify: false})
         return {
           ...model._doc,
           _id: model.id,
@@ -443,14 +464,17 @@ module.exports = {
       throw err;
     }
   },
-  addModelTraits: async (args, req) => {
+  addModelTrait: async (args, req) => {
 
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
-      const traits = args.traits;
-      const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { traits: {$each: traits} }},{new: true, useFindAndModify: false})
+      const trait = {
+        key: args.modelInput.traitKey ,
+        value: args.modelInput.traitValue
+      };
+      const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { traits: trait }},{new: true, useFindAndModify: false})
         return {
           ...model._doc,
           _id: model.id,
@@ -490,9 +514,10 @@ module.exports = {
     }
     try {
       const perk = {
-        date: args.modelInput.date,
-        name: args.modelInput.name,
-        description: args.modelInput.description,
+        date: args.modelInput.perkDate,
+        name: args.modelInput.perkName,
+        description: args.modelInput.perkDescription,
+        imageLink: args.modelInput.perkImageLink,
       };
       const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { perks: perk }},{new: true, useFindAndModify: false})
         return {
@@ -551,8 +576,9 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-      const tags = args.tags;
-      const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { tags: {$each: tags} }},{new: true, useFindAndModify: false})
+      const tags = args.modelInput.tags;
+      const splitTags = tags.split(",");
+      const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { tags: {$each: splitTags} }},{new: true, useFindAndModify: false})
         return {
           ...model._doc,
           _id: model.id,
@@ -569,8 +595,9 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-      const categories = args.categories;
-      const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { categories: {$each: categories} }},{new: true, useFindAndModify: false})
+      const categories = args.modelInput.categories;
+      const splitCategories = categories.split(",");
+      const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { categories: {$each: splitCategories} }},{new: true, useFindAndModify: false})
         return {
           ...model._doc,
           _id: model.id,

@@ -16,16 +16,6 @@ import SidebarPage from '../Sidebar';
 import SidebarControl from '../../components/SidebarControl';
 
 import ThisModelProfile from '../../components/Models/thisModelProfile';
-import UpdateModelForm from '../../components/Forms/model/UpdateModelForm';
-import UpdateModelFieldForm from '../../components/Forms/model/UpdateModelFieldForm';
-
-import AddModelProfileImageForm from '../../components/Forms/model/AddModelProfileImageForm';
-import AddModelPerkForm from '../../components/Forms/model/AddModelPerkForm';
-import AddModelInterestsForm from '../../components/Forms/model/AddModelInterestsForm';
-import AddModelCategoriesForm from '../../components/Forms/model/AddModelCategoriesForm';
-import AddModelTagsForm from '../../components/Forms/model/AddModelTagsForm';
-import AddModelTokensForm from '../../components/Forms/model/AddModelTokensForm';
-import AddModelTraitForm from '../../components/Forms/model/AddModelTraitForm';
 
 import './Model.css';
 
@@ -189,7 +179,7 @@ class ModelProfile extends Component {
       });
     };
 
-    modalConfirmUpdateFieldHandler = (event) => {
+  modalConfirmUpdateFieldHandler = (event) => {
 
       const token = this.context.token;
       const activityId = this.context.activityId;
@@ -237,7 +227,7 @@ class ModelProfile extends Component {
         });
     }
 
-    addModelProfileImageHandler = (event) => {
+  addModelProfileImageHandler = (event) => {
       const token = this.context.token;
       const activityId = this.context.activityId;
 
@@ -538,7 +528,6 @@ class ModelProfile extends Component {
   };
 
   getThisModel() {
-    // console.log("here");
     this.setState({ isLoading: true });
     const activityId = this.context.activityId;
     const requestBody = {
@@ -562,10 +551,11 @@ class ModelProfile extends Component {
       })
       .then(resData => {
         const thisModel = resData.data.getThisModel;
-        this.context.model = thisModel;
+
         if (this.isActive) {
           this.setState({ model: thisModel, isLoading: false });
         }
+        this.context.model = this.state.model;
       })
       .catch(err => {
         this.setState({userAlert: err});
@@ -697,7 +687,7 @@ class ModelProfile extends Component {
                         addTrait={this.addModelTraitHandler}
                         addPerk={this.addUserPerkHandler}
                         addInterests={this.addModelInterestsHandler}
-                        addModelCategories={this.addModelCategoriesHandler}
+                        addCategories={this.addModelCategoriesHandler}
                         addTags={this.addModelTagsHandler}
                         addTokens={this.addModelTokensHandler}
                         onProfileImageDelete={this.deleteModelProfileImage}

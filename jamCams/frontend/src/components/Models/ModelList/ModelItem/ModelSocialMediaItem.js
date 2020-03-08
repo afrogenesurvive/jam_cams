@@ -3,9 +3,9 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
 
-import './UserItem.css';
+import './ModelItem.css';
 
-const userPerkItem = props => (
+const modelSocialMediaItem = props => (
   <li key={props.authId} className="users__list-item_detail1 users__list-item_detail">
     <div>
 
@@ -14,30 +14,23 @@ const userPerkItem = props => (
 
         <ul className="cardUl">
           <li className="cardLi">
-          <Image src={props.imageLink} className="profileImageImg" fluid />
 
-          <p className="userItemHeading"> date:</p>
+          <p className="userItemHeading"> platform:</p>
           <p className="userItemText">
-          {props.date}
+          {props.platform}
           </p>
           </li>
           <li>
-          <p className="userItemHeading"> name:</p>
+          <p className="userItemHeading"> handle:</p>
           <p className="userItemText">
-          {props.name}
-          </p>
-          </li>
-          <li>
-          <p className="userItemHeading"> description:</p>
-          <p className="userItemText">
-          {props.description}
+          {props.handle}
           </p>
           </li>
         </ul>
 
         <Card.Link href="">
         { props.canDelete === true && (
-          <Button variant="danger" onClick={props.onDelete.bind(this, props.perk)}>
+          <Button variant="danger" onClick={props.onDelete.bind(this, props.socialMedia)}>
             Delete
           </Button>
         )}
@@ -49,4 +42,4 @@ const userPerkItem = props => (
   </li>
 );
 
-export default userPerkItem;
+export default modelSocialMediaItem;

@@ -3,30 +3,34 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
 
-import './UserItem.css';
+import './ModelItem.css';
 
-const userProfileImageItem = props => (
-  <li key={props.authId} className="users__list-item_detail users__list-item_detail1">
+const modelTraitItem = props => (
+  <li key={props.authId} className="users__list-item_detail1 users__list-item_detail">
     <div>
 
     <Card className="card">
       <Card.Body>
 
         <ul className="cardUl">
-          <li>
-          <Image src={props.path} className="profileImageImg" fluid />
-
-          </li>
           <li className="cardLi">
+
+          <p className="userItemHeading"> key:</p>
           <p className="userItemText">
-          {props.name}
+          {props.key}
+          </p>
+          </li>
+          <li>
+          <p className="userItemHeading"> value:</p>
+          <p className="userItemText">
+          {props.value}
           </p>
           </li>
         </ul>
 
         <Card.Link href="">
         { props.canDelete === true && (
-          <Button variant="danger" onClick={props.onDelete.bind(this, props.profileImage)}>
+          <Button variant="danger" onClick={props.onDelete.bind(this, props.trait)}>
             Delete
           </Button>
         )}
@@ -38,4 +42,4 @@ const userProfileImageItem = props => (
   </li>
 );
 
-export default userProfileImageItem;
+export default modelTraitItem;

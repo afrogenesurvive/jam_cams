@@ -2,10 +2,10 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
-import './UserItem.css';
+import './ModelItem.css';
 
-const userItem = props => (
-  <li key={props.authId} className="users__list-item_detail users__list-item_detail4">
+const modelItem = props => (
+  <li key={props.userId} className="users__list-item_detail users__list-item_detail4">
     <Card style={{ width: '18rem' }}>
 
     <Card.Body>
@@ -26,4 +26,4 @@ const userItem = props => (
   </li>
 );
 
-export default userItem;
+export default modelItem;
