@@ -12,9 +12,9 @@ import Nav from 'react-bootstrap/Nav';
 import Card from 'react-bootstrap/Card';
 
 import AuthContext from '../../context/auth-context';
-import UserList from '../../components/Users/UserList/UserList';
-import SearchUserList from '../../components/Users/UserList/SearchUserList';
-import UserDetail from '../../components/Users/UserDetail';
+import ModelList from '../../components/Models/ModelList/ModelList';
+import SearchModelList from '../../components/Models/ModelList/SearchModelList';
+import ModelDetail from '../../components/Models/ModelDetail';
 
 import Spinner from '../../components/Spinner/Spinner';
 import SidebarPage from '../Sidebar';
@@ -22,27 +22,27 @@ import SidebarControl from '../../components/SidebarControl';
 import AlertBox from '../../components/AlertBox';
 import LoadingOverlay from '../../components/LoadingOverlay';
 import AttachmentViewer from '../../components/AttachmentViewer';
-import UserDetailViewer from '../../components/UserDetailViewer';
+import ModelDetailViewer from '../../components/ModelDetailViewer';
 
-import SearchUserForm from '../../components/Forms/user/SearchUserForm';
+import SearchModelForm from '../../components/Forms/model/SearchModelForm';
 
-import './Users.css';
+import './Model.css';
 
-class UsersPage extends Component {
+class ModelsPage extends Component {
   state = {
     creating: false,
     updating: false,
     deleting: false,
     searching: false,
-    user: null,
-    users: [],
-    searchUsers: [],
+    model: null,
+    models: [],
+    searchModels: [],
     isLoading: false,
     isSorting: false,
     selectedUser: null,
-    userUpdateField: null,
-    userSearchField: null,
-    userSearchQuery: null,
+    modelUpdateField: null,
+    modelSearchField: null,
+    modelSearchQuery: null,
     canDelete: null,
     userAlert: null,
     overlay: false,
@@ -62,15 +62,15 @@ class UsersPage extends Component {
 
   componentDidMount() {
 
-    if (this.context.user.name === "Lord-of-the-Manor"){
+    if (this.context.model.name === "Lady-of-the-Manor"){
       this.setState({canDelete: true})
     }
 
-    if (JSON.stringify(this.context.selectedUser) !== "{}") {
-      this.setState({ selectedUser: this.context.selectedUser })
+    if (JSON.stringify(this.context.selectedModel) !== "{}") {
+      this.setState({ selectedModel: this.context.selectedModel })
     }
 
-    this.fetchUsers();
+    this.fetchModels();
   }
 
 
@@ -140,14 +140,14 @@ class UsersPage extends Component {
     this.setState({ creating: false, updating: false, deleting: false, searching: false});
   };
 
-  fetchUsers() {
+  fetchModels() {
 
     const activityId = this.context.activityId;
     this.setState({ isLoading: true, userAlert: "Fetching Staff Master List..." });
     const requestBody = {
       query: `
-          query {users(activityId:"${activityId}")
-          {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+          query {models(activityId:"${activityId}")
+          {_id,name,username,dob,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
         `};
 
     fetch('http://localhost:9009/graphql', {
@@ -167,8 +167,8 @@ class UsersPage extends Component {
       })
       .then(resData => {
         const responseAlert = JSON.stringify(resData.data).slice(0,8);
-        this.setState({userAlert: responseAlert, users: resData.data.users, isLoading: false});
-        this.context.users = this.state.users;
+        this.setState({userAlert: responseAlert, models: resData.data.models, isLoading: false});
+        this.context.models = this.state.models;
       })
       .catch(err => {
         this.setState({userAlert: err});
@@ -178,19 +178,19 @@ class UsersPage extends Component {
       });
   }
 
-  deleteListUser = () => {
-    console.log("delete listed user");
+  deleteListModel = () => {
+    console.log("delete listed model");
   }
 
 
 
-showDetailHandler = userId => {
+showDetailHandler = modelId => {
 
   this.setState(prevState => {
-    const selectedUser = prevState.users.find(e => e._id === userId);
-    this.context.selectedUser = selectedUser;
-    this.setState({selectedUser: selectedUser, showDetail: true});
-    return { selectedUser: selectedUser };
+    const selectedModel = prevState.models.find(e => e._id === modelId);
+    this.context.selectedModel = selectedModel;
+    this.setState({selectedModel: selectedModel, showDetail: true});
+    return { selectedModel: selectedModel };
   });
 };
 
@@ -213,8 +213,8 @@ hideDetailHandler = () => {
       this.setState({showAttachment: false})
   }
 
-  userSearchClearlHandler () {
-    this.setState({searchUsers: [], userAlert: "clearing user search results"});
+  modelSearchClearlHandler () {
+    this.setState({searchModels: [], userAlert: "clearing model search results"});
   }
 
   showSidebar = () => {
@@ -253,11 +253,11 @@ hideDetailHandler = () => {
       }
 
       {this.state.showDetail === true && (
-        <UserDetailViewer
-          user={this.state.selectedUser}
-          onHideUserDetail={this.hideDetailHandler}
+        <ModelDetailViewer
+          model={this.state.selectedModel}
+          onHideModelDetail={this.hideDetailHandler}
           canDelete={this.state.canDelete}
-          onDelete={this.deleteListUser}
+          onDelete={this.deleteListModel}
         />
       )}
       <SidebarControl
@@ -308,8 +308,8 @@ hideDetailHandler = () => {
                          {this.state.isLoading ? (
                            <Spinner />
                          ) : (
-                           <UserList
-                             users={this.state.users}
+                           <ModelList
+                             models={this.state.models}
                              authId={this.context.activityId}
                              onViewDetail={this.showDetailHandler}
                            />
@@ -325,14 +325,14 @@ hideDetailHandler = () => {
                         <Tabs defaultActiveKey="Field" id="uncontrolled-tab-example">
 
                         <Tab eventKey="Field" title="Search by Field:">
-                          <SearchUserForm
-                          authUserId={this.context.userId}
+                          <SearchModelForm
+                          authId={this.context.activityId}
                           canCancel
                             canConfirm
                             onCancel={this.modalCancelHandler}
                             onConfirm={this.modalConfirmSearchHandler}
                             confirmText="Search"
-                            user={this.context.selectedUser}
+                            model={this.context.selectedModel}
                           />
                         </Tab>
                         </Tabs>
@@ -344,17 +344,17 @@ hideDetailHandler = () => {
                             <Card.Body className="searchCardBody">
                               <Card.Title>This Search</Card.Title>
                               <Card.Text>
-                                Field: {this.state.userSearchField}  ,   Query: {this.state.userSearchQuery}
+                                Field: {this.state.modelSearchField}  ,   Query: {this.state.modelSearchQuery}
                               </Card.Text>
                             </Card.Body>
                           </Card>
                         </Row>
                         <Row className="searchListRow1">
 
-                        {this.state.searchUsers !== [] && (
-                          <SearchUserList
-                            searchUsers={this.state.searchUsers}
-                            authUserId={this.context.userId}
+                        {this.state.searchModels !== [] && (
+                          <SearchModelList
+                            searchModels={this.state.searchModels}
+                            authId={this.context.activityId}
                             onViewDetail={this.showDetailHandler}
                           />
                         )}
@@ -375,4 +375,4 @@ hideDetailHandler = () => {
   }
 }
 
-export default UsersPage;
+export default ModelsPage;

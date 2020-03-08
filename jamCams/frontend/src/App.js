@@ -11,7 +11,7 @@ import UsersPage from './pages/user/Users';
 // import ContentPage from './pages/user/Users';
 // import ShowsPage from './pages/user/Users';
 
-// import ModelsPage from './pages/model/Models';
+import ModelsPage from './pages/model/Models';
 // import ContentPage from './pages/content/Content';
 // import ShowsPage from './pages/show/Shows';
 import MainNavigation from './components/Navigation/MainNavigation';
@@ -156,9 +156,7 @@ class App extends Component {
                 )}
 
                 {this.state.token && (<Route path="/users" component={UsersPage} />)}
-                {
-                  // this.state.token && (<Route path="/models" component={ModelsPage} />)
-                }
+                {this.state.token && (<Route path="/models" component={ModelsPage} />)}
                 {
                   // this.state.token && (<Route path="/content" component={ContentPage} />)
                 }
