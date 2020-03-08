@@ -179,6 +179,7 @@ class UserProfile extends Component {
         this.setState({userAlert: err});
       });
     };
+
   modalConfirmUpdateFieldHandler = (event) => {
 
       const token = this.context.token;
@@ -271,7 +272,13 @@ class UserProfile extends Component {
       this.setState({ adding: false, userAddField: null, userAlert: "Updating selected Staff by Field..." });
 
       const profileImageName = event.target.formGridFilename.value;
-      const profileImageType = event.target.formGridFiletype.value;
+      let profileImageType = null;
+      if (
+        event.target.formGridFiletype.value === "" ||
+        event.target.formGridFiletype.value === null
+      ) {
+        profileImageType = "*";
+      }
       const profileImagePath = event.target.formGridFilepath.value;
 
       const requestBody = {
@@ -604,96 +611,110 @@ class UserProfile extends Component {
   }
 
   addUserBillingHandler = (event) => {
-      console.log(event);
-      const token = this.context.token;
-      const activityId = this.context.activityId;
 
       this.setState({ adding: false, userAddField: null, userAlert: "Updating selected Staff by Field..." });
 
+      const token = this.context.token;
+      const activityId = this.context.activityId;
       const billingDate = new Date();
+      const billingType = event.target.formGridTypeSelect.value;
+      const billingDescription = event.target.formGridDescription.value;
+      const billingAmount = event.target.formGridAmount.value;
+      const billingPayment = event.target.formGridPayment.value;
+      let billingPaid = false;
+      if (event.target.formGridPaidCheckbox.checked === true) {
+        billingPaid = true;
+      }
 
+      const requestBody = {
+        query:`
+        mutation {addUserBilling(activityId:"${activityId}", userId:"${activityId}",
+        userInput:{
+          billingDate:"${billingDate}",
+          billingType:"${billingType}",
+          billingDescription:"${billingDescription}",
+          billingAmount:${billingAmount},
+          billingPaid:${billingPaid},
+          billingPayment:"${billingPayment}"
+        })
+        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+        `};
 
-      // const requestBody = {
-      //   query:`
-      //   mutation {addUserBilling(activityId:"5e5432e6e1d489135ff955c2", userId:"5e544e0308863914150dc91e",
-      //   userInput:{
-      //     billingDate:"${billingDate}",
-      //     billingType:"${billingType}",
-      //     billingDescription:"${billingDescription}",
-      //     billingAmount:${billingAmount},
-      //     billingPaid:${billingPaid},
-      //     billingPayment:"${billingPayment}"
-      //   })
-      //   {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
-      //   `};
-      //
-      // fetch('http://localhost:9009/graphql', {
-      //   method: 'POST',
-      //   body: JSON.stringify(requestBody),
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     Authorization: 'Bearer ' + token
-      //   }
-      // })
-      //   .then(res => {
-      //     if (res.status !== 200 && res.status !== 201) {
-      //       throw new Error('Failed!');
-      //     }
-      //     return res.json();
-      //   })
-      //   .then(resData => {
-      //
-      //     const responseAlert = JSON.stringify(resData.data).slice(2,25);
-      //     this.setState({ userAlert: responseAlert, user: resData.data.addUserComplaint})
-      //     this.context.user = this.state.user;
-      //     // this.getThisUser();
-      //   })
-      //   .catch(err => {
-      //     this.setState({userAlert: err});
-      //   });
+      fetch('http://localhost:9009/graphql', {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token
+        }
+      })
+        .then(res => {
+          if (res.status !== 200 && res.status !== 201) {
+            throw new Error('Failed!');
+          }
+          return res.json();
+        })
+        .then(resData => {
+
+          const responseAlert = JSON.stringify(resData.data).slice(2,25);
+          this.setState({ userAlert: responseAlert, user: resData.data.addUserBilling})
+          this.context.user = this.state.user;
+          // this.getThisUser();
+        })
+        .catch(err => {
+          this.setState({userAlert: err});
+        });
     };
   deleteUserBilling = (event) => {
-    console.log(event);
     const token = this.context.token;
     const activityId = this.context.activityId;
+    const billingDate = new Date(event.date.slice(0,10)*1000).toISOString().slice(0,10)
+    // const billingDate = event.date
+    const billingType = event.type
+    const billingDescription = event.description
+    const billingAmount = event.amount
+    const billingPaid = event.paid
+    const billingPayment = event.payment
 
-    // const requestBody = {
-    //   query:`
-    //     "mutation {deleteUserBilling(activityId:"${activityId}", userId:"${activityId}",
-    //     userInput:{
-    //       billingDate: ${billingDate},
-    //       billingType: ${billingType},
-    //       billingDescription: ${billingDescription},
-    //       billingAmount: ${billingAmount},
-    //       billingPaid: ${billingPaid},
-    //       billingPayment: ${billingPayment}
-    //     })
-    //     {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
-    //   `};
-    //
-    // fetch('http://localhost:9009/graphql', {
-    //   method: 'POST',
-    //   body: JSON.stringify(requestBody),
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     Authorization: 'Bearer ' + token
-    //   }
-    // })
-    //   .then(res => {
-    //     if (res.status !== 200 && res.status !== 201) {
-    //       throw new Error('Failed!');
-    //     }
-    //     return res.json();
-    //   })
-    //   .then(resData => {
-    //     const responseAlert = JSON.stringify(resData.data).slice(2,25);
-    //     this.setState({ userAlert: responseAlert, user: resData.data.deleteUserBilling})
-    //     this.context.user = this.state.user;
-    //     // this.getThisUser();
-    //   })
-    //   .catch(err => {
-    //     this.setState({userAlert: err});
-    //   });
+    const requestBody = {
+      query:`
+        "mutation {deleteUserBilling(activityId:"${activityId}", userId:"${activityId}",
+        userInput:{
+          billingDate: "${billingDate}",
+          billingType: "${billingType}",
+          billingDescription: "${billingDescription}",
+          billingAmount: ${billingAmount},
+          billingPaid: ${billingPaid},
+          billingPayment: "${billingPayment}"
+        })
+        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+      `};
+
+      console.log(JSON.stringify(requestBody));
+
+    fetch('http://localhost:9009/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Failed!');
+        }
+        return res.json();
+      })
+      .then(resData => {
+        const responseAlert = JSON.stringify(resData.data).slice(2,25);
+        this.setState({ userAlert: responseAlert, user: resData.data.deleteUserBilling})
+        this.context.user = this.state.user;
+        // this.getThisUser();
+      })
+      .catch(err => {
+        this.setState({userAlert: err});
+      });
   }
 
   addUserComplaintHandler = (event) => {
@@ -705,12 +726,26 @@ class UserProfile extends Component {
       const complaintDate = new Date();
       const complaintType = event.target.formGridTypeSelect.value;
       const complaintDescription = event.target.formGridDescription.value;
-      const complainantId = "5e5432e6e1d489135ff955c2";
-      const testOfffenderId = "5e569ead200d2a03d8036405";
+      const complainantId = "5e6312a84d494267fb64e60d";
+      // const complainantId = this.context.model._id;
+      const offenderId = this.context.selectedUser._id;
+
+      if (complainantId === undefined ||
+          complainantId.trim().length === 0) {
+        this.setState({userAlert: "Please select a Model and try again"});
+        this.context.userAlert = "Please select a Model and try again";
+        return
+      }
+      if (offenderId === undefined ||
+          offenderId.trim().length === 0) {
+        this.setState({userAlert: "Please select a User and try again"});
+        this.context.userAlert = "Please select a User and try again";
+        return
+      }
 
       const requestBody = {
         query:`
-        mutation {addUserComplaint(activityId:"${activityId}", userId:"${testOfffenderId}"complainantId:"${complainantId}",userInput:{
+        mutation {addUserComplaint(activityId:"${activityId}", userId:"${offenderId}"complainantId:"${complainantId}",userInput:{
           complaintDate:"${complaintDate}",
           complaintType:"${complaintType}",
           complaintDescription:"${complaintDescription}",
@@ -733,10 +768,9 @@ class UserProfile extends Component {
           return res.json();
         })
         .then(resData => {
-
           const responseAlert = JSON.stringify(resData.data).slice(2,25);
-          this.setState({ userAlert: responseAlert, user: resData.data.addUserComplaint});
-          this.context.user = this.state.user;
+          this.setState({ userAlert: responseAlert});
+          // this.context.user = this.state.user;
           // this.getThisUser();
         })
         .catch(err => {
@@ -883,7 +917,7 @@ class UserProfile extends Component {
       //   authId={this.context.activityId}
       //   alert={this.state.userAlert}
       // />
-    }
+      }
 
       {this.state.overlay === true && (
         <LoadingOverlay
@@ -897,7 +931,8 @@ class UserProfile extends Component {
 
       <Row>
 
-      {this.state.sidebarShow === true && (
+      {this.state.sidebarShow === true &&
+        this.state.user !== null && (
         <Col md={2} className="MasterCol1">
         <SidebarPage
           you={this.state.user}
@@ -958,6 +993,7 @@ class UserProfile extends Component {
                         updating={this.state.updating}
                         updatingField={this.state.updatingField}
                         userAddField={this.state.userAddField}
+                        selectedUser={this.context.selectedUser}
                       />
                     )}
 

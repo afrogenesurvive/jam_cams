@@ -647,6 +647,7 @@ module.exports = {
         complainant: complainant,
       };
       const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { complaints: complaint }},{new: true, useFindAndModify: false})
+
         return {
           ...user._doc,
           _id: user.id,

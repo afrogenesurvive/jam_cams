@@ -249,7 +249,8 @@ hideDetailHandler = () => {
       //   authId={this.context.activityId}
       //   alert={this.state.userAlert}
       // />
-    }
+      }
+      
       {this.state.showDetail === true && (
         <UserDetailViewer
           user={this.state.selectedUser}
@@ -275,7 +276,9 @@ hideDetailHandler = () => {
         {this.state.sidebarShow === true && (
           <Col md={2} className="MasterCol1">
           <SidebarPage
-            you={this.state.selectedUser}
+            you={this.state.user}
+            alert={this.state.userAlert}
+            authId={this.context.activityId}
           />
           </Col>
         )}

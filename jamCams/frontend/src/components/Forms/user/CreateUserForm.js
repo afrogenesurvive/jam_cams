@@ -127,7 +127,7 @@ return (
 </Form.Row>
 
 <Form.Row>
-<Form.Group as={Col} controlId="formGridAddresspostalCode">
+<Form.Group as={Col} controlId="formGridAddressPostalCode">
   <Form.Label>postalCode</Form.Label>
   <Form.Control type="text" placeholder="addresspostalCode"/>
 </Form.Group>

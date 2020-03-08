@@ -503,6 +503,7 @@ module.exports = buildSchema(`
     createModel(modelInput: ModelInput!): Model
     updateModel(activityId: ID!, modelId: ID!, modelInput: ModelInput!): Model
     updateModelField(activityId: ID!, modelId: ID!, field: String!, query: String!): Model
+    addModelModelName(activityId: ID!, modelId: ID!, modelInput: ModelInput!): Model
     addModelSocialMedia(activityId: ID!, modelId: ID!, socialMedia: [SocialMediaInput!]): Model
     addModelTrait(activityId: ID!, modelId: ID!, modelInput: ModelInput!): Model
     addModelTraits(activityId: ID!, modelId: ID!, traits: [TraitInput!]): Model
@@ -511,8 +512,8 @@ module.exports = buildSchema(`
     addModelPerk(activityId: ID!, modelId: ID!, modelInput: ModelInput): Model
     addModelPerks(activityId: ID!, modelId: ID!, perks: [PerkInput!]): Model
     addModelTokens(activityId: ID!, modelId: ID!, modelInput: ModelInput): Model
-    addModelTags(activityId: ID!, modelId: ID!, tags: [String!]): Model
-    addModelCategories(activityId: ID!, modelId: ID!, categories: [String!]): Model
+    addModelTags(activityId: ID!, modelId: ID!, modelInput: ModelInput!): Model
+    addModelCategories(activityId: ID!, modelId: ID!, modelInput: ModelInput!): Model
     addModelFan(activityId: ID!, modelId: ID!, fanId: ID!): Model
     addModelFriend(activityId: ID!, modelId: ID!, friendId: ID!): Model
     addModelShow(activityId: ID!, modelId: ID!, showId: ID!): Model

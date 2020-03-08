@@ -28,16 +28,19 @@ return (
     <option>address.country</option>
     <option>address.postalCode</option>
     <option>bio</option>
+    <option>tokens</option>
   </Form.Control>
   </Form.Group>
   </Form.Row>
 
-  <Form.Row>
-    <Form.Group as={Col} controlId="formGridField">
-    <Form.Label>Field</Form.Label>
-    <Form.Control type="text" placeholder="field"/>
-  </Form.Group>
-  </Form.Row>
+  {
+  // <Form.Row>
+  //   <Form.Group as={Col} controlId="formGridField">
+  //   <Form.Label>Field</Form.Label>
+  //   <Form.Control type="text" placeholder="field"/>
+  // </Form.Group>
+  // </Form.Row>
+  }
 
   <Form.Row>
   <Form.Group as={Col} controlId="formGridQuery">

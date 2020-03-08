@@ -19,17 +19,19 @@ const { pocketVariables } = require('../../helpers/pocketVars');
 
 module.exports = {
   models: async (args, req) => {
-    // console.log(`
-    //   users...args: ${util.inspect(args)},
-    //   isAuth: ${req.isAuth},
-    //   `);
 
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
       const models = await Model.find({})
-      .populate('messages');
+      .populate('fans')
+      .populate('friends')
+      .populate('shows')
+      .populate('content')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
       return models.map(model => {
         return transformModel(model,);
       });
@@ -83,7 +85,7 @@ module.exports = {
     try {
 
       const regex = "/^" + args.regex + "/";
-      const models = await Model.find({'address.street': {$regex: regex, $options: 'i'}});
+      const models = await Model.find({'name': {$regex: regex, $options: 'i'}});
 
       return models.map(model => {
         return transformModel(model);

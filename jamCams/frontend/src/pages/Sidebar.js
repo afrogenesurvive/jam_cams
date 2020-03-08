@@ -36,6 +36,7 @@ class SidebarPage extends Component {
       <Card.Body>
         <Card.Title className="cardTitle">You</Card.Title>
         <Card.Subtitle className="mb-2">ID:</Card.Subtitle>
+
         <Card.Text>
           {this.context.user._id}
         </Card.Text>

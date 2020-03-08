@@ -28,7 +28,6 @@ import './thisUserProfile.css';
 const thisUserProfile = (props) => {
   const {...user} = props.user;
   const userAddress = user.address;
-
   const userDob = new Date(user.dob.substr(0,9)*1000).toISOString().slice(0,10);
 
   return (
@@ -285,6 +284,7 @@ const thisUserProfile = (props) => {
           confirmText="Confirm"
           user={props.user}
           authId={props.authId}
+          selectedUser={props.selectedUser}
         />
     )}
 

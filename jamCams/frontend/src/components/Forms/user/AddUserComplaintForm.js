@@ -10,6 +10,7 @@ return (
 <div className="UpdateFormContainer">
 <Form onSubmit={props.onConfirm}>
 
+<Form.Row>
 <Form.Group as={Col} controlId="formGridTypeSelect">
 <Form.Label>Complaint Types</Form.Label>
 <Form.Control as="select">
@@ -18,6 +19,11 @@ return (
   <option>type 3</option>
 </Form.Control>
 </Form.Group>
+
+<h5>Offender Username:</h5>
+  {props.selectedUser.username}
+
+</Form.Row>
 
   <Form.Row>
     <Form.Group as={Col} controlId="formGridDescription">

@@ -35,7 +35,6 @@ class AuthPage extends Component {
   };
   static contextType = AuthContext;
 
-
   componentDidMount() {
 
     const token = sessionStorage.getItem('token');
@@ -46,20 +45,19 @@ class AuthPage extends Component {
       console.log("sessionStorage found: User");
       this.setState({userAlert: "sessionStorage found...",userSeshStore: true });
       this.getThisUser();
-      this.retrieveLogin();
+      // this.retrieveLogin();
     }
     if ( role === "Model" ) {
       console.log("sessionStorage found: Model");
       this.setState({userAlert: "sessionStorage found...",userSeshStore: true });
       this.getThisModel();
-      this.retrieveLogin();
+      // this.retrieveLogin();
     }
     if (role === "No sessionStorage found") {
       console.log();
       this.setState({ userAlert: "Alerts shown here..." });
     }
   }
-
 
   retrieveLogin = () => {
     console.log("retrieving login");
@@ -70,8 +68,6 @@ class AuthPage extends Component {
       sessionStorage.getItem('tokenExpiration'),
     );
   };
-
-
 
   submitHandler = event => {
     event.preventDefault();
@@ -193,7 +189,7 @@ class AuthPage extends Component {
     }
 
     getThisUser() {
-      console.log("getThisUser");
+
       const activityId = sessionStorage.getItem('activityId');
       const token = sessionStorage.getItem('token');
       const requestBody = {
@@ -218,7 +214,7 @@ class AuthPage extends Component {
         .then(resData => {
           const thisUser = resData.data.getThisUser;
           this.context.user = thisUser;
-
+          this.retrieveLogin();
         })
         .catch(err => {
           this.setState({userAlert: err});
@@ -251,6 +247,7 @@ class AuthPage extends Component {
         .then(resData => {
           const thisModel = resData.data.getThisModel;
           this.context.model = thisModel;
+          this.retrieveLogin();
         })
         .catch(err => {
           this.setState({userAlert: err});

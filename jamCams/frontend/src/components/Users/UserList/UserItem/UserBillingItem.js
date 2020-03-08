@@ -10,10 +10,6 @@ const userBillingItem = props => (
 
     <Card className="card">
       <Card.Body>
-        <Card.Title>
-          Billing
-        </Card.Title>
-
 
         <ul className="cardUl">
           <li className="cardLi">
