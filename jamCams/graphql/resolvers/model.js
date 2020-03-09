@@ -338,7 +338,14 @@ module.exports = {
     }
     try {
 
-      const model = await Model.findById({_id: args.activityId});
+      const model = await Model.findById({_id: args.activityId})
+      .populate('fans')
+      .populate('friends')
+      .populate('shows')
+      .populate('content')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
 
       return {
         ...model._doc,
@@ -431,8 +438,9 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-      const interests = args.interests;
-      const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { interests: {$each: interests} }},{new: true, useFindAndModify: false})
+      const interests = args.modelInput.interests;
+      const splitInterests = interests.split(",");
+      const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { interests: {$each: splitInterests} }},{new: true, useFindAndModify: false})
         return {
           ...model._doc,
           _id: model.id,

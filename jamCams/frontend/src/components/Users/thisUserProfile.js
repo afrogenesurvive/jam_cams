@@ -10,6 +10,7 @@ import UserProfileImageList from './UserList/UserProfileImageList';
 import UserPerkList from './UserList/UserPerkList';
 import UserInterestList from './UserList/UserInterestList';
 import UserTagList from './UserList/UserTagList';
+import UserModelList from './UserList/UserModelList';
 import UserBillingList from './UserList/UserBillingList';
 import UserComplaintList from './UserList/UserComplaintList';
 
@@ -238,6 +239,20 @@ const thisUserProfile = (props) => {
           authId={props.authId}
           canDelete={props.canDelete}
           onDelete={props.onTagsDelete}
+        />
+      ) }
+
+    </Tab>
+
+    <Tab eventKey="favs" title="favs">
+
+    {user.models !== null &&
+      user.models !== [] && (
+        <UserModelList
+          userModels={user.models}
+          authId={props.authId}
+          canDelete={props.canDelete}
+          onDelete={props.onUserModelDelete}
         />
       ) }
 

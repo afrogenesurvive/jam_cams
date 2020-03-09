@@ -14,6 +14,7 @@ import ModelModelNameList from './ModelList/ModelModelNameList';
 import ModelInterestList from './ModelList/ModelInterestList';
 import ModelCategoryList from './ModelList/ModelCategoryList';
 import ModelTagList from './ModelList/ModelTagList';
+import ModelFanList from './ModelList/ModelFanList';
 
 import UpdateModelForm from '../../components/Forms/model/UpdateModelForm';
 import UpdateModelFieldForm from '../../components/Forms/model/UpdateModelFieldForm';
@@ -26,6 +27,8 @@ import AddModelInterestsForm from '../../components/Forms/model/AddModelInterest
 import AddModelCategoriesForm from '../../components/Forms/model/AddModelCategoriesForm';
 import AddModelTagsForm from '../../components/Forms/model/AddModelTagsForm';
 import AddModelTokensForm from '../../components/Forms/model/AddModelTokensForm';
+
+import CreateContentForm from '../../components/Forms/content/CreateContentForm';
 
 import './thisUserProfile.css';
 
@@ -345,6 +348,50 @@ const thisModelProfile = (props) => {
           authId={props.authId}
           canDelete={props.canDelete}
           onDelete={props.onTagsDelete}
+        />
+      ) }
+
+    </Tab>
+
+    <Tab eventKey="content" title="content">
+
+    <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartAddContent}>+ Content</Button>
+
+    {props.modelAddField === "content" && (
+        <CreateContentForm
+          canCancel
+          canConfirm
+          onCancel={props.onCancel}
+          onConfirm={props.addContent}
+          confirmText="Confirm"
+          model={props.model}
+          authId={props.authId}
+        />
+    )}
+
+    {
+      // model.content !== null &&
+      // model.content !== [] && (
+      //   <ModelContentList
+      //     modelContent={model.content}
+      //     authId={props.authId}
+      //     canDelete={props.canDelete}
+      //     onDelete={props.onContentDelete}
+      //   />
+      // )
+    }
+
+    </Tab>
+
+    <Tab eventKey="fans" title="fans">
+
+    {model.fans !== null &&
+      model.fans !== [] && (
+        <ModelFanList
+          modelFans={model.fans}
+          authId={props.authId}
+          canDelete={props.canDelete}
+          onDelete={props.onModelFanDelete}
         />
       ) }
 

@@ -44,8 +44,13 @@ module.exports = {
     }
     try {
 
+      const preTransaction = await Transaction.findById({_id: args.transctionId});
+      const senderRole = preTransaction.sender.role;
+      const recieverRole = preTransaction.reciever.role;
 
       const transaction = await Transaction.findByIdAndRemove(args.transactionId);
+      const updateSender = await mongoose.model(senderRole).findOneAndUpdate({_id: args.senderId},{$pull: {'transctions._id': args.transctionId}},{new: true, useFindAndModify: false});
+      const updateReceiver = await mongoose.model(receiverRole).findOneAndUpdate({_id: args.receiverId},{$pull: {'transctions._id': args.transctionId}},{new: true, useFindAndModify: false});
         return {
           ...transaction._doc,
           _id: transaction.id,

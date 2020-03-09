@@ -190,8 +190,9 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-      const tags = args.tags;
-      const content = await Content.findOneAndUpdate({_id:args.contentId},{$addToSet: { tags: {$each: tags} }},{new: true, useFindAndModify: false})
+      const tags = args.contentInput.tags;
+      const splitTags = tags.split(",");
+      const content = await Content.findOneAndUpdate({_id:args.contentId},{$addToSet: { tags: {$each: splitTags} }},{new: true, useFindAndModify: false})
         return {
           ...content._doc,
           _id: content.id,

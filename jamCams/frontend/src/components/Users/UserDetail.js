@@ -45,6 +45,9 @@ const UserDetail = (props) => {
             <span className="bold">Country:</span> {user.address.country}
           </Card.Text>
           <Card.Text>
+            <span className="bold">Email:</span> {user.contact.email}
+          </Card.Text>
+          <Card.Text>
             <span className="bold">Bio:</span> {user.bio}
           </Card.Text>
           <Card.Text>

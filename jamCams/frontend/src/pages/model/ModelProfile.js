@@ -568,13 +568,17 @@ class ModelProfile extends Component {
       });
   };
 
+  CreateContentHandler = (event) => {
+    console.log("creating content for model",this.context.activityId);
+  }
+
   getThisModel() {
     this.setState({ isLoading: true });
     const activityId = this.context.activityId;
     const requestBody = {
       query: `
       query {getThisModel(activityId:"${activityId}")
-      {_id,name,role,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
+      {_id,name,role,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username,profileImages{name,type,path},bio},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
         `};
 
     fetch('http://localhost:9009/graphql', {
@@ -595,8 +599,9 @@ class ModelProfile extends Component {
 
         if (this.isActive) {
           this.setState({ model: thisModel, isLoading: false });
+          this.context.model = this.state.model;
         }
-        this.context.model = this.state.model;
+
       })
       .catch(err => {
         this.setState({userAlert: err});
@@ -659,6 +664,9 @@ class ModelProfile extends Component {
   }
   addModelTokens = () => {
     this.setState({adding: true, modelAddField: "tokens"})
+  }
+  addModelContent = () => {
+    this.setState({adding: true, modelAddField: "content"})
   }
 
 
@@ -735,10 +743,12 @@ class ModelProfile extends Component {
                         addTags={this.addModelTagsHandler}
                         addModelName={this.addModelModelNameHandler}
                         addTokens={this.addModelTokensHandler}
+                        addContent={this.CreateContentHandler}
                         onProfileImageDelete={this.deleteModelProfileImage}
                         onSocialMediaDelete={this.deleteModelSocialMedia}
                         onTraitDelete={this.deleteModelTrait}
                         onTagsDelete={this.deleteModelTags}
+                        onContentDelete={this.deleteModelContent}
                         onModelNameDelete={this.deleteModelModelName}
                         onInterestDelete={this.deleteModelInterests}
                         onCategoriesDelete={this.deleteModelCategories}
@@ -754,6 +764,7 @@ class ModelProfile extends Component {
                         onStartAddPerk={this.addModelPerk}
                         onStartAddCategories={this.addModelCategories}
                         onStartAddTokens={this.addModelTokens}
+                        onStartAddContent={this.addModelContent}
                         updating={this.state.updating}
                         updatingField={this.state.updatingField}
                         modelAddField={this.state.modelAddField}

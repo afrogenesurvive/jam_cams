@@ -44,6 +44,7 @@ class ModelsPage extends Component {
     modelSearchField: null,
     modelSearchQuery: null,
     canDelete: null,
+    canFavorite: false,
     userAlert: null,
     overlay: false,
     overlayStatus: "test",
@@ -55,6 +56,7 @@ class ModelsPage extends Component {
     sidebarShow: true,
     mCol1Size: 3,
     mCol2Size: 9,
+    adding: false,
   };
   isActive = true;
 
@@ -62,8 +64,11 @@ class ModelsPage extends Component {
 
   componentDidMount() {
 
-    if (this.context.model.name === "Lady-of-the-Manor"){
+    if (this.context.user.name === "Lord-of-the-Manor" || this.context.model.name === "Lady-of-the-Manor"){
       this.setState({canDelete: true})
+    }
+    if (this.context.role === "User"){
+      this.setState({canFavorite: true})
     }
 
     if (JSON.stringify(this.context.selectedModel) !== "{}") {
@@ -134,20 +139,52 @@ class ModelsPage extends Component {
       });
   }
 
+  onAddFavModel = (modelId) => {
+    const activityId = this.context.activityId;
+    this.setState({ adding: false, userAlert: "Adding model to your favs" });
+    const requestBody = {
+      query: `
+          mutation {addUserModel(activityId:"${activityId}",userId:"${activityId}",modelId:"${modelId}")
+          {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+        `};
 
+    fetch('http://localhost:9009/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.context.token
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          this.context.userAlert = 'Failed!';
+          throw new Error('Failed!');
+        }
+        return res.json();
+      })
+      .then(resData => {
+        const responseAlert = JSON.stringify(resData.data).slice(0,8);
+        this.setState({userAlert: responseAlert});
+        this.context.user = resData.data.addUserModel;
+      })
+      .catch(err => {
+        this.setState({userAlert: err});
+      });
+  }
 
   modalCancelHandler = () => {
-    this.setState({ creating: false, updating: false, deleting: false, searching: false});
+    this.setState({ creating: false, updating: false, deleting: false, searching: false, adding: false});
   };
 
   fetchModels() {
 
     const activityId = this.context.activityId;
-    this.setState({ isLoading: true, userAlert: "Fetching Staff Master List..." });
+    this.setState({ isLoading: true, userAlert: "Fetching model Master List..." });
     const requestBody = {
       query: `
           query {models(activityId:"${activityId}")
-          {_id,name,username,dob,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
+          {_id,name,role,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username,profileImages{name,type,path},bio},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
         `};
 
     fetch('http://localhost:9009/graphql', {
@@ -184,15 +221,15 @@ class ModelsPage extends Component {
 
 
 
-showDetailHandler = modelId => {
+  showDetailHandler = modelId => {
 
-  this.setState(prevState => {
-    const selectedModel = prevState.models.find(e => e._id === modelId);
-    this.context.selectedModel = selectedModel;
-    this.setState({selectedModel: selectedModel, showDetail: true});
-    return { selectedModel: selectedModel };
-  });
-};
+    this.setState(prevState => {
+      const selectedModel = prevState.models.find(e => e._id === modelId);
+      this.context.selectedModel = selectedModel;
+      this.setState({selectedModel: selectedModel, showDetail: true});
+      return { selectedModel: selectedModel };
+    });
+  };
 
 hideDetailHandler = () => {
   this.setState({showDetail: false, overlay: false})
@@ -234,6 +271,10 @@ selectModelNoDetail = (model) => {
         sidebarShow: false,
         mCol2Size: 11
       })
+  }
+
+  onTest = (modelId) => {
+    console.log("this is a test id...", modelId);
   }
 
   componentWillUnmount() {
@@ -329,6 +370,9 @@ selectModelNoDetail = (model) => {
                              authId={this.context.activityId}
                              onViewDetail={this.showDetailHandler}
                              onSelectNoDetail={this.selectModelNoDetail}
+                             canFavorite={this.state.canFavorite}
+                             onAddFavModel={this.onAddFavModel}
+                             onTest={this.onTest}
                            />
                          )}
                         </Row>

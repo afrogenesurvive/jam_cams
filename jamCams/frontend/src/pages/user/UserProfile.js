@@ -818,6 +818,47 @@ class UserProfile extends Component {
     //     this.setState({userAlert: err});
     //   });
   }
+  deleteUserModel = (event) => {
+    console.log(event);
+    const token = this.context.token;
+    const activityId = this.context.activityId;
+
+    // const requestBody = {
+    //   query:`
+    //     "mutation {deleteUserComplaint(activityId:"${activityId}", userId:"${activityId}",
+    //     userInput:{
+    //       complaintDate: ${complaintDate},
+    //       complaintType: ${complaintType},
+    //       complaintDescription: ${complaintDescription},
+    //       complaintComplainant: ${complaintComplainant}
+    //     })
+    //     {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+    // //   `};
+    //
+    // fetch('http://localhost:9009/graphql', {
+    //   method: 'POST',
+    //   body: JSON.stringify(requestBody),
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     Authorization: 'Bearer ' + token
+    //   }
+    // })
+    //   .then(res => {
+    //     if (res.status !== 200 && res.status !== 201) {
+    //       throw new Error('Failed!');
+    //     }
+    //     return res.json();
+    //   })
+    //   .then(resData => {
+    //     const responseAlert = JSON.stringify(resData.data).slice(2,25);
+    //     this.setState({ userAlert: responseAlert, user: resData.data.deleteUserComplaint})
+    //     this.context.user = this.state.user;
+    //     // this.getThisUser();
+    //   })
+    //   .catch(err => {
+    //     this.setState({userAlert: err});
+    //   });
+  }
 
   getThisUser() {
     this.setState({ isLoading: true });
@@ -825,7 +866,7 @@ class UserProfile extends Component {
     const requestBody = {
       query: `
       query {getThisUser(activityId:"${activityId}")
-      {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+      {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email},modelNames,profileImages{name,type},bio,interests},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
         `};
 
     fetch('http://localhost:9009/graphql', {
@@ -980,6 +1021,7 @@ class UserProfile extends Component {
                         onInterestDelete={this.deleteUserInterests}
                         onComplaintDelete={this.deleteUserComplaint}
                         onBillingDelete={this.deleteUserBilling}
+                        onUserModelDelete={this.deleteUserModel}
                         onCancel={this.modalCancelHandler}
                         onStartUpdate={this.startUpdateUserHandler}
                         onStartUpdateField={this.startUpdateUserFieldHandler}

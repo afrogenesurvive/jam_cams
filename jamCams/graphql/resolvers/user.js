@@ -343,7 +343,14 @@ module.exports = {
     }
     try {
 
-      const user = await User.findById({_id: args.activityId});
+      const user = await User.findById({_id: args.activityId})
+      .populate('models')
+      .populate('viewedShows.ref')
+      .populate('viewedcontent.ref')
+      .populate('likedcontent.ref')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
 
       return {
         ...user._doc,
@@ -666,8 +673,10 @@ module.exports = {
     try {
 
       const model = await Model.findById({_id: args.modelId})
+      const preUser = await User.findById({_id: args.userId})
       const user = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {models: model}},{new: true, useFindAndModify: false})
       .populate('models');
+      const updateModel = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {fans: preUser}},{new: true, useFindAndModify: false})
 
       return {
         ...user._doc,
@@ -858,6 +867,25 @@ module.exports = {
           path: args.userInput.profileImagePath,
         }
         const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { profileImages: profileImage }},{new: true, useFindAndModify: false});
+
+        return {
+          ...user._doc,
+          _id: user.id,
+          email: user.contact.email ,
+          name: user.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteUserTag: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const tag = args.userInput.tag;
+        const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { tags: tag }},{new: true, useFindAndModify: false});
 
         return {
           ...user._doc,
