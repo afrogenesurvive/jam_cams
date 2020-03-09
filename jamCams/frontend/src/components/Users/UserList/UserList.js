@@ -9,7 +9,8 @@ const userList = props => {
     return (
       <UserItem
         key={user._id}
-        userId={props.authUserId}
+        user={user}
+        authId={props.authId}
         _id={user._id}
         username={user.username}
         topImage={user.profileImages[0].path}
@@ -18,6 +19,9 @@ const userList = props => {
         interest2={user.interests[1]}
         interest3={user.interests[2]}
         onDetail={props.onViewDetail}
+        canReport={props.canReport}
+        onReport={props.onReport}
+        onSelectNoDetail={props.onSelectNoDetail}
       />
     );
   });

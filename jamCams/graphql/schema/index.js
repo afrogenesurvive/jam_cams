@@ -174,6 +174,7 @@ module.exports = buildSchema(`
     role: String
     username: String
     modelName: String
+    modelNames: String
     dob: String
     addressNumber: Int
     addressStreet: String
@@ -192,14 +193,17 @@ module.exports = buildSchema(`
     profileImagesType: String
     profileImagesPath: String
     interest: String
+    interests: String
     perkDate: String
     perkName: String
     perkDescription: String
     perkImageLink: String
     tokens: Float
     tag: String
+    tags: String
     loggedIn: Boolean
     category: String
+    categories: String
   }
 
   type Content {

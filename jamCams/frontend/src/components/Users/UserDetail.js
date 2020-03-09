@@ -62,8 +62,13 @@ const UserDetail = (props) => {
         <Row className="detailCardRow">
           <Col className="detailCardCol">
             { props.canDelete === true && (
-              <Button variant="danger" onClick={props.onDelete}>
+              <Button variant="danger" onClick={props.onDelete.bind(this, user._id)}>
                 Delete !!??
+              </Button>
+            )}
+            { props.canReport === true && (
+              <Button variant="danger" onClick={props.onReport.bind(this, user._id)}>
+                Report!!??
               </Button>
             )}
           </Col>

@@ -16,6 +16,8 @@ return (
     <ModelDetail
       authId={props.authId}
       model={props.model}
+      canDelete={props.canDelete}
+      onDelete={props.onDelete}
     />
 
     </div>

@@ -19,6 +19,7 @@ import UpdateModelForm from '../../components/Forms/model/UpdateModelForm';
 import UpdateModelFieldForm from '../../components/Forms/model/UpdateModelFieldForm';
 import AddModelProfileImageForm from '../../components/Forms/model/AddModelProfileImageForm';
 import AddModelSocialMediaForm from '../../components/Forms/model/AddModelSocialMediaForm';
+import AddModelModelNameForm from '../../components/Forms/model/AddModelModelNameForm';
 import AddModelPerkForm from '../../components/Forms/model/AddModelPerkForm';
 import AddModelTraitForm from '../../components/Forms/model/AddModelTraitForm';
 import AddModelInterestsForm from '../../components/Forms/model/AddModelInterestsForm';
@@ -99,6 +100,19 @@ const thisModelProfile = (props) => {
         onDelete={props.onModelNameDelete}
       />
 
+      <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartAddModelName}>+ Modelname</Button>
+      {props.modelAddField === "modelName" && (
+          <AddModelModelNameForm
+            canCancel
+            canConfirm
+            onCancel={props.onCancel}
+            onConfirm={props.addModelName}
+            confirmText="Confirm"
+            model={props.model}
+            authId={props.authId}
+          />
+      )}
+
       <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartUpdate}>Edit</Button>
       <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartUpdateField}>Edit 1 Field</Button>
       <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartAddTokens}>+ Tokens</Button>
@@ -173,8 +187,8 @@ const thisModelProfile = (props) => {
 
     <Tab eventKey="socialMedia" title="socialMedia">
 
-    <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartAddSocialMedia}>+ Image</Button>
-    {props.userAddField === "socialMedia" && (
+    <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartAddSocialMedia}>+ Social</Button>
+    {props.modelAddField === "socialMedia" && (
         <AddModelSocialMediaForm
           model={props.model}
           authId={props.authId}

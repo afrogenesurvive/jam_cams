@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
 
 import AlertBox from '../../components/AlertBox';
 import CreateUserForm from '../../components/Forms/user/CreateUserForm';
 import CreateModelForm from '../../components/Forms/model/CreateModelForm';
 import LoadingOverlay from '../../components/LoadingOverlay';
+import './Auth.css';
 
 class SignupPage extends Component {
   state = {
@@ -237,7 +239,6 @@ class SignupPage extends Component {
     return (
       <React.Fragment>
 
-      <Row>
       <AlertBox
         authUserId={this.context.userId}
         alert={this.state.userAlert}
@@ -248,15 +249,26 @@ class SignupPage extends Component {
           status={this.state.overlayStatus}
         />
       )}
+      <Container className="loginPageContainer">
 
-      <Col className="signupRow" md={8}>
+      <Row className="loginPageContainerRow1">
+
+      <Col className="loginPageContainerCol1">
+      <h4 className="loginPageTitle"> Welcome you Pervz: Signup </h4>
 
       {this.state.creating === false && (
-      <Button variant="primary" onClick={this.changeSignupMode.bind(this, "User")}>User Signup</Button>
+      <Button variant="primary" className="loginButton1" onClick={this.changeSignupMode.bind(this, "User")}>User Signup</Button>
       )}
       {this.state.creating === false && (
-      <Button variant="success" onClick={this.changeSignupMode.bind(this, "Model")}>Model Signup</Button>
+      <Button variant="success" className="loginButton1" onClick={this.changeSignupMode.bind(this, "Model")}>Model Signup</Button>
       )}
+
+      </Col>
+
+      </Row>
+
+      <Row className="loginPageContainerRow2">
+      <Col className="loginPageContainerCol2">
 
       {this.state.role === "User" &&
         this.state.creating === true && (
@@ -286,6 +298,7 @@ class SignupPage extends Component {
 
       </Col>
       </Row>
+      </Container>
 
       </React.Fragment>
     );

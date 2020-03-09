@@ -32,11 +32,11 @@ class SidebarPage extends Component {
       <Row className="sidebarRow1">
       <Col md={12} className="">
 
+      {this.context.role === "User" && (
       <Card border="primary" className="sidebarCard">
       <Card.Body>
         <Card.Title className="cardTitle">You</Card.Title>
         <Card.Subtitle className="mb-2">ID:</Card.Subtitle>
-
         <Card.Text>
           {this.context.user._id}
         </Card.Text>
@@ -50,16 +50,44 @@ class SidebarPage extends Component {
         </Card.Text>
       </Card.Body>
       </Card>
+      )}
+
+      {this.context.role === "Model" && (
+      <Card border="primary" className="sidebarCard">
+      <Card.Body>
+        <Card.Title className="cardTitle">You</Card.Title>
+        <Card.Subtitle className="mb-2">ID:</Card.Subtitle>
+        <Card.Text>
+          {this.context.model._id}
+        </Card.Text>
+        <Card.Subtitle className="mb-2">Name:</Card.Subtitle>
+        <Card.Text>
+          {this.context.model.name}
+        </Card.Text>
+        <Card.Subtitle className="mb-2">Role:</Card.Subtitle>
+        <Card.Text>
+          {this.context.model.role}
+        </Card.Text>
+      </Card.Body>
+      </Card>
+      )}
 
       <Card border="secondary" className="sidebarCard">
       <Card.Body>
         <Card.Title className="cardTitle">Selection</Card.Title>
-        <Card.Subtitle className="mb-2">Staff:</Card.Subtitle>
+        <Card.Subtitle className="mb-2">User:</Card.Subtitle>
         <Card.Text>
           {this.context.selectedUser._id}
         </Card.Text>
         <Card.Text>
           {this.context.selectedUser.name}
+        </Card.Text>
+        <Card.Subtitle className="mb-2">Model:</Card.Subtitle>
+        <Card.Text>
+          {this.context.selectedModel._id}
+        </Card.Text>
+        <Card.Text>
+          {this.context.selectedModel.name}
         </Card.Text>
 
       </Card.Body>

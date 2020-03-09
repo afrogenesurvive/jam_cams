@@ -4,30 +4,23 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import './CreateUserForm.css';
 
-const AddModelProfileImageForm = (props) => {
+const AddModelModelNameForm = (props) => {
+  const {...model} = props.model;
+  const modelNameList = JSON.stringify(model.modelNames)
 
 return (
 <div className="UpdateFormContainer">
 <Form onSubmit={props.onConfirm}>
 
   <Form.Row>
-    <Form.Group as={Col} controlId="formGridFilename">
-    <Form.Label>Title/Caption</Form.Label>
-    <Form.Control type="text" placeholder="Filename"/>
-  </Form.Group>
+  <h6>Current Names:</h6>
+  <p>{modelNameList}</p>
   </Form.Row>
 
   <Form.Row>
-    <Form.Group as={Col} controlId="formGridFiletype">
-    <Form.Label>Filetype</Form.Label>
-    <Form.Control type="text" placeholder="Filetype"/>
-  </Form.Group>
-  </Form.Row>
-
-  <Form.Row>
-    <Form.Group as={Col} controlId="formGridFilepath">
-    <Form.Label>Link Address</Form.Label>
-    <Form.Control type="text" placeholder="link address"/>
+    <Form.Group as={Col} controlId="formGridModelName">
+    <Form.Label>Modelname</Form.Label>
+    <Form.Control type="text" placeholder="Modelname"/>
   </Form.Group>
   </Form.Row>
 
@@ -51,4 +44,4 @@ return (
 
 )};
 
-export default AddModelProfileImageForm;
+export default AddModelModelNameForm;

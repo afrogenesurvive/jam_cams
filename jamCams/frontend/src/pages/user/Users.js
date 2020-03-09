@@ -44,6 +44,7 @@ class UsersPage extends Component {
     userSearchField: null,
     userSearchQuery: null,
     canDelete: null,
+    canReport: null,
     userAlert: null,
     overlay: false,
     overlayStatus: "test",
@@ -62,8 +63,11 @@ class UsersPage extends Component {
 
   componentDidMount() {
 
-    if (this.context.user.name === "Lord-of-the-Manor"){
+    if (this.context.user.name === "Lord-of-the-Manor" || this.context.model.name === "Lady-of-the-Manor"){
       this.setState({canDelete: true})
+    }
+    if (this.context.role === "Model"){
+      this.setState({canReport: true})
     }
 
     if (JSON.stringify(this.context.selectedUser) !== "{}") {
@@ -178,11 +182,13 @@ class UsersPage extends Component {
       });
   }
 
-  deleteListUser = () => {
-    console.log("delete listed user");
+  deleteListUser = (userId) => {
+    console.log("delete listed user", userId);
   }
 
-
+  reportUser = (userId) => {
+    console.log("reporting user", userId);
+  }
 
 showDetailHandler = userId => {
 
@@ -193,6 +199,11 @@ showDetailHandler = userId => {
     return { selectedUser: selectedUser };
   });
 };
+
+selectUserNoDetail = (user) => {
+  this.setState({selectedUser: user});
+  this.context.selectedUser = user;
+}
 
 hideDetailHandler = () => {
   this.setState({showDetail: false, overlay: false})
@@ -258,6 +269,8 @@ hideDetailHandler = () => {
           onHideUserDetail={this.hideDetailHandler}
           canDelete={this.state.canDelete}
           onDelete={this.deleteListUser}
+          canReport={this.state.canReport}
+          onReport={this.reportUser}
         />
       )}
       <SidebarControl
@@ -274,10 +287,21 @@ hideDetailHandler = () => {
 
         <Row>
 
-        {this.state.sidebarShow === true && (
+        {this.state.sidebarShow === true &&
+          this.context.role === "User" && (
           <Col md={2} className="MasterCol1">
           <SidebarPage
             you={this.state.user}
+            alert={this.state.userAlert}
+            authId={this.context.activityId}
+          />
+          </Col>
+        )}
+        {this.state.sidebarShow === true &&
+          this.context.role === "Model" &&(
+          <Col md={2} className="MasterCol1">
+          <SidebarPage
+            you={this.state.model}
             alert={this.state.userAlert}
             authId={this.context.activityId}
           />
@@ -309,9 +333,12 @@ hideDetailHandler = () => {
                            <Spinner />
                          ) : (
                            <UserList
+                            canReport={this.state.canReport}
+                            onReport={this.reportUser}
                              users={this.state.users}
                              authId={this.context.activityId}
                              onViewDetail={this.showDetailHandler}
+                             onSelectNoDetail={this.selectUserNoDetail}
                            />
                          )}
                         </Row>

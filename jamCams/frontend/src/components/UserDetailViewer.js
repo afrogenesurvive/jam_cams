@@ -16,6 +16,10 @@ return (
     <UserDetail
       authId={props.authId}
       user={props.user}
+      canReport={props.canReport}
+      onReport={props.onReport}
+      canDelete={props.canDelete}
+      onDelete={props.onDelete}
     />
 
     </div>

@@ -198,6 +198,11 @@ hideDetailHandler = () => {
   this.setState({showDetail: false, overlay: false})
 }
 
+selectModelNoDetail = (model) => {
+  this.setState({selectedModel: model});
+  this.context.selectedModel = model;
+}
+
   onViewAttachment = (attachment) => {
 
       this.setState({showAttachment: true})
@@ -274,10 +279,21 @@ hideDetailHandler = () => {
 
         <Row>
 
-        {this.state.sidebarShow === true && (
+        {this.state.sidebarShow === true &&
+          this.context.role === "User" && (
           <Col md={2} className="MasterCol1">
           <SidebarPage
             you={this.state.user}
+            alert={this.state.userAlert}
+            authId={this.context.activityId}
+          />
+          </Col>
+        )}
+        {this.state.sidebarShow === true &&
+          this.context.role === "Model" &&(
+          <Col md={2} className="MasterCol1">
+          <SidebarPage
+            you={this.state.model}
             alert={this.state.userAlert}
             authId={this.context.activityId}
           />
@@ -312,6 +328,7 @@ hideDetailHandler = () => {
                              models={this.state.models}
                              authId={this.context.activityId}
                              onViewDetail={this.showDetailHandler}
+                             onSelectNoDetail={this.selectModelNoDetail}
                            />
                          )}
                         </Row>
@@ -333,6 +350,7 @@ hideDetailHandler = () => {
                             onConfirm={this.modalConfirmSearchHandler}
                             confirmText="Search"
                             model={this.context.selectedModel}
+                            onSelectNoDetail={this.selectModelNoDetail}
                           />
                         </Tab>
                         </Tabs>

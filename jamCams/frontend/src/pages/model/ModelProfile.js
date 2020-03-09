@@ -273,6 +273,47 @@ class ModelProfile extends Component {
         });
     };
 
+  addModelModelNameHandler = (event) => {
+      const token = this.context.token;
+      const activityId = this.context.activityId;
+
+      this.setState({ adding: false, modelAddField: null, userAlert: "Updating selected Staff by Field..." });
+      const modelName = event.target.formGridModelName.value;
+
+      const requestBody = {
+        query:`
+        mutation {addModelModelName(activityId:"${activityId}", modelId:"${activityId}",modelInput:{
+          modelName:"${modelName}"
+        })
+        {_id,name,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
+        `};
+
+      fetch('http://localhost:9009/graphql', {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token
+        }
+      })
+        .then(res => {
+          if (res.status !== 200 && res.status !== 201) {
+            throw new Error('Failed!');
+          }
+          return res.json();
+        })
+        .then(resData => {
+          this.context.model = resData.data.addModelProfileImage;
+
+          const responseAlert = JSON.stringify(resData.data).slice(2,25);
+          this.setState({ userAlert: responseAlert, model: resData.data.addModelProfileImage})
+          this.getThisModel();
+        })
+        .catch(err => {
+          this.setState({userAlert: err});
+        });
+    };
+
   addModelPerkHandler = (event) => {
     const token = this.context.token;
     const activityId = this.context.activityId;
@@ -566,7 +607,7 @@ class ModelProfile extends Component {
   }
 
   modalCancelHandler = () => {
-    this.setState({ updating: false ,updatingField: false });
+    this.setState({ updating: false, updatingField: false, adding: false, modelAddField: null  });
   };
 
   updateModelSpecialProfile (event) {
@@ -592,29 +633,32 @@ class ModelProfile extends Component {
   addModelField = (args) => {
     this.setState({adding: true, modelAddField: args})
   }
-  addUserProfileImage = () => {
-    this.setState({adding: true, userAddField: "profileImage"})
+  addModelProfileImage = () => {
+    this.setState({adding: true, modelAddField: "profileImage"})
   }
-  addUserTrait = () => {
-    this.setState({adding: true, userAddField: "trait"})
+  addModelModelName = () => {
+    this.setState({adding: true, modelAddField: "modelName"})
   }
-  addUserSocialMedia = () => {
-    this.setState({adding: true, userAddField: "socialMedia"})
+  addModelTrait = () => {
+    this.setState({adding: true, modelAddField: "trait"})
   }
-  addUserPerk = () => {
-    this.setState({adding: true, userAddField: "perk"})
+  addModelSocialMedia = () => {
+    this.setState({adding: true, modelAddField: "socialMedia"})
   }
-  addUserInterests = () => {
-    this.setState({adding: true, userAddField: "interests"})
+  addModelPerk = () => {
+    this.setState({adding: true, modelAddField: "perk"})
   }
-  addUserTags = () => {
-    this.setState({adding: true, userAddField: "tags"})
+  addModelInterests = () => {
+    this.setState({adding: true, modelAddField: "interests"})
   }
-  addUserCategories = () => {
-    this.setState({adding: true, userAddField: "categories"})
+  addModelTags = () => {
+    this.setState({adding: true, modelAddField: "tags"})
   }
-  addUserTokens = () => {
-    this.setState({adding: true, userAddField: "tokens"})
+  addModelCategories = () => {
+    this.setState({adding: true, modelAddField: "categories"})
+  }
+  addModelTokens = () => {
+    this.setState({adding: true, modelAddField: "tokens"})
   }
 
 
@@ -685,15 +729,17 @@ class ModelProfile extends Component {
                         addProfileImage={this.addModelProfileImageHandler}
                         addSocialMedia={this.addModelSocialMediaHandler}
                         addTrait={this.addModelTraitHandler}
-                        addPerk={this.addUserPerkHandler}
+                        addPerk={this.addModelPerkHandler}
                         addInterests={this.addModelInterestsHandler}
                         addCategories={this.addModelCategoriesHandler}
                         addTags={this.addModelTagsHandler}
+                        addModelName={this.addModelModelNameHandler}
                         addTokens={this.addModelTokensHandler}
                         onProfileImageDelete={this.deleteModelProfileImage}
                         onSocialMediaDelete={this.deleteModelSocialMedia}
                         onTraitDelete={this.deleteModelTrait}
                         onTagsDelete={this.deleteModelTags}
+                        onModelNameDelete={this.deleteModelModelName}
                         onInterestDelete={this.deleteModelInterests}
                         onCategoriesDelete={this.deleteModelCategories}
                         onCancel={this.modalCancelHandler}
@@ -702,10 +748,13 @@ class ModelProfile extends Component {
                         onStartAddProfileImage={this.addModelProfileImage}
                         onStartAddSocialMedia={this.addModelSocialMedia}
                         onStartAddTrait={this.addModelTrait}
+                        onStartAddModelName={this.addModelModelName}
                         onStartAddInterests={this.addModelInterests}
                         onStartAddTags={this.addModelTags}
+                        onStartAddPerk={this.addModelPerk}
                         onStartAddCategories={this.addModelCategories}
                         onStartAddTokens={this.addModelTokens}
+                        updating={this.state.updating}
                         updatingField={this.state.updatingField}
                         modelAddField={this.state.modelAddField}
                         selectedUser={this.context.selectedUser}
