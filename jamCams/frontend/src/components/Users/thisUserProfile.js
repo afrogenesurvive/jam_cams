@@ -13,6 +13,7 @@ import UserTagList from './UserList/UserTagList';
 import UserModelList from './UserList/UserModelList';
 import UserBillingList from './UserList/UserBillingList';
 import UserComplaintList from './UserList/UserComplaintList';
+import UserMessageList from './UserList/UserMessageList';
 
 import UpdateUserForm from '../Forms/user/UpdateUserForm';
 import UpdateUserFieldForm from '../Forms/user/UpdateUserFieldForm';
@@ -23,6 +24,7 @@ import AddUserTagsForm from '../Forms/user/AddUserTagsForm';
 import AddUserTokensForm from '../Forms/user/AddUserTokensForm';
 import AddUserComplaintForm from '../Forms/user/AddUserComplaintForm';
 import AddUserBillingForm from '../Forms/user/AddUserBillingForm';
+import CreateMessageForm from '../Forms/message/CreateMessageForm';
 
 import './thisUserProfile.css';
 
@@ -310,6 +312,35 @@ const thisUserProfile = (props) => {
           authId={props.authId}
           canDelete={props.canDelete}
           onDelete={props.onComplaintDelete}
+        />
+      ) }
+
+    </Tab>
+
+    <Tab eventKey="messages" title="messages">
+
+    <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartCreateMessage}>+ Message</Button>
+
+    {props.userAddField === "messge" && (
+        <CreateMessageForm
+          canCancel
+          canConfirm
+          onCancel={props.onCancel}
+          onConfirm={props.createMessage}
+          confirmText="Confirm"
+          user={props.user}
+          authId={props.authId}
+          receiver={props.receiver}
+        />
+    )}
+
+    {user.messges !== null &&
+      user.messges !== [] && (
+        <UserMessageList
+          userMessages={user.messages}
+          authId={props.authId}
+          canDelete={props.canDelete}
+          onDelete={props.onMessageDelete}
         />
       ) }
 

@@ -860,6 +860,10 @@ class UserProfile extends Component {
     //   });
   }
 
+  userCreateMessage = (event) => {
+    console.log("creating message from ...");
+  }
+
   getThisUser() {
     this.setState({ isLoading: true });
     const activityId = this.context.activityId;
@@ -944,6 +948,10 @@ class UserProfile extends Component {
   addUserBilling = () => {
     this.setState({adding: true, userAddField: "billing"})
   }
+  startCreateMessage = () => {
+    console.log("who are sender reciever??");
+    this.setState({adding: true, userAddField: "message"})
+  }
 
   componentWillUnmount() {
     this.isActive = false;
@@ -1015,12 +1023,14 @@ class UserProfile extends Component {
                         addTokens={this.addUserTokensHandler}
                         addComplaint={this.addUserComplaintHandler}
                         addBilling={this.addUserBillingHandler}
+                        createMessage={this.userCreateMessage}
                         onProfileImageDelete={this.deleteUserProfileImage}
                         onPerkDelete={this.deleteUserPerk}
                         onTagsDelete={this.deleteUserTags}
                         onInterestDelete={this.deleteUserInterests}
                         onComplaintDelete={this.deleteUserComplaint}
                         onBillingDelete={this.deleteUserBilling}
+                        onMessageDelete={this.deleteUserMessage}
                         onUserModelDelete={this.deleteUserModel}
                         onCancel={this.modalCancelHandler}
                         onStartUpdate={this.startUpdateUserHandler}
@@ -1032,6 +1042,7 @@ class UserProfile extends Component {
                         onStartAddTokens={this.addUserTokens}
                         onStartAddComplaint={this.addUserComplaint}
                         onStartAddBilling={this.addUserBilling}
+                        onStartCreateMessage={this.startCreateMessage}
                         updating={this.state.updating}
                         updatingField={this.state.updatingField}
                         userAddField={this.state.userAddField}

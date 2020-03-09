@@ -20,6 +20,8 @@ export default React.createContext({
     show: {},
     shows:[],
     selectedShow: {},
+    sender: null,
+    reciever: null,
     userAlert: "...",
     file: null,
     fancyDate: null,
