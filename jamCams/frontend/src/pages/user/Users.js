@@ -190,6 +190,12 @@ class UsersPage extends Component {
     console.log("reporting user", userId);
   }
 
+  selectUserMessageReceiver = (user) => {
+    console.log("selected user..",user._id,"..to message");
+    this.context.receiver = user;
+    this.context.selectedUser = user;
+  }
+
 showDetailHandler = userId => {
 
   this.setState(prevState => {
@@ -339,6 +345,7 @@ hideDetailHandler = () => {
                              authId={this.context.activityId}
                              onViewDetail={this.showDetailHandler}
                              onSelectNoDetail={this.selectUserNoDetail}
+                             onSelectMessageReceiver={this.selectUserMessageReceiver}
                            />
                          )}
                         </Row>

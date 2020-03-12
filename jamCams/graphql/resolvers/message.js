@@ -103,10 +103,12 @@ module.exports = {
         subject: args.messageInput.subject,
         sender: {
           role: senderRole,
+          username: sender.username,
           ref: sender
         },
         receiver: {
           role: receiverRole,
+          username: receiver.username,
           ref: receiver
         },
         message: args.messageInput.message,

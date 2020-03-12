@@ -14,6 +14,7 @@ import UserModelList from './UserList/UserModelList';
 import UserBillingList from './UserList/UserBillingList';
 import UserComplaintList from './UserList/UserComplaintList';
 import UserMessageList from './UserList/UserMessageList';
+import UserTransactionList from './UserList/UserTransactionList';
 
 import UpdateUserForm from '../Forms/user/UpdateUserForm';
 import UpdateUserFieldForm from '../Forms/user/UpdateUserFieldForm';
@@ -25,6 +26,7 @@ import AddUserTokensForm from '../Forms/user/AddUserTokensForm';
 import AddUserComplaintForm from '../Forms/user/AddUserComplaintForm';
 import AddUserBillingForm from '../Forms/user/AddUserBillingForm';
 import CreateMessageForm from '../Forms/message/CreateMessageForm';
+import CreateTransactionForm from '../Forms/transaction/CreateTransactionForm';
 
 import './thisUserProfile.css';
 
@@ -214,7 +216,7 @@ const thisUserProfile = (props) => {
           canDelete={props.canDelete}
           onDelete={props.onInterestDelete}
         />
-      ) }
+      )}
 
     </Tab>
 
@@ -321,7 +323,12 @@ const thisUserProfile = (props) => {
 
     <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartCreateMessage}>+ Message</Button>
 
-    {props.userAddField === "messge" && (
+    {props.messageReceiver === null && (
+      <Button variant="outline-warning" size="lg" className="confirmEditButton" >Select someone to message</Button>
+    )}
+
+    {props.userAddField === "message" &&
+      props.messageReceiver !== null && (
         <CreateMessageForm
           canCancel
           canConfirm
@@ -330,17 +337,51 @@ const thisUserProfile = (props) => {
           confirmText="Confirm"
           user={props.user}
           authId={props.authId}
-          receiver={props.receiver}
+          receiver={props.messageReceiver}
         />
     )}
 
-    {user.messges !== null &&
-      user.messges !== [] && (
+    {user.messages !== null &&
+      user.messages !== [] && (
         <UserMessageList
           userMessages={user.messages}
           authId={props.authId}
           canDelete={props.canDelete}
           onDelete={props.onMessageDelete}
+        />
+      ) }
+
+    </Tab>
+
+    <Tab eventKey="transactions" title="transactions">
+
+    <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartCreateTransaction}>+ Transaction</Button>
+
+    {props.messageReceiver === null && (
+      <Button variant="outline-warning" size="lg" className="confirmEditButton" >Select someone send tokens to</Button>
+    )}
+
+    {props.userAddField === "transaction" &&
+      props.messageReceiver !== null && (
+        <CreateTransactionForm
+          canCancel
+          canConfirm
+          onCancel={props.onCancel}
+          onConfirm={props.createTransaction}
+          confirmText="Confirm"
+          user={props.user}
+          authId={props.authId}
+          receiver={props.messageReceiver}
+        />
+    )}
+
+    {user.transactions !== null &&
+      user.transactions !== [] && (
+        <UserTransactionList
+          userTransactions={user.transactions}
+          authId={props.authId}
+          canDelete={props.canDelete}
+          onDelete={props.onTransactionDelete}
         />
       ) }
 

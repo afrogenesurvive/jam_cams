@@ -4,16 +4,15 @@ import Card from 'react-bootstrap/Card'
 
 import './UserItem.css';
 
-const userMessgeItem = props => (
+const userTransactionItem = props => (
   <li key={props.authId} className="users__list-item_detail users__list-item_detail2">
     <div>
 
     <Card className="card">
       <Card.Body>
         <Card.Title>
-          Message
+          Transaction
         </Card.Title>
-
 
         <ul className="cardUl">
           <li className="cardLi">
@@ -41,15 +40,15 @@ const userMessgeItem = props => (
           </p>
           </li>
           <li>
-          <p className="userItemHeading"> subject:</p>
+          <p className="userItemHeading"> amount:</p>
           <p className="userItemText">
-          {props.subject}
+          {props.amount}
           </p>
           </li>
           <li>
-          <p className="userItemHeading"> message:</p>
+          <p className="userItemHeading"> description:</p>
           <p className="userItemText">
-          {props.messageMessage}
+          {props.description}
           </p>
           </li>
         </ul>
@@ -68,4 +67,4 @@ const userMessgeItem = props => (
   </li>
 );
 
-export default userMessgeItem;
+export default userTransactionItem;

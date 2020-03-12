@@ -22,6 +22,7 @@ const userList = props => {
         canReport={props.canReport}
         onReport={props.onReport}
         onSelectNoDetail={props.onSelectNoDetail}
+        onSelectMessageReceiver={props.onSelectMessageReceiver}
       />
     );
   });

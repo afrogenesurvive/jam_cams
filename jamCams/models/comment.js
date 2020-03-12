@@ -10,6 +10,7 @@ const commentSchema = new Schema({
   content: {type: Schema.Types.ObjectId,ref: 'Content'},
   author: {
     role: {type: String},
+    username: {type: String},
     ref: {type: ObjectId}
   },
   comment: {type: String},

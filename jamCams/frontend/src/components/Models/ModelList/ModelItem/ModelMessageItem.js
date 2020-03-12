@@ -2,10 +2,10 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card'
 
-import './UserItem.css';
+import './ModelItem.css';
 
-const userMessgeItem = props => (
-  <li key={props.authId} className="users__list-item_detail users__list-item_detail2">
+const modelMessgeItem = props => (
+  <li key={props.authId} className="users__list-item_detail users__list-item_detail3">
     <div>
 
     <Card className="card">
@@ -25,13 +25,13 @@ const userMessgeItem = props => (
           <li>
           <p className="userItemHeading"> sender:</p>
           <p className="userItemText">
-          {props.sender.role}: {props.sender.ref}
+          {props.sender}
           </p>
           </li>
           <li>
-          <p className="userItemHeading"> receiver:</p>
+          <p className="userItemHeading"> reciever:</p>
           <p className="userItemText">
-          {props.receiver.role}: {props.receiver.ref}
+          {props.receiver}
           </p>
           </li>
           <li>
@@ -49,7 +49,7 @@ const userMessgeItem = props => (
           <li>
           <p className="userItemHeading"> message:</p>
           <p className="userItemText">
-          {props.messageMessage}
+          {props.message}
           </p>
           </li>
         </ul>
@@ -68,4 +68,4 @@ const userMessgeItem = props => (
   </li>
 );
 
-export default userMessgeItem;
+export default modelMessgeItem;

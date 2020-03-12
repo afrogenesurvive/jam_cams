@@ -4,8 +4,8 @@ import UserModelItem from './UserItem/UserModelItem';
 import './UserList.css';
 
 const UserModelList = props => {
-
   const userModels = props.userModels.map(userModel => {
+
     return (
       <UserModelItem
         key={userModel._id}

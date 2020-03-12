@@ -12,7 +12,7 @@ const Chat = require('../../models/chat');
 const Transaction = require('../../models/transaction');
 const util = require('util');
 
-const { transformUser } = require('./merge');
+const { transformUser, transformMessage } = require('./merge');
 const { dateToString } = require('../../helpers/date');
 const { pocketVariables } = require('../../helpers/pocketVars');
 
@@ -345,9 +345,9 @@ module.exports = {
 
       const user = await User.findById({_id: args.activityId})
       .populate('models')
-      .populate('viewedShows.ref')
-      .populate('viewedcontent.ref')
-      .populate('likedcontent.ref')
+      .populate('viewedShows')
+      .populate('viewedcontent')
+      .populate('likedcontent')
       .populate('comments')
       .populate('messages')
       .populate('transactions');
@@ -358,6 +358,25 @@ module.exports = {
         email: user.contact.email ,
         name: user.name,
       };
+    } catch (err) {
+      throw err;
+    }
+  },
+  loadUserMessages: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const preMessageIdArray = args.messageIds;
+      const messageIdArray = preMessageIdArray.split(",");
+      const messages = await Message.find({_id: {$in: messageIdArray}})
+
+
+      return messages.map(message => {
+        return transformMessage(message);
+      });
     } catch (err) {
       throw err;
     }
@@ -387,7 +406,14 @@ module.exports = {
           postalCode: args.userInput.addressPostalCode,
         },
         bio: args.userInput.bio
-        },{new: true, useFindAndModify: false});
+        },{new: true, useFindAndModify: false})
+        .populate('models')
+        .populate('viewedShows')
+        .populate('viewedcontent')
+        .populate('likedcontent')
+        .populate('comments')
+        .populate('messages')
+        .populate('transactions');
 
         return {
           ...user._doc,
@@ -426,6 +452,13 @@ module.exports = {
 
       const query = {[resolverField]:resolverQuery};
       const user = await User.findOneAndUpdate({_id:args.userId},query,{new: true, useFindAndModify: false})
+      .populate('models')
+      .populate('viewedShows')
+      .populate('viewedcontent')
+      .populate('likedcontent')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
 
       return {
         ...user._doc,
@@ -460,6 +493,14 @@ module.exports = {
       const interests = args.userInput.interests;
       const splitInterests = interests.split(",");
       const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { interests: {$each: splitInterests} }},{new: true, useFindAndModify: false})
+      .populate('models')
+      .populate('viewedShows')
+      .populate('viewedcontent')
+      .populate('likedcontent')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
+
         return {
           ...user._doc,
           _id: user.id,
@@ -479,6 +520,14 @@ module.exports = {
       const tags = args.userInput.tags;
       const splitTags = tags.split(",");
       const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { tags: {$each: splitTags} }},{new: true, useFindAndModify: false})
+      .populate('models')
+      .populate('viewedShows')
+      .populate('viewedcontent')
+      .populate('likedcontent')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
+
         return {
           ...user._doc,
           _id: user.id,
@@ -502,6 +551,14 @@ module.exports = {
         imageLink: args.userInput.perkImageLink,
       };
       const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { perks: perk }},{new: true, useFindAndModify: false})
+      .populate('models')
+      .populate('viewedShows')
+      .populate('viewedcontent')
+      .populate('likedcontent')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
+
         return {
           ...user._doc,
           _id: user.id,
@@ -520,6 +577,7 @@ module.exports = {
     try {
       const perks = args.perks;
       const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { perks: {$each: perks} }},{new: true, useFindAndModify: false})
+
         return {
           ...user._doc,
           _id: user.id,
@@ -542,6 +600,14 @@ module.exports = {
         path: args.userInput.profileImagePath
       };
       const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { profileImages: profileImage }},{new: true, useFindAndModify: false})
+      .populate('models')
+      .populate('viewedShows')
+      .populate('viewedcontent')
+      .populate('likedcontent')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
+
         return {
           ...user._doc,
           _id: user.id,
@@ -564,6 +630,14 @@ module.exports = {
       const amountToAdd = args.userInput.tokens;
       let newAmount = prevAmount + amountToAdd;
       const user = await User.findOneAndUpdate({_id:args.userId},{ tokens: newAmount },{new: true, useFindAndModify: false})
+      .populate('models')
+      .populate('viewedShows')
+      .populate('viewedcontent')
+      .populate('likedcontent')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
+
         return {
           ...user._doc,
           _id: user.id,
@@ -610,6 +684,14 @@ module.exports = {
         payment: args.userInput.billingPayment
       };
       const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { billing: billing }},{new: true, useFindAndModify: false})
+      .populate('models')
+      .populate('viewedShows')
+      .populate('viewedcontent')
+      .populate('likedcontent')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
+
         return {
           ...user._doc,
           _id: user.id,
@@ -629,7 +711,14 @@ module.exports = {
     try {
 
       const user = await User.findOneAndUpdate({'billing.date': args.date, 'billing.amount': args.amount},{$set: {paid: true}},{new: true, useFindAndModify: false})
-      // const user = await User.findOneAndUpdate({'billing.date': args.date, 'billing.amount': args.amount},{$set: { dbQueryNewKey: args.newValue }},{new: true, useFindAndModify: false})
+      .populate('models')
+      .populate('viewedShows')
+      .populate('viewedcontent')
+      .populate('likedcontent')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
+
         return {
           ...user._doc,
           _id: user.id,
@@ -654,6 +743,13 @@ module.exports = {
         complainant: complainant,
       };
       const user = await User.findOneAndUpdate({_id:args.userId},{$addToSet: { complaints: complaint }},{new: true, useFindAndModify: false})
+      .populate('models')
+      .populate('viewedShows')
+      .populate('viewedcontent')
+      .populate('likedcontent')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
 
         return {
           ...user._doc,
@@ -675,7 +771,14 @@ module.exports = {
       const model = await Model.findById({_id: args.modelId})
       const preUser = await User.findById({_id: args.userId})
       const user = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {models: model}},{new: true, useFindAndModify: false})
-      .populate('models');
+      .populate('models')
+      .populate('viewedShows')
+      .populate('viewedcontent')
+      .populate('likedcontent')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
+
       const updateModel = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {fans: preUser}},{new: true, useFindAndModify: false})
 
       return {
@@ -758,7 +861,13 @@ module.exports = {
 
       const comment = await Comment.findById({_id: args.commentId})
       const user = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {comments: comment}},{new: true, useFindAndModify: false})
-      .populate('comments');
+      .populate('models')
+      .populate('viewedShows')
+      .populate('viewedcontent')
+      .populate('likedcontent')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
 
       return {
         ...user._doc,
@@ -779,7 +888,13 @@ module.exports = {
 
       const message = await Message.findById({_id: args.messageId})
       const user = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {messages: message}},{new: true, useFindAndModify: false})
-      .populate('messages');
+      .populate('models')
+      .populate('viewedShows')
+      .populate('viewedcontent')
+      .populate('likedcontent')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
 
       return {
         ...user._doc,
@@ -799,7 +914,14 @@ module.exports = {
     try {
 
       const transaction = await Transaction.findById({_id: args.transactionId})
-      const user = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {transactions: transaction}},{new: true, useFindAndModify: false});
+      const user = await User.findOneAndUpdate({_id: args.userId},{$addToSet: {transactions: transaction}},{new: true, useFindAndModify: false})
+      .populate('models')
+      .populate('viewedShows')
+      .populate('viewedcontent')
+      .populate('likedcontent')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
 
       return {
         ...user._doc,

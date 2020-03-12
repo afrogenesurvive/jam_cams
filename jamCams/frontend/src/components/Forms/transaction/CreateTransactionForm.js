@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 import "react-datepicker/dist/react-datepicker.css";
 import './CreateUserForm.css';
 
-const CreateMessageForm = (props) => {
+const CreateTransactionForm = (props) => {
 
 return (
 <div className="CreateFormContainer">
@@ -13,7 +13,7 @@ return (
 
 <Form.Row>
 <Form.Group as={Col} controlId="formGridTypeSelect">
-<Form.Label>Message Type</Form.Label>
+<Form.Label>Transaction Type</Form.Label>
 <Form.Control as="select">
   <option>type 1</option>
   <option>type 2</option>
@@ -21,9 +21,9 @@ return (
 </Form.Control>
 </Form.Group>
 
-<Form.Group as={Col} controlId="formGridSubject">
-  <Form.Label>Subject</Form.Label>
-  <Form.Control type="text" placeholder="Subject" />
+<Form.Group as={Col} controlId="formGridAmount">
+  <Form.Label>Amount</Form.Label>
+  <Form.Control type="number" placeholder="Token Amount" />
 </Form.Group>
 
 <Form.Group as={Col} controlId="formGridReceiver">
@@ -33,9 +33,9 @@ return (
 </Form.Row>
 
 <Form.Row>
-<Form.Group as={Col} controlId="formGridMessage">
-  <Form.Label>Message</Form.Label>
-  <Form.Control as="textarea" rows="9" placeholder="Message"/>
+<Form.Group as={Col} controlId="formGridDescription">
+  <Form.Label>Description</Form.Label>
+  <Form.Control as="textarea" rows="3" placeholder="Description"/>
 </Form.Group>
 </Form.Row>
 
@@ -58,4 +58,4 @@ return (
 
 )};
 
-export default CreateMessageForm;
+export default CreateTransactionForm;

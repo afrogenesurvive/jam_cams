@@ -10,10 +10,12 @@ const messageSchema = new Schema({
   subject: {type: String},
   sender: {
     role: {type: String},
+    username: {type: String},
     ref: {type: ObjectId}
   },
   receiver: {
     role: {type: String},
+    username: {type: String},
     ref: {type: ObjectId}
   },
   message: {type: String},

@@ -23,14 +23,9 @@ const modelItem = props => (
       <Button variant="secondary" onClick={props.onSelectNoDetail.bind(this, props.model)}>
         Select
       </Button>
-      {
-      // <Button variant="primary" onClick={props.onViewDetail.bind(this, props._id)}>
-      //   Details
-      // </Button>
-      // <Button variant="secondary" onClick={props.onSelectNoDetail.bind(this, props.model)}>
-      //   Select
-      // </Button>
-      }
+      <Button variant="link" onClick={props.onSelectMessageReceiver.bind(this, props.model)}>
+        Message
+      </Button>
       {props.canFavorite === true && (
         <Button variant="warning" onClick={props.onAddFavModel.bind(this, props._id)}>
           Favorite

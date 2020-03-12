@@ -37,6 +37,9 @@ class UserProfile extends Component {
     sidebarShow: true,
     mCol1Size: 3,
     mCol2Size: 9,
+    messagesLoaded: false,
+    userMessages: null,
+    finalConfirmation: false,
   };
   isActive = true;
   static contextType = AuthContext;
@@ -151,7 +154,7 @@ class UserProfile extends Component {
             contactEmail:"${contactEmail}",
             bio:"${bio}"
           })
-          {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+          {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email},modelNames,profileImages{name,type},bio,interests},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
         `};
 
     fetch('http://localhost:9009/graphql', {
@@ -198,7 +201,7 @@ class UserProfile extends Component {
       const requestBody = {
         query:`
           mutation {updateUserField(activityId:"${activityId}",userId:"${activityId}",field:"${field}",query:"${query}")
-          {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+          {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email},modelNames,profileImages{name,type},bio,interests},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
         `};
 
       fetch('http://localhost:9009/graphql', {
@@ -238,7 +241,7 @@ class UserProfile extends Component {
         const requestBody = {
           query:`
           mutation {addUserTokens(activityId:"${activityId}", userId:"${activityId}",userInput:{tokens:${tokens}})
-          {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+          {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email},modelNames,profileImages{name,type},bio,interests},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
           `};
 
         fetch('http://localhost:9009/graphql', {
@@ -288,7 +291,7 @@ class UserProfile extends Component {
           profileImageType:"${profileImageType}",
           profileImagePath:"${profileImagePath}",
         })
-        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email},modelNames,profileImages{name,type},bio,interests},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
         `};
 
       fetch('http://localhost:9009/graphql', {
@@ -332,7 +335,7 @@ class UserProfile extends Component {
           profileImageType:"${profileImageType}",
           profileImagePath:"${profileImagePath}",
         })
-        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email},modelNames,profileImages{name,type},bio,interests},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
       `};
 
     fetch('http://localhost:9009/graphql', {
@@ -381,7 +384,7 @@ class UserProfile extends Component {
         perkDescription:"${perkDescription}",
         perkImageLink:"${perkImageLink}",
       })
-      {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+      {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email},modelNames,profileImages{name,type},bio,interests},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
       `};
 
     fetch('http://localhost:9009/graphql', {
@@ -399,11 +402,11 @@ class UserProfile extends Component {
         return res.json();
       })
       .then(resData => {
-        this.context.user = resData.data.addUserPerk;
-
+        console.log(resData.data);
         const responseAlert = JSON.stringify(resData.data).slice(2,25);
         this.setState({ userAlert: responseAlert, user: resData.data.addUserPerk})
-        this.getThisUser();
+        this.context.user = this.state.user;
+        // this.getThisUser();
       })
       .catch(err => {
         this.setState({userAlert: err});
@@ -429,7 +432,7 @@ class UserProfile extends Component {
           perkDescription:${perkDescription},
           perkImageLink:${perkImageLink},
         })
-        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email},modelNames,profileImages{name,type},bio,interests},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
       `};
 
     fetch('http://localhost:9009/graphql', {
@@ -468,7 +471,7 @@ class UserProfile extends Component {
     const requestBody = {
       query:`
         mutation {addUserInterests(activityId:"${activityId}",userId:"${activityId}",userInput:{interests:"${preInterests}"})
-        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email},modelNames,profileImages{name,type},bio,interests},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
       `};
 
     fetch('http://localhost:9009/graphql', {
@@ -506,7 +509,7 @@ class UserProfile extends Component {
       query:`
         "mutation {deleteUserInterests(activityId:"${activityId}", userId:"${activityId}",
         userInput:{interest:"${interests}"})
-        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email},modelNames,profileImages{name,type},bio,interests},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
       `};
 
     fetch('http://localhost:9009/graphql', {
@@ -544,7 +547,7 @@ class UserProfile extends Component {
     const requestBody = {
       query:`
         mutation {addUserTags(activityId:"${activityId}",userId:"${activityId}",userInput:{tags:"${preTags}"})
-        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email},modelNames,profileImages{name,type},bio,interests},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
       `};
 
     fetch('http://localhost:9009/graphql', {
@@ -562,11 +565,12 @@ class UserProfile extends Component {
         return res.json();
       })
       .then(resData => {
-        this.context.user = resData.data.addUserTags;
-
+        console.log(resData);
         const responseAlert = JSON.stringify(resData.data).slice(2,25);
         this.setState({ userAlert: responseAlert, user: resData.data.addUserTags})
-        this.getThisUser();
+        this.context.user = this.state.user;
+        this.context.userAlert = responseAlert;
+        // this.getThisUser();
       })
       .catch(err => {
         this.setState({userAlert: err});
@@ -582,7 +586,7 @@ class UserProfile extends Component {
       query:`
         "mutation {deleteUserTags(activityId:"${activityId}", userId:"${activityId}",
         userInput:{tags:"${tags}"})
-        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email},modelNames,profileImages{name,type},bio,interests},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
       `};
 
     fetch('http://localhost:9009/graphql', {
@@ -637,7 +641,7 @@ class UserProfile extends Component {
           billingPaid:${billingPaid},
           billingPayment:"${billingPayment}"
         })
-        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email},modelNames,profileImages{name,type},bio,interests},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
         `};
 
       fetch('http://localhost:9009/graphql', {
@@ -687,10 +691,8 @@ class UserProfile extends Component {
           billingPaid: ${billingPaid},
           billingPayment: "${billingPayment}"
         })
-        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email},modelNames,profileImages{name,type},bio,interests},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
       `};
-
-      console.log(JSON.stringify(requestBody));
 
     fetch('http://localhost:9009/graphql', {
       method: 'POST',
@@ -745,12 +747,16 @@ class UserProfile extends Component {
 
       const requestBody = {
         query:`
-        mutation {addUserComplaint(activityId:"${activityId}", userId:"${offenderId}"complainantId:"${complainantId}",userInput:{
-          complaintDate:"${complaintDate}",
-          complaintType:"${complaintType}",
-          complaintDescription:"${complaintDescription}",
-        })
-        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+        mutation {addUserComplaint(
+          activityId:"${activityId}",
+          userId:"${offenderId}",
+          complainantId:"${complainantId}",
+          userInput:{
+            complaintDate:"${complaintDate}",
+            complaintType:"${complaintType}",
+            complaintDescription:"${complaintDescription}"
+          })
+        {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email},modelNames,profileImages{name,type},bio,interests},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
         `};
 
       fetch('http://localhost:9009/graphql', {
@@ -768,9 +774,10 @@ class UserProfile extends Component {
           return res.json();
         })
         .then(resData => {
+          console.log(resData);
           const responseAlert = JSON.stringify(resData.data).slice(2,25);
-          this.setState({ userAlert: responseAlert});
-          // this.context.user = this.state.user;
+          this.setState({ userAlert: responseAlert, user: resData.data.addUserComplaint});
+          this.context.user = this.state.user;
           // this.getThisUser();
         })
         .catch(err => {
@@ -860,9 +867,218 @@ class UserProfile extends Component {
     //   });
   }
 
-  userCreateMessage = (event) => {
-    console.log("creating message from ...");
+  loadUserMessages = () => {
+    console.log("loading user messages... get ids from state user and run them through gql query: getUserMessages");
+
   }
+
+  userCreateMessage = (event) => {
+
+    this.setState({ adding: false });
+    const token = this.context.token;
+    const receiver = this.context.receiver;
+    const receiverId = this.context.receiver._id;
+    const receiverRole = this.context.receiver.role;
+    const role = this.context.role;
+    const activityId = this.context.activityId;
+
+    const date = new Date();
+    const timeString1 = date.toISOString().slice(11,16);
+    const timeString2 = date.toLocaleString().slice(11,16);
+    const type = event.target.formGridTypeSelect.value;
+    const subject = event.target.formGridSubject.value;
+    const message = event.target.formGridMessage.value;
+
+    const requestBody = {
+      query:`
+        mutation {createMessage(
+          senderRole:"${role}",
+          receiverRole:"${receiverRole}",
+          senderId:"${activityId}",
+          receiverId:"${receiverId}",
+          messageInput: {
+            date:"${date}",
+            time:"${timeString2}",
+            type:"${type}",
+            subject:"${subject}",
+            message:"${message}"
+          })
+        {_id,date,time,type,subject,sender{role,ref},receiver{role,ref},message,read}}
+      `};
+
+    fetch('http://localhost:9009/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Failed!');
+        }
+        return res.json();
+      })
+      .then(resData => {
+        console.log(resData);
+        const responseAlert = JSON.stringify(resData.data).slice(2,25);
+        this.setState({ userAlert: responseAlert});
+        // this.context.user = this.state.user;
+        this.context.receiver = null;
+        // this.getThisUser();
+      })
+      .catch(err => {
+        this.setState({userAlert: err});
+      });
+  }
+
+  deleteUserMessage = (event) => {
+    console.log(event);
+    const token = this.context.token;
+    const activityId = this.context.activityId;
+
+    // const requestBody = {
+    //   query:`
+    //     "mutation {deleteUserComplaint(activityId:"${activityId}", userId:"${activityId}",
+    //     userInput:{
+    //       complaintDate: ${complaintDate},
+    //       complaintType: ${complaintType},
+    //       complaintDescription: ${complaintDescription},
+    //       complaintComplainant: ${complaintComplainant}
+    //     })
+    //     {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+    // //   `};
+    //
+    // fetch('http://localhost:9009/graphql', {
+    //   method: 'POST',
+    //   body: JSON.stringify(requestBody),
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     Authorization: 'Bearer ' + token
+    //   }
+    // })
+    //   .then(res => {
+    //     if (res.status !== 200 && res.status !== 201) {
+    //       throw new Error('Failed!');
+    //     }
+    //     return res.json();
+    //   })
+    //   .then(resData => {
+    //     const responseAlert = JSON.stringify(resData.data).slice(2,25);
+    //     this.setState({ userAlert: responseAlert, user: resData.data.deleteUserComplaint})
+    //     this.context.user = this.state.user;
+    //     // this.getThisUser();
+    //   })
+    //   .catch(err => {
+    //     this.setState({userAlert: err});
+    //   });
+  }
+
+  userCreateTransaction = (event) => {
+
+    this.setState({ adding: false });
+    const token = this.context.token;
+    const receiver = this.context.receiver;
+    const receiverId = this.context.receiver._id;
+    const receiverRole = this.context.receiver.role;
+    const role = this.context.role;
+    const activityId = this.context.activityId;
+
+    const date = new Date();
+    const timeString1 = date.toISOString().slice(11,16);
+    const timeString2 = date.toLocaleString().slice(11,16);
+    const type = event.target.formGridTypeSelect.value;
+    const description = event.target.formGridDescription.value;
+    const amount = event.target.formGridAmount.value;
+
+    const requestBody = {
+      query:`
+        mutation {createTransaction(
+          senderRole:"${role}",
+          receiverRole:"${receiverRole}",
+          senderId:"${activityId}",
+          receiverId:"${receiverId}",
+          transactionInput: {
+            date:"${date}",
+            time:"${timeString2}",
+            type:"${type}",
+            description:"${description}",
+            amount:${amount}
+          })
+        {_id,date,time,type,sender{role,username,ref},receiver{role,username,ref},amount,description}}
+      `};
+
+    fetch('http://localhost:9009/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Failed!');
+        }
+        return res.json();
+      })
+      .then(resData => {
+        console.log(resData);
+        const responseAlert = JSON.stringify(resData.data).slice(2,25);
+        this.setState({ userAlert: responseAlert});
+        // this.context.user = this.state.user;
+        this.context.receiver = null;
+        // this.getThisUser();
+      })
+      .catch(err => {
+        this.setState({userAlert: err});
+      });
+  }
+
+
+  deleteUserTransaction = (event) => {
+    console.log(event);
+    const token = this.context.token;
+    const activityId = this.context.activityId;
+
+    // const requestBody = {
+    //   query:`
+    //     "mutation {deleteUserComplaint(activityId:"${activityId}", userId:"${activityId}",
+    //     userInput:{
+    //       complaintDate: ${complaintDate},
+    //       complaintType: ${complaintType},
+    //       complaintDescription: ${complaintDescription},
+    //       complaintComplainant: ${complaintComplainant}
+    //     })
+    //     {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email}},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+    // //   `};
+    //
+    // fetch('http://localhost:9009/graphql', {
+    //   method: 'POST',
+    //   body: JSON.stringify(requestBody),
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     Authorization: 'Bearer ' + token
+    //   }
+    // })
+    //   .then(res => {
+    //     if (res.status !== 200 && res.status !== 201) {
+    //       throw new Error('Failed!');
+    //     }
+    //     return res.json();
+    //   })
+    //   .then(resData => {
+    //     const responseAlert = JSON.stringify(resData.data).slice(2,25);
+    //     this.setState({ userAlert: responseAlert, user: resData.data.deleteUserComplaint})
+    //     this.context.user = this.state.user;
+    //     // this.getThisUser();
+    //   })
+    //   .catch(err => {
+    //     this.setState({userAlert: err});
+    //   });
+  }
+
 
   getThisUser() {
     this.setState({ isLoading: true });
@@ -870,7 +1086,7 @@ class UserProfile extends Component {
     const requestBody = {
       query: `
       query {getThisUser(activityId:"${activityId}")
-      {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email},modelNames,profileImages{name,type},bio,interests},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+      {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description,imageLink},models{_id,name,username,contact{email},modelNames,profileImages{name,type},bio,interests},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
         `};
 
     fetch('http://localhost:9009/graphql', {
@@ -949,8 +1165,10 @@ class UserProfile extends Component {
     this.setState({adding: true, userAddField: "billing"})
   }
   startCreateMessage = () => {
-    console.log("who are sender reciever??");
     this.setState({adding: true, userAddField: "message"})
+  }
+  startCreateTransaction = () => {
+    this.setState({adding: true, userAddField: "transaction"})
   }
 
   componentWillUnmount() {
@@ -1024,6 +1242,7 @@ class UserProfile extends Component {
                         addComplaint={this.addUserComplaintHandler}
                         addBilling={this.addUserBillingHandler}
                         createMessage={this.userCreateMessage}
+                        createTransaction={this.userCreateTransaction}
                         onProfileImageDelete={this.deleteUserProfileImage}
                         onPerkDelete={this.deleteUserPerk}
                         onTagsDelete={this.deleteUserTags}
@@ -1031,6 +1250,7 @@ class UserProfile extends Component {
                         onComplaintDelete={this.deleteUserComplaint}
                         onBillingDelete={this.deleteUserBilling}
                         onMessageDelete={this.deleteUserMessage}
+                        onTransactionDelete={this.deleteUserTransaction}
                         onUserModelDelete={this.deleteUserModel}
                         onCancel={this.modalCancelHandler}
                         onStartUpdate={this.startUpdateUserHandler}
@@ -1043,6 +1263,11 @@ class UserProfile extends Component {
                         onStartAddComplaint={this.addUserComplaint}
                         onStartAddBilling={this.addUserBilling}
                         onStartCreateMessage={this.startCreateMessage}
+                        onStartCreateTransaction={this.startCreateTransaction}
+                        messageReceiver={this.context.receiver}
+                        onStartLoadMessage={this.loadUserMessages}
+                        userMessagesLoaded={this.state.messagesLoaded}
+                        userMessages={this.state.userMessages}
                         updating={this.state.updating}
                         updatingField={this.state.updatingField}
                         userAddField={this.state.userAddField}

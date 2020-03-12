@@ -15,6 +15,7 @@ import ModelInterestList from './ModelList/ModelInterestList';
 import ModelCategoryList from './ModelList/ModelCategoryList';
 import ModelTagList from './ModelList/ModelTagList';
 import ModelFanList from './ModelList/ModelFanList';
+import ModelMessageList from './ModelList/ModelMessageList';
 
 import UpdateModelForm from '../../components/Forms/model/UpdateModelForm';
 import UpdateModelFieldForm from '../../components/Forms/model/UpdateModelFieldForm';
@@ -28,6 +29,7 @@ import AddModelCategoriesForm from '../../components/Forms/model/AddModelCategor
 import AddModelTagsForm from '../../components/Forms/model/AddModelTagsForm';
 import AddModelTokensForm from '../../components/Forms/model/AddModelTokensForm';
 
+import CreateMessageForm from '../Forms/message/CreateMessageForm';
 import CreateContentForm from '../../components/Forms/content/CreateContentForm';
 
 import './thisUserProfile.css';
@@ -392,6 +394,40 @@ const thisModelProfile = (props) => {
           authId={props.authId}
           canDelete={props.canDelete}
           onDelete={props.onModelFanDelete}
+        />
+      ) }
+
+    </Tab>
+
+    <Tab eventKey="messages" title="messages">
+
+    <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartCreateMessage}>+ Message</Button>
+
+    {props.messageReceiver === null && (
+      <Button variant="outline-warning" size="lg" className="confirmEditButton" >Select someone to message</Button>
+    )}
+
+    {props.modelAddField === "message" &&
+      props.messageReceiver !== null && (
+        <CreateMessageForm
+          canCancel
+          canConfirm
+          onCancel={props.onCancel}
+          onConfirm={props.createMessage}
+          confirmText="Confirm"
+          model={props.model}
+          authId={props.authId}
+          receiver={props.messageReceiver}
+        />
+    )}
+
+    {model.messges !== null &&
+      model.messges !== [] && (
+        <ModelMessageList
+          modelMessages={model.messages}
+          authId={props.authId}
+          canDelete={props.canDelete}
+          onDelete={props.onMessageDelete}
         />
       ) }
 

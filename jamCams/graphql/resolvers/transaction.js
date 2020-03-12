@@ -77,10 +77,12 @@ module.exports = {
         type: args.transactionInput.type,
         sender: {
           role: senderRole,
+          username: sender.username,
           ref: sender
         },
         receiver: {
           role: receiverRole,
+          username: receiver.username,
           ref: receiver
         },
         amount: args.transactionInput.amount,

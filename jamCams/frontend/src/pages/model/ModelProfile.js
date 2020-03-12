@@ -572,6 +572,65 @@ class ModelProfile extends Component {
     console.log("creating content for model",this.context.activityId);
   }
 
+  modelCreateMessage = (event) => {
+
+    this.setState({ adding: false });
+    const token = this.context.token;
+    const receiver = this.context.receiver;
+    const activityId = this.context.activityId;
+
+    const date = new Date();
+    const timeString1 = date.toISOString().slice(11,16);
+    const timeString2 = date.toLocaleString().slice(11,16);
+    const type = event.target.formGridTypeSelect.value;
+    const subject = event.target.formGridSubject.value;
+    const message = event.target.formGridMessage.value;
+    console.log("here", timeString1, timeString2);
+
+    // const requestBody = {
+    //   query:`
+    //     mutation {createMessage(
+    //       senderRole:"${}",
+    //       receiverRole:"${}",
+    //       senderId:"${}",
+    //       receiverId:"${}",
+    //       messageInput: {
+    //         date:"${}",
+    //         time:"${}",
+    //         type:"${}",
+    //         subject:"${}",
+    //         message:"${}"
+    //       })
+    //     {_id,date,time,type,subject,sender{role,ref},receiver{role,ref},message,read}}
+    //   `};
+    //
+    // fetch('http://localhost:9009/graphql', {
+    //   method: 'POST',
+    //   body: JSON.stringify(requestBody),
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     Authorization: 'Bearer ' + token
+    //   }
+    // })
+    //   .then(res => {
+    //     if (res.status !== 200 && res.status !== 201) {
+    //       throw new Error('Failed!');
+    //     }
+    //     return res.json();
+    //   })
+    //   .then(resData => {
+    //     const responseAlert = JSON.stringify(resData.data).slice(2,25);
+    //     this.setState({ userAlert: responseAlert});
+    //     // this.context.user = this.state.user;
+    //     this.context.receiver = null;
+    //     this.getThisUser();
+    //   })
+    //   .catch(err => {
+    //     this.setState({userAlert: err});
+    //   });
+  }
+
+
   getThisModel() {
     this.setState({ isLoading: true });
     const activityId = this.context.activityId;
@@ -668,6 +727,9 @@ class ModelProfile extends Component {
   addModelContent = () => {
     this.setState({adding: true, modelAddField: "content"})
   }
+  startCreateMessage = () => {
+    this.setState({adding: true, modelAddField: "message"})
+  }
 
 
   componentWillUnmount() {
@@ -743,6 +805,7 @@ class ModelProfile extends Component {
                         addTags={this.addModelTagsHandler}
                         addModelName={this.addModelModelNameHandler}
                         addTokens={this.addModelTokensHandler}
+                        createMessage={this.modelCreateMessage}
                         addContent={this.CreateContentHandler}
                         onProfileImageDelete={this.deleteModelProfileImage}
                         onSocialMediaDelete={this.deleteModelSocialMedia}
@@ -752,6 +815,7 @@ class ModelProfile extends Component {
                         onModelNameDelete={this.deleteModelModelName}
                         onInterestDelete={this.deleteModelInterests}
                         onCategoriesDelete={this.deleteModelCategories}
+                        onMessageDelete={this.deleteModelMessage}
                         onCancel={this.modalCancelHandler}
                         onStartUpdate={this.startUpdateModelHandler}
                         onStartUpdateField={this.startUpdateModelFieldHandler}
@@ -765,6 +829,8 @@ class ModelProfile extends Component {
                         onStartAddCategories={this.addModelCategories}
                         onStartAddTokens={this.addModelTokens}
                         onStartAddContent={this.addModelContent}
+                        onStartCreateMessage={this.startCreateMessage}
+                        messageReceiver={this.context.receiver}
                         updating={this.state.updating}
                         updatingField={this.state.updatingField}
                         modelAddField={this.state.modelAddField}

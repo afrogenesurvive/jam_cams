@@ -292,6 +292,7 @@ module.exports = buildSchema(`
   }
   type Author {
     role: String
+    username: String
     ref: ID
   }
   input CommentInput {
@@ -399,6 +400,7 @@ module.exports = buildSchema(`
     getUserMessage(activityId: ID!, messageId: ID!): [User]
     getUserTransaction(activityId: ID!, transactionId: ID!): [User]
     getThisUser(activityId: ID!): User
+    loadUserMessages(activityId: ID!, messageIds: String!): [Message]
 
     models(activityId: ID!): [Model]
     getModelId(activityId: ID!, modelId: ID!): Model

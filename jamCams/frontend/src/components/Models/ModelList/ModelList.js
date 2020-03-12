@@ -19,11 +19,11 @@ const modelList = props => {
         interest1={model.interests[0]}
         interest2={model.interests[1]}
         interest3={model.interests[2]}
-        onTest={props.onTest}
         onViewDetail={props.onViewDetail}
         onSelectNoDetail={props.onSelectNoDetail}
         canFavorite={props.canFavorite}
         onAddFavModel={props.onAddFavModel}
+        onSelectMessageReceiver={props.onSelectMessageReceiver}
       />
     );
   });

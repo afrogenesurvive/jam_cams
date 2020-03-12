@@ -28,7 +28,7 @@ return (
   <Form.Row>
     <Form.Group as={Col} controlId="formGridAmount">
     <Form.Label>Billing Amount</Form.Label>
-    <Form.Control type="number" placeholder="Billing Amount"/>
+    <Form.Control type="number" step="0.01" placeholder="Billing Amount"/>
   </Form.Group>
   </Form.Row>
   <Form.Row>

@@ -219,7 +219,10 @@ class ModelsPage extends Component {
     console.log("delete listed model");
   }
 
-
+  selectModelMessageReceiver = (model) => {
+    this.context.receiver = model;
+    this.context.selectedModel = model;
+  }
 
   showDetailHandler = modelId => {
 
@@ -372,7 +375,7 @@ selectModelNoDetail = (model) => {
                              onSelectNoDetail={this.selectModelNoDetail}
                              canFavorite={this.state.canFavorite}
                              onAddFavModel={this.onAddFavModel}
-                             onTest={this.onTest}
+                             onSelectMessageReceiver={this.selectModelMessageReceiver}
                            />
                          )}
                         </Row>
