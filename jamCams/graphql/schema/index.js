@@ -517,7 +517,7 @@ module.exports = buildSchema(`
     addModelTrait(activityId: ID!, modelId: ID!, modelInput: ModelInput!): Model
     addModelTraits(activityId: ID!, modelId: ID!, traits: [TraitInput!]): Model
     addModelProfileImage(activityId: ID!, modelId: ID!, modelInput: ModelInput): Model
-    addModelInterests(activityId: ID!, modelId: ID!, userInput: UserInput!): Model
+    addModelInterests(activityId: ID!, modelId: ID!, modelInput: ModelInput!): Model
     addModelPerk(activityId: ID!, modelId: ID!, modelInput: ModelInput): Model
     addModelPerks(activityId: ID!, modelId: ID!, perks: [PerkInput!]): Model
     addModelTokens(activityId: ID!, modelId: ID!, modelInput: ModelInput): Model
@@ -532,18 +532,23 @@ module.exports = buildSchema(`
     addModelTransaction(activityId: ID!, modelId: ID!, transactionId: ID!): Model
 
     deleteModel(activityId: ID!, modelId: ID!): Model
+    deleteModelTrait(activityId: ID!, modelId: ID!, modelInput: ModelInput!): Model
     deleteModelTraits(activityId: ID!, modelId: ID!, traits: [TraitInput!]): Model
-    deleteModelInterests(activityId: ID!, modelId: ID!, interests: [String!]): Model
-    deleteModelSocialMedia(activityId: ID!, modelId: ID!, socialMedia: [SocialMediaInput!]): Model
-    deleteModelProfileImage(activityId: ID!, modelId: ID!, profileImageName: String!): Model
+    deleteModelInterests(activityId: ID!, modelId: ID!, modelInput: ModelInput!): Model
+    deleteModelModelNames(activityId: ID!, modelId: ID!, modelInput: ModelInput!): Model
+    deleteModelSocialMedia(activityId: ID!, modelId: ID!, modelInput: ModelInput!): Model
+    deleteModelProfileImage(activityId: ID!, modelId: ID!, modelInput: ModelInput!): Model
     deleteModelPerk(activityId: ID!, modelId: ID!, modelInput: ModelInput!): Model
     deleteModelPerks(activityId: ID!, modelId: ID!, perkNames: [String!]): Model
     deleteModelTag(activityId: ID!, modelId: ID!, modelInput: ModelInput!): Model
-    deleteModelTags(activityId: ID!, modelId: ID!, tags: [String!]): Model
+    deleteModelTags(activityId: ID!, modelId: ID!, modelInput: ModelInput!): Model
     deleteModelCategory(activityId: ID!, modelId: ID!, modelInput: ModelInput!): Model
-    deleteModelCategories(activityId: ID!, modelId: ID!, categories: [String!]): Model
+    deleteModelCategories(activityId: ID!, modelId: ID!, modelInput: ModelInput!): Model
     deleteModelFan(activityId: ID!, modelId: ID!, fanId: ID!): Model
-    deleteModelFriend(activityId: ID!, userId: ID!, friendId: ID!): Model
+    deleteModelFriend(activityId: ID!, modelId: ID!, friendId: ID!): Model
+    deleteModelComment(activityId: ID!, modelId: ID!, commentId: ID!): Model
+    deleteModelMessage(activityId: ID!, modelId: ID!, messageId: ID!): Model
+    deleteModelTransaction(activityId: ID!, modelId: ID!, transactionId: ID!): Model
 
     createContent(activityId: ID!, creatorId: ID!, contentInput: ContentInput!): Content
     updateContent(activityId: ID!, contentId: ID!, contentInput: ContentInput!): Content

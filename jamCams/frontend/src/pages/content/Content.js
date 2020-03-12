@@ -24,11 +24,9 @@ import LoadingOverlay from '../../components/LoadingOverlay';
 import AttachmentViewer from '../../components/AttachmentViewer';
 import UserDetailViewer from '../../components/UserDetailViewer';
 
-import SearchUserForm from '../../components/Forms/user/SearchUserForm';
-
 import './Users.css';
 
-class UsersPage extends Component {
+class ContentPage extends Component {
   state = {
     creating: false,
     updating: false,
@@ -357,15 +355,7 @@ hideDetailHandler = () => {
                         <Tabs defaultActiveKey="Field" id="uncontrolled-tab-example">
 
                         <Tab eventKey="Field" title="Search by Field:">
-                          <SearchUserForm
-                          authUserId={this.context.userId}
-                          canCancel
-                            canConfirm
-                            onCancel={this.modalCancelHandler}
-                            onConfirm={this.modalConfirmSearchHandler}
-                            confirmText="Search"
-                            user={this.context.selectedUser}
-                          />
+                        
                         </Tab>
                         </Tabs>
                         </Col>
@@ -376,20 +366,13 @@ hideDetailHandler = () => {
                             <Card.Body className="searchCardBody">
                               <Card.Title>This Search</Card.Title>
                               <Card.Text>
-                                Field: {this.state.userSearchField}  ,   Query: {this.state.userSearchQuery}
+                                Field: {this.state.contentSearchField}  ,   Query: {this.state.contentSearchQuery}
                               </Card.Text>
                             </Card.Body>
                           </Card>
                         </Row>
                         <Row className="searchListRow1">
 
-                        {this.state.searchUsers !== [] && (
-                          <SearchUserList
-                            searchUsers={this.state.searchUsers}
-                            authUserId={this.context.userId}
-                            onViewDetail={this.showDetailHandler}
-                          />
-                        )}
                         </Row>
 
                         </Container>
@@ -407,4 +390,4 @@ hideDetailHandler = () => {
   }
 }
 
-export default UsersPage;
+export default ContentPage;

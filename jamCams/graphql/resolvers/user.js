@@ -702,7 +702,6 @@ module.exports = {
       throw err;
     }
   },
-
   editUserBillingPaid: async (args, req) => {
 
     if (!req.isAuth) {
@@ -982,7 +981,6 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-        console.log("here");
         const profileImage = {
           name: args.userInput.profileImageName,
           type: args.userInput.profileImageType,
@@ -1117,10 +1115,10 @@ module.exports = {
         const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { 'models': model }},{new: true, useFindAndModify: false});
 
         return {
-          ...model._doc,
-          _id: model.id,
-          email: model.contact.email ,
-          name: model.name,
+          ...user._doc,
+          _id: user.id,
+          email: user.contact.email ,
+          name: user.name,
         };
     } catch (err) {
       throw err;
@@ -1136,10 +1134,10 @@ module.exports = {
         const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { 'likedContent.ref': content }},{new: true, useFindAndModify: false});
 
         return {
-          ...model._doc,
-          _id: model.id,
-          email: model.contact.email ,
-          name: model.name,
+          ...user._doc,
+          _id: user.id,
+          email: user.contact.email ,
+          name: user.name,
         };
     } catch (err) {
       throw err;
@@ -1155,10 +1153,10 @@ module.exports = {
         const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { 'comments': comment }},{new: true, useFindAndModify: false});
 
         return {
-          ...model._doc,
-          _id: model.id,
-          email: model.contact.email ,
-          name: model.name,
+          ...user._doc,
+          _id: user.id,
+          email: user.contact.email ,
+          name: user.name,
         };
     } catch (err) {
       throw err;
@@ -1174,10 +1172,10 @@ module.exports = {
         const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { 'messages': message }},{new: true, useFindAndModify: false});
 
         return {
-          ...model._doc,
-          _id: model.id,
-          email: model.contact.email ,
-          name: model.name,
+          ...user._doc,
+          _id: user.id,
+          email: user.contact.email ,
+          name: user.name,
         };
     } catch (err) {
       throw err;
@@ -1193,10 +1191,10 @@ module.exports = {
         const user = await User.findOneAndUpdate({_id:args.userId},{$pull: { 'transactions': transaction }},{new: true, useFindAndModify: false});
 
         return {
-          ...model._doc,
-          _id: model.id,
-          email: model.contact.email ,
-          name: model.name,
+          ...user._doc,
+          _id: user.id,
+          email: user.contact.email ,
+          name: user.name,
         };
     } catch (err) {
       throw err;

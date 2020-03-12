@@ -24,7 +24,7 @@ const modelItem = props => (
         Select
       </Button>
       <Button variant="link" onClick={props.onSelectMessageReceiver.bind(this, props.model)}>
-        Message
+        Send Message/Tokens
       </Button>
       {props.canFavorite === true && (
         <Button variant="warning" onClick={props.onAddFavModel.bind(this, props._id)}>

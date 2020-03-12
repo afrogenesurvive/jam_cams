@@ -23,7 +23,7 @@ return (
 
 <Form.Group as={Col} controlId="formGridAmount">
   <Form.Label>Amount</Form.Label>
-  <Form.Control type="number" placeholder="Token Amount" />
+  <Form.Control type="number" step="0.01" placeholder="Token Amount" />
 </Form.Group>
 
 <Form.Group as={Col} controlId="formGridReceiver">

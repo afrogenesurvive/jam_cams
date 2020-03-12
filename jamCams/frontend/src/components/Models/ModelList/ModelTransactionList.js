@@ -1,13 +1,13 @@
 import React from 'react';
 
-import UserTransactionItem from './UserItem/UserTransactionItem';
-import './UserList.css';
+import ModelTransactionItem from './ModelItem/ModelTransactionItem';
+import './ModelList.css';
 
-const userTransactionList = props => {
-  const userTransactions = props.userTransactions.map(transaction => {
-    
+const modelTransactionList = props => {
+  const modelTransactions = props.modelTransactions.map(transaction => {
+
     return (
-      <UserTransactionItem
+      <ModelTransactionItem
         key={transaction.path}
         authId={props.authId}
         _id={transaction._id}
@@ -24,7 +24,7 @@ const userTransactionList = props => {
     );
   });
 
-  return <ul className="user__list1_detail">{userTransactions}</ul>;
+  return <ul className="user__list1_detail">{modelTransactions}</ul>;
 };
 
-export default userTransactionList;
+export default modelTransactionList;

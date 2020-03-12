@@ -16,9 +16,11 @@ import ModelCategoryList from './ModelList/ModelCategoryList';
 import ModelTagList from './ModelList/ModelTagList';
 import ModelFanList from './ModelList/ModelFanList';
 import ModelMessageList from './ModelList/ModelMessageList';
+import ModelTransactionList from './ModelList/ModelTransactionList';
 
 import UpdateModelForm from '../../components/Forms/model/UpdateModelForm';
 import UpdateModelFieldForm from '../../components/Forms/model/UpdateModelFieldForm';
+
 import AddModelProfileImageForm from '../../components/Forms/model/AddModelProfileImageForm';
 import AddModelSocialMediaForm from '../../components/Forms/model/AddModelSocialMediaForm';
 import AddModelModelNameForm from '../../components/Forms/model/AddModelModelNameForm';
@@ -30,6 +32,7 @@ import AddModelTagsForm from '../../components/Forms/model/AddModelTagsForm';
 import AddModelTokensForm from '../../components/Forms/model/AddModelTokensForm';
 
 import CreateMessageForm from '../Forms/message/CreateMessageForm';
+import CreateTransactionForm from '../Forms/transaction/CreateTransactionForm';
 import CreateContentForm from '../../components/Forms/content/CreateContentForm';
 
 import './thisUserProfile.css';
@@ -364,7 +367,7 @@ const thisModelProfile = (props) => {
           canCancel
           canConfirm
           onCancel={props.onCancel}
-          onConfirm={props.addContent}
+          onConfirm={props.createContent}
           confirmText="Confirm"
           model={props.model}
           authId={props.authId}
@@ -428,6 +431,40 @@ const thisModelProfile = (props) => {
           authId={props.authId}
           canDelete={props.canDelete}
           onDelete={props.onMessageDelete}
+        />
+      ) }
+
+    </Tab>
+
+    <Tab eventKey="transactions" title="transactions">
+
+    <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartCreateTransaction}>+ Transaction</Button>
+
+    {props.messageReceiver === null && (
+      <Button variant="outline-warning" size="lg" className="confirmEditButton" >Select someone send tokens to</Button>
+    )}
+
+    {props.modelAddField === "transaction" &&
+      props.messageReceiver !== null && (
+        <CreateTransactionForm
+          canCancel
+          canConfirm
+          onCancel={props.onCancel}
+          onConfirm={props.createTransaction}
+          confirmText="Confirm"
+          model={props.model}
+          authId={props.authId}
+          receiver={props.messageReceiver}
+        />
+    )}
+
+    {model.transactions !== null &&
+      model.transactions !== [] && (
+        <ModelTransactionList
+          modelTransactions={model.transactions}
+          authId={props.authId}
+          canDelete={props.canDelete}
+          onDelete={props.onTransactionDelete}
         />
       ) }
 

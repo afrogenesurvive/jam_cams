@@ -176,6 +176,7 @@ class UserProfile extends Component {
         const responseAlert = JSON.stringify(resData.data).slice(2,25);
 
         this.setState({ userAlert: responseAlert, user: updatedUser})
+        this.context.userAlert = responseAlert;
         this.getThisUser();
       })
       .catch(err => {
@@ -222,6 +223,7 @@ class UserProfile extends Component {
 
           const responseAlert = JSON.stringify(resData.data).slice(2,25);
           this.setState({ userAlert: responseAlert, user: resData.data.updateUserField})
+          this.context.userAlert = responseAlert;
           this.context.user = this.state.user;
           this.getThisUser();
         })
@@ -261,6 +263,7 @@ class UserProfile extends Component {
           .then(resData => {
             this.context.user = resData.data.addUserTokens;
             const responseAlert = JSON.stringify(resData.data).slice(2,25);
+            this.context.userAlert = responseAlert;
             this.getThisUser();
           })
           .catch(err => {
@@ -311,6 +314,7 @@ class UserProfile extends Component {
         .then(resData => {
           const responseAlert = JSON.stringify(resData.data).slice(2,25);
           this.setState({ userAlert: responseAlert, user: resData.data.addUserProfileImage})
+          this.context.userAlert = responseAlert;
           this.context.user = this.state.user;
           // this.getThisUser();
         })
@@ -356,6 +360,7 @@ class UserProfile extends Component {
         console.log("here",resData);
         const responseAlert = JSON.stringify(resData.data).slice(2,25);
         this.setState({ userAlert: responseAlert, user: resData.data.deleteUserProfileImage})
+        this.context.userAlert = responseAlert;
         this.context.user = this.state.user;
         // this.getThisUser();
       })
@@ -405,6 +410,7 @@ class UserProfile extends Component {
         console.log(resData.data);
         const responseAlert = JSON.stringify(resData.data).slice(2,25);
         this.setState({ userAlert: responseAlert, user: resData.data.addUserPerk})
+        this.context.userAlert = responseAlert;
         this.context.user = this.state.user;
         // this.getThisUser();
       })
@@ -491,6 +497,7 @@ class UserProfile extends Component {
       .then(resData => {
         const responseAlert = JSON.stringify(resData.data).slice(2,25);
         this.setState({ userAlert: responseAlert, user: resData.data.addUserInterests})
+        this.context.userAlert = responseAlert;
         this.context.user = this.state.user;
         // this.getThisUser();
       })
@@ -529,6 +536,7 @@ class UserProfile extends Component {
       .then(resData => {
         const responseAlert = JSON.stringify(resData.data).slice(2,25);
         this.setState({ userAlert: responseAlert, user: resData.data.deleteUserInterests})
+        this.context.userAlert = responseAlert;
         this.context.user = this.state.user;
         // this.getThisUser();
       })
@@ -606,6 +614,7 @@ class UserProfile extends Component {
       .then(resData => {
         const responseAlert = JSON.stringify(resData.data).slice(2,25);
         this.setState({ userAlert: responseAlert, user: resData.data.deleteUserTags})
+        this.context.userAlert = responseAlert;
         this.context.user = this.state.user;
         // this.getThisUser();
       })
@@ -662,6 +671,7 @@ class UserProfile extends Component {
 
           const responseAlert = JSON.stringify(resData.data).slice(2,25);
           this.setState({ userAlert: responseAlert, user: resData.data.addUserBilling})
+          this.context.userAlert = responseAlert;
           this.context.user = this.state.user;
           // this.getThisUser();
         })
@@ -711,6 +721,7 @@ class UserProfile extends Component {
       .then(resData => {
         const responseAlert = JSON.stringify(resData.data).slice(2,25);
         this.setState({ userAlert: responseAlert, user: resData.data.deleteUserBilling})
+        this.context.userAlert = responseAlert;
         this.context.user = this.state.user;
         // this.getThisUser();
       })
@@ -777,6 +788,7 @@ class UserProfile extends Component {
           console.log(resData);
           const responseAlert = JSON.stringify(resData.data).slice(2,25);
           this.setState({ userAlert: responseAlert, user: resData.data.addUserComplaint});
+          this.context.userAlert = responseAlert;
           this.context.user = this.state.user;
           // this.getThisUser();
         })
@@ -903,7 +915,7 @@ class UserProfile extends Component {
             subject:"${subject}",
             message:"${message}"
           })
-        {_id,date,time,type,subject,sender{role,ref},receiver{role,ref},message,read}}
+        {_id,date,time,type,subject,sender{role,username,ref},receiver{role,username,ref},message,read}}
       `};
 
     fetch('http://localhost:9009/graphql', {
@@ -924,15 +936,14 @@ class UserProfile extends Component {
         console.log(resData);
         const responseAlert = JSON.stringify(resData.data).slice(2,25);
         this.setState({ userAlert: responseAlert});
-        // this.context.user = this.state.user;
+        this.context.userAlert = responseAlert;
         this.context.receiver = null;
-        // this.getThisUser();
+        this.getThisUser();
       })
       .catch(err => {
         this.setState({userAlert: err});
       });
   }
-
   deleteUserMessage = (event) => {
     console.log(event);
     const token = this.context.token;
@@ -1027,6 +1038,7 @@ class UserProfile extends Component {
         console.log(resData);
         const responseAlert = JSON.stringify(resData.data).slice(2,25);
         this.setState({ userAlert: responseAlert});
+        this.context.userAlert = responseAlert;
         // this.context.user = this.state.user;
         this.context.receiver = null;
         // this.getThisUser();
@@ -1035,8 +1047,6 @@ class UserProfile extends Component {
         this.setState({userAlert: err});
       });
   }
-
-
   deleteUserTransaction = (event) => {
     console.log(event);
     const token = this.context.token;
@@ -1078,7 +1088,6 @@ class UserProfile extends Component {
     //     this.setState({userAlert: err});
     //   });
   }
-
 
   getThisUser() {
     this.setState({ isLoading: true });
@@ -1212,28 +1221,19 @@ class UserProfile extends Component {
       <Col md={this.state.mCol2Size} className="MasterCol2">
         <div className="containerProfile">
 
-        <Tab.Container id="left-tabs-example" defaultActiveKey="Detail">
           <Row>
-            <Col sm={2}>
-              <Nav variant="pills" className="flex-column">
-                <Nav.Item>
-                  <Nav.Link eventKey="Detail">You</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="..." disabled>...</Nav.Link>
-                </Nav.Item>
-              </Nav>
-            </Col>
-            <Col sm={10}>
-              <Tab.Content>
-                <Tab.Pane eventKey="Detail">
+            <Col>
+
                   {this.state.user !== null && (
                       <ThisUserProfile
                         user={this.state.user}
                         authId={this.context.activityId}
+
                         canDelete={this.state.canDelete}
+
                         onEdit={this.modalConfirmUpdateHandler}
                         onEditField={this.modalConfirmUpdateFieldHandler}
+
                         addProfileImage={this.addUserProfileImageHandler}
                         addPerk={this.addUserPerkHandler}
                         addInterests={this.addUserInterestsHandler}
@@ -1241,8 +1241,10 @@ class UserProfile extends Component {
                         addTokens={this.addUserTokensHandler}
                         addComplaint={this.addUserComplaintHandler}
                         addBilling={this.addUserBillingHandler}
+
                         createMessage={this.userCreateMessage}
                         createTransaction={this.userCreateTransaction}
+
                         onProfileImageDelete={this.deleteUserProfileImage}
                         onPerkDelete={this.deleteUserPerk}
                         onTagsDelete={this.deleteUserTags}
@@ -1252,7 +1254,9 @@ class UserProfile extends Component {
                         onMessageDelete={this.deleteUserMessage}
                         onTransactionDelete={this.deleteUserTransaction}
                         onUserModelDelete={this.deleteUserModel}
+
                         onCancel={this.modalCancelHandler}
+
                         onStartUpdate={this.startUpdateUserHandler}
                         onStartUpdateField={this.startUpdateUserFieldHandler}
                         onStartAddProfileImage={this.addUserProfileImage}
@@ -1264,27 +1268,23 @@ class UserProfile extends Component {
                         onStartAddBilling={this.addUserBilling}
                         onStartCreateMessage={this.startCreateMessage}
                         onStartCreateTransaction={this.startCreateTransaction}
-                        messageReceiver={this.context.receiver}
+
                         onStartLoadMessage={this.loadUserMessages}
                         userMessagesLoaded={this.state.messagesLoaded}
                         userMessages={this.state.userMessages}
                         updating={this.state.updating}
                         updatingField={this.state.updatingField}
                         userAddField={this.state.userAddField}
+
                         selectedUser={this.context.selectedUser}
+                        selectedModel={this.context.selectedModel}
+                        messageReceiver={this.context.receiver}
                       />
                     )}
 
-                </Tab.Pane>
-
-                <Tab.Pane eventKey="...">
-
-                </Tab.Pane>
-
-              </Tab.Content>
             </Col>
           </Row>
-        </Tab.Container>
+
         </div>
       </Col>
       </Row>

@@ -28,7 +28,12 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-      const contents = await Content.find({});
+      const contents = await Content.find({})
+      .populate('creator')
+      .populate('models')
+      .populate('likes.user')
+      .populate('comments');
+
       return contents.map(content => {
         return transformContent(content,);
       });

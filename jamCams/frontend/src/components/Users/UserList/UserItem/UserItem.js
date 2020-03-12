@@ -24,7 +24,7 @@ const userItem = props => (
         Select
       </Button>
       <Button variant="link" onClick={props.onSelectMessageReceiver.bind(this, props.user)}>
-        Message/SendTokens
+        Send Message/Tokens
       </Button>
       {props.canReport === true && (
         <Button variant="danger" onClick={props.onReport.bind(this, props._id)}>

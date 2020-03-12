@@ -32,6 +32,7 @@ module.exports = {
       .populate('comments')
       .populate('messages')
       .populate('transactions');
+
       return models.map(model => {
         return transformModel(model,);
       });
@@ -46,7 +47,14 @@ module.exports = {
     }
     try {
 
-      const model = await Model.findById(args.modelId);
+      const model = await Model.findById(args.modelId)
+      .populate('fans')
+      .populate('friends')
+      .populate('shows')
+      .populate('content')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
 
         return {
             ...model._doc,
@@ -68,6 +76,13 @@ module.exports = {
       const resolverQuery = args.query;
       const query = {[resolverField]:resolverQuery};
       const models = await Model.find(query)
+      .populate('fans')
+      .populate('friends')
+      .populate('shows')
+      .populate('content')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
 
       return models.map(model => {
         return transformModel(model);
@@ -382,7 +397,14 @@ module.exports = {
           postalCode: args.modelInput.addressPostalCode,
         },
         bio: args.modelInput.bio
-        },{new: true, useFindAndModify: false});
+        },{new: true, useFindAndModify: false})
+        .populate('fans')
+        .populate('friends')
+        .populate('shows')
+        .populate('content')
+        .populate('comments')
+        .populate('messages')
+        .populate('transactions');
 
         return {
           ...model._doc,
@@ -404,6 +426,13 @@ module.exports = {
       const resolverQuery = args.query;
       const query = {[resolverField]:resolverQuery};
       const model = await Model.findOneAndUpdate({_id:args.modelId},query,{new: true, useFindAndModify: false})
+      .populate('fans')
+      .populate('friends')
+      .populate('shows')
+      .populate('content')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
 
       return {
         ...model._doc,
@@ -422,6 +451,14 @@ module.exports = {
     try {
       const modelName = args.modelInput.modelName;
       const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { modelNames: modelName }},{new: true, useFindAndModify: false})
+      .populate('fans')
+      .populate('friends')
+      .populate('shows')
+      .populate('content')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
+
         return {
           ...model._doc,
           _id: model.id,
@@ -441,6 +478,14 @@ module.exports = {
       const interests = args.modelInput.interests;
       const splitInterests = interests.split(",");
       const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { interests: {$each: splitInterests} }},{new: true, useFindAndModify: false})
+      .populate('fans')
+      .populate('friends')
+      .populate('shows')
+      .populate('content')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
+
         return {
           ...model._doc,
           _id: model.id,
@@ -462,6 +507,14 @@ module.exports = {
         handle: args.modelInput.socialMediaHandle
       }
       const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { socialMedia: socialMedia }},{new: true, useFindAndModify: false})
+      .populate('fans')
+      .populate('friends')
+      .populate('shows')
+      .populate('content')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
+
         return {
           ...model._doc,
           _id: model.id,
@@ -483,6 +536,14 @@ module.exports = {
         value: args.modelInput.traitValue
       };
       const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { traits: trait }},{new: true, useFindAndModify: false})
+      .populate('fans')
+      .populate('friends')
+      .populate('shows')
+      .populate('content')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
+
         return {
           ...model._doc,
           _id: model.id,
@@ -505,6 +566,14 @@ module.exports = {
         path: args.modelInput.profileImagesPath
       };
       const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { profileImages: profileImage }},{new: true, useFindAndModify: false})
+      .populate('fans')
+      .populate('friends')
+      .populate('shows')
+      .populate('content')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
+
         return {
           ...model._doc,
           _id: model.id,
@@ -528,6 +597,14 @@ module.exports = {
         imageLink: args.modelInput.perkImageLink,
       };
       const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { perks: perk }},{new: true, useFindAndModify: false})
+      .populate('fans')
+      .populate('friends')
+      .populate('shows')
+      .populate('content')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
+
         return {
           ...model._doc,
           _id: model.id,
@@ -568,6 +645,14 @@ module.exports = {
       const amountToAdd = args.modelInput.tokens;
       let newAmount = prevAmount + amountToAdd;
       const model = await Model.findOneAndUpdate({_id:args.modelId},{ tokens: newAmount },{new: true, useFindAndModify: false})
+      .populate('fans')
+      .populate('friends')
+      .populate('shows')
+      .populate('content')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
+
         return {
           ...model._doc,
           _id: model.id,
@@ -587,6 +672,14 @@ module.exports = {
       const tags = args.modelInput.tags;
       const splitTags = tags.split(",");
       const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { tags: {$each: splitTags} }},{new: true, useFindAndModify: false})
+      .populate('fans')
+      .populate('friends')
+      .populate('shows')
+      .populate('content')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
+
         return {
           ...model._doc,
           _id: model.id,
@@ -606,6 +699,14 @@ module.exports = {
       const categories = args.modelInput.categories;
       const splitCategories = categories.split(",");
       const model = await Model.findOneAndUpdate({_id:args.modelId},{$addToSet: { categories: {$each: splitCategories} }},{new: true, useFindAndModify: false})
+      .populate('fans')
+      .populate('friends')
+      .populate('shows')
+      .populate('content')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
+
         return {
           ...model._doc,
           _id: model.id,
@@ -624,7 +725,14 @@ module.exports = {
     try {
 
       const fan = await User.findById({_id: args.fanId})
-      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {fans: fan}},{new: true, useFindAndModify: false});
+      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {fans: fan}},{new: true, useFindAndModify: false})
+      .populate('fans')
+      .populate('friends')
+      .populate('shows')
+      .populate('content')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
 
       return {
         ...model._doc,
@@ -644,7 +752,14 @@ module.exports = {
     try {
 
       const friend = await Model.findById({_id: args.friendId})
-      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {friends: friend}},{new: true, useFindAndModify: false});
+      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {friends: friend}},{new: true, useFindAndModify: false})
+      .populate('fans')
+      .populate('friends')
+      .populate('shows')
+      .populate('content')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
 
       return {
         ...model._doc,
@@ -664,7 +779,14 @@ module.exports = {
     try {
 
       const show = await Model.findById({_id: args.showId})
-      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {shows: show}},{new: true, useFindAndModify: false});
+      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {shows: show}},{new: true, useFindAndModify: false})
+      .populate('fans')
+      .populate('friends')
+      .populate('shows')
+      .populate('content')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
 
       return {
         ...model._doc,
@@ -684,7 +806,14 @@ module.exports = {
     try {
 
       const comment = await Model.findById({_id: args.commentId})
-      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {comments: comment}},{new: true, useFindAndModify: false});
+      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {comments: comment}},{new: true, useFindAndModify: false})
+      .populate('fans')
+      .populate('friends')
+      .populate('shows')
+      .populate('content')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
 
       return {
         ...model._doc,
@@ -704,7 +833,14 @@ module.exports = {
     try {
 
       const content = await Model.findById({_id: args.contentId})
-      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {content: content}},{new: true, useFindAndModify: false});
+      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {content: content}},{new: true, useFindAndModify: false})
+      .populate('fans')
+      .populate('friends')
+      .populate('shows')
+      .populate('content')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
 
       return {
         ...model._doc,
@@ -724,7 +860,14 @@ module.exports = {
     try {
 
       const message = await Model.findById({_id: args.messageId})
-      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {messages: message}},{new: true, useFindAndModify: false});
+      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {messages: message}},{new: true, useFindAndModify: false})
+      .populate('fans')
+      .populate('friends')
+      .populate('shows')
+      .populate('content')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
 
       return {
         ...model._doc,
@@ -744,7 +887,14 @@ module.exports = {
     try {
 
       const transaction = await Model.findById({_id: args.transactionId})
-      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {transactions: transaction}},{new: true, useFindAndModify: false});
+      const model = await Model.findOneAndUpdate({_id: args.modelId},{$addToSet: {transactions: transaction}},{new: true, useFindAndModify: false})
+      .populate('fans')
+      .populate('friends')
+      .populate('shows')
+      .populate('content')
+      .populate('comments')
+      .populate('messages')
+      .populate('transactions');
 
       return {
         ...model._doc,
@@ -764,7 +914,28 @@ module.exports = {
     try {
         const interest = args.modelInput.interest;
         const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { interests: interest }},{new: true, useFindAndModify: false});
-        // const user = await Model.findOneAndUpdate({_id:args.userId},{$pull: { interest: { date: new Date(attendanceDate) }}},{new: true, useFindAndModify: false})
+
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email ,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteModelTrait: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const trait = {
+        key: args.modelInput.traitKey,
+        value: args.modelInput.traitValue,
+      }
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { traits: trait }},{new: true, useFindAndModify: false});
 
         return {
           ...model._doc,
@@ -801,8 +972,27 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-        const interests = args.interests;
-        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { interests: interests }},{new: true, useFindAndModify: false});
+        const interests = args.modelInput.interest.split(",");
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { interests: {$in: interests} }},{new: true, useFindAndModify: false});
+
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email ,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteModelModelNames: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const modelNames = args.modelInput.modelNames.split(",");
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { modelNames: {$in: modelNames} }},{new: true, useFindAndModify: false});
 
         return {
           ...model._doc,
@@ -820,7 +1010,10 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-        const socialMedia = args.socialMedia;
+        const socialMedia = {
+          platform: args.modelInput.platform,
+          handle: args.modelInput.handle
+        };
         const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { socialMedia: socialMedia }},{new: true, useFindAndModify: false});
 
         return {
@@ -839,8 +1032,36 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-        const profileImageName = args.profileImageName;
-        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { 'profileImages.name': profileImageName }},{new: true, useFindAndModify: false});
+      const profileImage = {
+        name: args.modelInput.profileImageName,
+        type: args.modelInput.profileImageType,
+        path: args.modelInput.profileImagePath,
+      }
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { profileImages: profileImage }},{new: true, useFindAndModify: false});
+
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email ,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteModelPerk: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const perk = {
+        date: args.modelInput.perkDate,
+        name: args.modelInput.perkName,
+        description: args.modelInput.perkDescription,
+        imageLink: args.modelInput.perkImageLink,
+      };
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { perks: perk }},{new: true, useFindAndModify: false});
 
         return {
           ...model._doc,
@@ -877,8 +1098,8 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-        const tags = args.tags;
-        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { 'tags': tags }},{new: true, useFindAndModify: false});
+        const tags = args.modelInput.tags.split(",");
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { tags: {$in: tags} }},{new: true, useFindAndModify: false});
 
         return {
           ...model._doc,
@@ -896,8 +1117,8 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-        const categories = args.categories;
-        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { 'categories': categories }},{new: true, useFindAndModify: false});
+        const categories = args.modelInput.categories.split(",");
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { categories: {$in: categories} }},{new: true, useFindAndModify: false});
 
         return {
           ...model._doc,
@@ -936,6 +1157,44 @@ module.exports = {
     try {
         const friend = await Model.findById({_id: args.friendId});
         const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { 'fans': fan }},{new: true, useFindAndModify: false});
+
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email ,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteModelMessage: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const message = await Message.findById({_id: args.messageId});
+        const model = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { 'messages': message }},{new: true, useFindAndModify: false});
+
+        return {
+          ...model._doc,
+          _id: model.id,
+          email: model.contact.email ,
+          name: model.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteModelTransaction: async (args, req) => {
+
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const transaction = await Transaction.findById({_id: args.transactionId});
+        const user = await Model.findOneAndUpdate({_id:args.modelId},{$pull: { 'transactions': transaction }},{new: true, useFindAndModify: false});
 
         return {
           ...model._doc,

@@ -6,7 +6,7 @@ import './UserList.css';
 const userComplaintList = props => {
   const userComplaints = props.userComplaints.map(complaint => {
     const complainant = complaint.complainant;
-    // console.log(props.userComplaints);
+    
     return (
       <UserComplaintItem
         key={complaint.path}

@@ -150,7 +150,7 @@ class ModelProfile extends Component {
             contactPhone:"${contactPhone}",
             contactEmail:"${contactEmail}",
             bio:"${bio}"})
-          {_id,name,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
+          {_id,name,role,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description,imageLink},tokens,fans{_id,name,username,profileImages{name,type,path},interests,bio,tags},friends{_id,name,username,profileImages{name,type,path},interests,bio,tags},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}}}}
         `};
 
     fetch('http://localhost:9009/graphql', {
@@ -197,7 +197,7 @@ class ModelProfile extends Component {
       const requestBody = {
         query:`
         mutation {updateModelField(activityId:"${activityId}", modelId:"${activityId}",field:"${field}", query:"${query}")
-        {_id,name,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
+        {_id,name,role,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description,imageLink},tokens,fans{_id,name,username,profileImages{name,type,path},interests,bio,tags},friends{_id,name,username,profileImages{name,type,path},interests,bio,tags},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}}}}
         `};
 
       fetch('http://localhost:9009/graphql', {
@@ -233,18 +233,18 @@ class ModelProfile extends Component {
 
       this.setState({ adding: false, modelAddField: null, userAlert: "Updating selected Staff by Field..." });
 
-      const profileImagenName = event.target.formGridFilename.value;
+      const profileImageName = event.target.formGridFilename.value;
       const profileImageType = event.target.formGridFiletype.value;
       const profileImagePath = event.target.formGridFilepath.value;
 
       const requestBody = {
         query:`
         mutation {addModelProfileImage(activityId:"${activityId}", modelId:"${activityId}",modelInput:{
-          profileImagenName:"${profileImagenName}",
+          profileImageName:"${profileImageName}",
           profileImageType:"${profileImageType}",
           profileImagePath:"${profileImagePath}",
         })
-        {_id,name,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
+        {_id,name,role,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description,imageLink},tokens,fans{_id,name,username,profileImages{name,type,path},interests,bio,tags},friends{_id,name,username,profileImages{name,type,path},interests,bio,tags},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}}}}
         `};
 
       fetch('http://localhost:9009/graphql', {
@@ -272,20 +272,24 @@ class ModelProfile extends Component {
           this.setState({userAlert: err});
         });
     };
-
-  addModelModelNameHandler = (event) => {
+  deleteModelProfileImage = (event) => {
       const token = this.context.token;
       const activityId = this.context.activityId;
 
       this.setState({ adding: false, modelAddField: null, userAlert: "Updating selected Staff by Field..." });
-      const modelName = event.target.formGridModelName.value;
+
+      const profileImageName = event.name;
+      const profileImageType = event.type;
+      const profileImagePath = event.path;
 
       const requestBody = {
         query:`
-        mutation {addModelModelName(activityId:"${activityId}", modelId:"${activityId}",modelInput:{
-          modelName:"${modelName}"
+        mutation {deleteModelProfileImage(activityId:"${activityId}", modelId:"${activityId}",modelInput:{
+          profileImageName:"${profileImageName}",
+          profileImageType:"${profileImageType}",
+          profileImagePath:"${profileImagePath}",
         })
-        {_id,name,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
+        {_id,name,role,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description,imageLink},tokens,fans{_id,name,username,profileImages{name,type,path},interests,bio,tags},friends{_id,name,username,profileImages{name,type,path},interests,bio,tags},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}}}}
         `};
 
       fetch('http://localhost:9009/graphql', {
@@ -303,10 +307,10 @@ class ModelProfile extends Component {
           return res.json();
         })
         .then(resData => {
-          this.context.model = resData.data.addModelProfileImage;
 
           const responseAlert = JSON.stringify(resData.data).slice(2,25);
-          this.setState({ userAlert: responseAlert, model: resData.data.addModelProfileImage})
+          this.setState({ userAlert: responseAlert, model: resData.data.deleteModelProfileImage})
+          this.context.model = this.state.model;
           this.getThisModel();
         })
         .catch(err => {
@@ -331,7 +335,7 @@ class ModelProfile extends Component {
         perkName:"${perkName}",
         perkDescription:"${perkDescription}",
       })
-      {_id,name,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
+      {_id,name,role,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description,imageLink},tokens,fans{_id,name,username,profileImages{name,type,path},interests,bio,tags},friends{_id,name,username,profileImages{name,type,path},interests,bio,tags},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}}}}
       `};
 
     fetch('http://localhost:9009/graphql', {
@@ -359,6 +363,51 @@ class ModelProfile extends Component {
         this.setState({userAlert: err});
       });
   };
+  deleteModelPerk = (event) => {
+    const token = this.context.token;
+    const activityId = this.context.activityId;
+
+    this.setState({ adding: false, modelAddField: null, userAlert: "Updating selected Staff by Field..." });
+
+    const perkDate = event.date;
+    const perkName = event.name;
+    const perkDescription = event.description;
+
+    const requestBody = {
+      query:`
+      mutation {deleteModelPerk(activityId:"${activityId}", modelId:"${activityId}",modelInput: {
+        perkDate:"${perkDate}",
+        perkName:"${perkName}",
+        perkDescription:"${perkDescription}",
+      })
+      {_id,name,role,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description,imageLink},tokens,fans{_id,name,username,profileImages{name,type,path},interests,bio,tags},friends{_id,name,username,profileImages{name,type,path},interests,bio,tags},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}}}}
+      `};
+
+    fetch('http://localhost:9009/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Failed!');
+        }
+        return res.json();
+      })
+      .then(resData => {
+
+        const responseAlert = JSON.stringify(resData.data).slice(2,25);
+        this.setState({ userAlert: responseAlert, model: resData.data.deleteModelPerk})
+        this.context.model = this.state.model;
+        this.getThisModel();
+      })
+      .catch(err => {
+        this.setState({userAlert: err});
+      });
+  };
 
   addModelTraitHandler = (event) => {
     const token = this.context.token;
@@ -371,11 +420,12 @@ class ModelProfile extends Component {
 
     const requestBody = {
       query:`
-      mutation {addModelTrait(activityId:"${activityId}", modelId:"${activityId}",modelInput: {
+      mutation {addModelTrait(activityId:"${activityId}", modelId:"${activityId}",
+      modelInput: {
         traitKey:"${traitKey}",
         traitValue:"${traitValue}",
       })
-      {_id,name,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
+      {_id,name,role,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description,imageLink},tokens,fans{_id,name,username,profileImages{name,type,path},interests,bio,tags},friends{_id,name,username,profileImages{name,type,path},interests,bio,tags},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}}}}
       `};
 
     fetch('http://localhost:9009/graphql', {
@@ -403,6 +453,133 @@ class ModelProfile extends Component {
         this.setState({userAlert: err});
       });
   };
+  deleteModelTrait = (event) => {
+    const token = this.context.token;
+    const activityId = this.context.activityId;
+
+    this.setState({ adding: false, modelAddField: null, userAlert: "Updating selected Staff by Field..." });
+
+    const traitKey = event.key;
+    const traitValue = event.value;
+
+    const requestBody = {
+      query:`
+      mutation {deleteModelTrait(activityId:"${activityId}", modelId:"${activityId}",
+      modelInput: {
+        traitKey:"${traitKey}",
+        traitValue:"${traitValue}",
+      })
+      {_id,name,role,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description,imageLink},tokens,fans{_id,name,username,profileImages{name,type,path},interests,bio,tags},friends{_id,name,username,profileImages{name,type,path},interests,bio,tags},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}}}}
+      `};
+
+    fetch('http://localhost:9009/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Failed!');
+        }
+        return res.json();
+      })
+      .then(resData => {
+
+        const responseAlert = JSON.stringify(resData.data).slice(2,25);
+        this.setState({ userAlert: responseAlert, model: resData.data.deleteModelTrait})
+        this.context.model = this.state.model;
+        this.getThisModel();
+      })
+      .catch(err => {
+        this.setState({userAlert: err});
+      });
+  };
+
+  addModelModelNameHandler = (event) => {
+      const token = this.context.token;
+      const activityId = this.context.activityId;
+
+      this.setState({ adding: false, modelAddField: null, userAlert: "Updating selected Staff by Field..." });
+      const modelName = event.target.formGridModelName.value;
+
+      const requestBody = {
+        query:`
+        mutation {addModelModelName(activityId:"${activityId}", modelId:"${activityId}",
+        modelInput:{
+          modelName:"${modelName}"
+        })
+        {_id,name,role,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description,imageLink},tokens,fans{_id,name,username,profileImages{name,type,path},interests,bio,tags},friends{_id,name,username,profileImages{name,type,path},interests,bio,tags},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}}}}
+        `};
+
+      fetch('http://localhost:9009/graphql', {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token
+        }
+      })
+        .then(res => {
+          if (res.status !== 200 && res.status !== 201) {
+            throw new Error('Failed!');
+          }
+          return res.json();
+        })
+        .then(resData => {
+
+          const responseAlert = JSON.stringify(resData.data).slice(2,25);
+          this.setState({ userAlert: responseAlert, model: resData.data.addModelModelName})
+          this.context.model = this.state.model;
+          this.getThisModel();
+        })
+        .catch(err => {
+          this.setState({userAlert: err});
+        });
+    };
+  deleteModelModelName = (event) => {
+      const token = this.context.token;
+      const activityId = this.context.activityId;
+
+      this.setState({ adding: false, modelAddField: null, userAlert: "Updating selected Staff by Field..." });
+      const modelNames = event.modelName;
+
+      const requestBody = {
+        query:`
+        mutation {deleteModelModelNames(activityId:"${activityId}", modelId:"${activityId}",
+        modelInput:{
+          modelName:"${modelNames}"
+        })
+        {_id,name,role,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description,imageLink},tokens,fans{_id,name,username,profileImages{name,type,path},interests,bio,tags},friends{_id,name,username,profileImages{name,type,path},interests,bio,tags},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}}}}
+        `};
+
+      fetch('http://localhost:9009/graphql', {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token
+        }
+      })
+        .then(res => {
+          if (res.status !== 200 && res.status !== 201) {
+            throw new Error('Failed!');
+          }
+          return res.json();
+        })
+        .then(resData => {
+
+          const responseAlert = JSON.stringify(resData.data).slice(2,25);
+          this.setState({ userAlert: responseAlert, model: resData.data.deleteModelModelNames})
+          this.context.model = this.state.model;
+          this.getThisModel();
+        })
+        .catch(err => {
+          this.setState({userAlert: err});
+        });
+    };
 
   addModelInterestsHandler = (event) => {
     const token = this.context.token;
@@ -415,8 +592,11 @@ class ModelProfile extends Component {
 
     const requestBody = {
       query:`
-      mutation {addModelInterests(activityId:"${activityId}", modelId:"${activityId}",interests:${interests})
-      {_id,name,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
+      mutation {addModelInterests(activityId:"${activityId}", modelId:"${activityId}",
+        modelInput: {
+          interests:"${interests}"
+        })
+      {_id,name,role,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description,imageLink},tokens,fans{_id,name,username,profileImages{name,type,path},interests,bio,tags},friends{_id,name,username,profileImages{name,type,path},interests,bio,tags},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}}}}
       `};
 
     fetch('http://localhost:9009/graphql', {
@@ -444,6 +624,48 @@ class ModelProfile extends Component {
         this.setState({userAlert: err});
       });
   };
+  deleteModelInterests = (event) => {
+    const token = this.context.token;
+    const activityId = this.context.activityId;
+
+    this.setState({ adding: false, modelAddField: null, userAlert: "Updating selected Staff by Field..." });
+
+    const interests = event.interest;
+
+    const requestBody = {
+      query:`
+      mutation {deleteModelInterests(activityId:"${activityId}", modelId:"${activityId}",
+        modelInput: {
+          interests:"${interests}"
+        })
+      {_id,name,role,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description,imageLink},tokens,fans{_id,name,username,profileImages{name,type,path},interests,bio,tags},friends{_id,name,username,profileImages{name,type,path},interests,bio,tags},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}}}}
+      `};
+
+    fetch('http://localhost:9009/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Failed!');
+        }
+        return res.json();
+      })
+      .then(resData => {
+
+        const responseAlert = JSON.stringify(resData.data).slice(2,25);
+        this.setState({ userAlert: responseAlert, model: resData.data.deleteModelInterests})
+        this.context.model = this.state.model;
+        this.getThisModel();
+      })
+      .catch(err => {
+        this.setState({userAlert: err});
+      });
+  };
 
   addModelCategoriesHandler = (event) => {
     const token = this.context.token;
@@ -456,8 +678,11 @@ class ModelProfile extends Component {
 
     const requestBody = {
       query:`
-      mutation {addModelCategories(activityId:"${activityId}", modelId:"${activityId}",categories:${categories})
-      {_id,name,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
+      mutation {addModelCategories(activityId:"${activityId}", modelId:"${activityId}",
+        modelInput: {
+          categories:"${categories}"
+        })
+      {_id,name,role,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description,imageLink},tokens,fans{_id,name,username,profileImages{name,type,path},interests,bio,tags},friends{_id,name,username,profileImages{name,type,path},interests,bio,tags},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}}}}
       `};
 
     fetch('http://localhost:9009/graphql', {
@@ -485,6 +710,48 @@ class ModelProfile extends Component {
         this.setState({userAlert: err});
       });
   };
+  deleteModelCategories = (event) => {
+    const token = this.context.token;
+    const activityId = this.context.activityId;
+
+    this.setState({ adding: false, modelAddField: null, userAlert: "Updating selected Staff by Field..." });
+
+    const categories = event.category;
+
+    const requestBody = {
+      query:`
+      mutation {deleteModelCategories(activityId:"${activityId}", modelId:"${activityId}",
+          modelInput: {
+            categories:"${categories}"
+          })
+      {_id,name,role,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description,imageLink},tokens,fans{_id,name,username,profileImages{name,type,path},interests,bio,tags},friends{_id,name,username,profileImages{name,type,path},interests,bio,tags},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}}}}
+      `};
+
+    fetch('http://localhost:9009/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Failed!');
+        }
+        return res.json();
+      })
+      .then(resData => {
+        this.context.model = resData.data.addModelCategories;
+
+        const responseAlert = JSON.stringify(resData.data).slice(2,25);
+        this.setState({ userAlert: responseAlert, model: resData.data.deleteModelCategories})
+        this.getThisModel();
+      })
+      .catch(err => {
+        this.setState({userAlert: err});
+      });
+  };
 
   addModelTagsHandler = (event) => {
     const token = this.context.token;
@@ -498,7 +765,7 @@ class ModelProfile extends Component {
     const requestBody = {
       query:`
       mutation {addModelTags(activityId:"${activityId}", modelId:"${activityId}",tags:${tags})
-      {_id,name,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
+      {_id,name,role,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description,imageLink},tokens,fans{_id,name,username,profileImages{name,type,path},interests,bio,tags},friends{_id,name,username,profileImages{name,type,path},interests,bio,tags},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}}}}
       `};
 
     fetch('http://localhost:9009/graphql', {
@@ -526,6 +793,48 @@ class ModelProfile extends Component {
         this.setState({userAlert: err});
       });
   };
+  deleteModelTags = (event) => {
+    const token = this.context.token;
+    const activityId = this.context.activityId;
+
+    this.setState({ adding: false, modelAddField: null, userAlert: "Updating selected Staff by Field..." });
+
+    const tags = event.tag;
+
+    const requestBody = {
+      query:`
+      mutation {deleteModelTags(activityId:"${activityId}", modelId:"${activityId}",
+        modelInput:{
+          tags:"${tags}"
+        })
+      {_id,name,role,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description,imageLink},tokens,fans{_id,name,username,profileImages{name,type,path},interests,bio,tags},friends{_id,name,username,profileImages{name,type,path},interests,bio,tags},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}}}}
+      `};
+
+    fetch('http://localhost:9009/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Failed!');
+        }
+        return res.json();
+      })
+      .then(resData => {
+
+        const responseAlert = JSON.stringify(resData.data).slice(2,25);
+        this.setState({ userAlert: responseAlert, model: resData.data.deleteModelTags})
+        this.context.model = this.state.model;
+        this.getThisModel();
+      })
+      .catch(err => {
+        this.setState({userAlert: err});
+      });
+  };
 
   addModelTokensHandler = (event) => {
     const token = this.context.token;
@@ -539,7 +848,7 @@ class ModelProfile extends Component {
     const requestBody = {
       query:`
       mutation{addModelTokens(activityId:"${activityId}",modelId:"${activityId}",modelInput:{tokens:${tokens}})
-      {_id,name,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
+      {_id,name,role,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description,imageLink},tokens,fans{_id,name,username,profileImages{name,type,path},interests,bio,tags},friends{_id,name,username,profileImages{name,type,path},interests,bio,tags},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}}}}
       `};
 
     fetch('http://localhost:9009/graphql', {
@@ -570,6 +879,58 @@ class ModelProfile extends Component {
 
   CreateContentHandler = (event) => {
     console.log("creating content for model",this.context.activityId);
+    this.setState({ adding: false });
+    const token = this.context.token;
+    const activityId = this.context.activityId;
+
+    const date = new Date();
+    const type = event.target.formGridTypeSelect.value;
+    const title= event.target.formGridTitle.value;
+    const fileName = event.target.formGridFileName.value;
+    const fileSize = event.target.formGridFileSize.value;
+    const fileType = event.target.formGridFileType.value;
+    const filePath = event.target.formGridFilePath.value;
+
+    const requestBody = {
+      query:`
+        mutation {createContent(activityId:"${activityId}",creatorId:"${activityId}",
+          contentInput:{
+            date:"${date}",
+            type:"${type}",
+            title:"${title}",
+            fileName:"${fileName}",
+            fileType:"${fileType}",
+            fileSize:"${fileSize}",
+            filePath:"${filePath}"
+          })
+        {_id,date,type,title,file{name,type,size,path},creator{_id,name,username,profileImages{name,type,path}},models{_id,name,username,profileImages{name,type,path}},viewCount,likes{date,user{_id,name,username,profileImages{name,type,path}}},likeCount,comments{_id},tags}}
+      `};
+
+    fetch('http://localhost:9009/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Failed!');
+        }
+        return res.json();
+      })
+      .then(resData => {
+        console.log(resData);
+        const responseAlert = JSON.stringify(resData.data).slice(2,25);
+        this.setState({ userAlert: responseAlert});
+        this.context.userAlert = responseAlert;
+        this.context.receiver = null;
+        this.getThisModel();
+      })
+      .catch(err => {
+        this.setState({userAlert: err});
+      });
   }
 
   modelCreateMessage = (event) => {
@@ -577,6 +938,9 @@ class ModelProfile extends Component {
     this.setState({ adding: false });
     const token = this.context.token;
     const receiver = this.context.receiver;
+    const receiverId = this.context.receiver._id;
+    const receiverRole = this.context.receiver.role;
+    const role = this.context.role;
     const activityId = this.context.activityId;
 
     const date = new Date();
@@ -585,49 +949,111 @@ class ModelProfile extends Component {
     const type = event.target.formGridTypeSelect.value;
     const subject = event.target.formGridSubject.value;
     const message = event.target.formGridMessage.value;
-    console.log("here", timeString1, timeString2);
 
-    // const requestBody = {
-    //   query:`
-    //     mutation {createMessage(
-    //       senderRole:"${}",
-    //       receiverRole:"${}",
-    //       senderId:"${}",
-    //       receiverId:"${}",
-    //       messageInput: {
-    //         date:"${}",
-    //         time:"${}",
-    //         type:"${}",
-    //         subject:"${}",
-    //         message:"${}"
-    //       })
-    //     {_id,date,time,type,subject,sender{role,ref},receiver{role,ref},message,read}}
-    //   `};
-    //
-    // fetch('http://localhost:9009/graphql', {
-    //   method: 'POST',
-    //   body: JSON.stringify(requestBody),
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     Authorization: 'Bearer ' + token
-    //   }
-    // })
-    //   .then(res => {
-    //     if (res.status !== 200 && res.status !== 201) {
-    //       throw new Error('Failed!');
-    //     }
-    //     return res.json();
-    //   })
-    //   .then(resData => {
-    //     const responseAlert = JSON.stringify(resData.data).slice(2,25);
-    //     this.setState({ userAlert: responseAlert});
-    //     // this.context.user = this.state.user;
-    //     this.context.receiver = null;
-    //     this.getThisUser();
-    //   })
-    //   .catch(err => {
-    //     this.setState({userAlert: err});
-    //   });
+    const requestBody = {
+      query:`
+        mutation {createMessage(
+          senderRole:"${role}",
+          receiverRole:"${receiverRole}",
+          senderId:"${activityId}",
+          receiverId:"${receiverId}",
+          messageInput: {
+            date:"${date}",
+            time:"${timeString2}",
+            type:"${type}",
+            subject:"${subject}",
+            message:"${message}"
+          })
+        {_id,date,time,type,subject,sender{role,username,ref},receiver{role,username,ref},message,read}}
+      `};
+
+    fetch('http://localhost:9009/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Failed!');
+        }
+        return res.json();
+      })
+      .then(resData => {
+        console.log(resData);
+        const responseAlert = JSON.stringify(resData.data).slice(2,25);
+        this.setState({ userAlert: responseAlert});
+        this.context.userAlert = responseAlert;
+        this.context.receiver = null;
+        this.getThisModel();
+      })
+      .catch(err => {
+        this.setState({userAlert: err});
+      });
+  }
+
+  modelCreateTransaction = (event) => {
+
+    this.setState({ adding: false });
+    const token = this.context.token;
+    const receiver = this.context.receiver;
+    const receiverId = this.context.receiver._id;
+    const receiverRole = this.context.receiver.role;
+    const role = this.context.role;
+    const activityId = this.context.activityId;
+
+    const date = new Date();
+    const timeString1 = date.toISOString().slice(11,16);
+    const timeString2 = date.toLocaleString().slice(11,16);
+    const type = event.target.formGridTypeSelect.value;
+    const description = event.target.formGridDescription.value;
+    const amount = event.target.formGridAmount.value;
+
+    const requestBody = {
+      query:`
+        mutation {createTransaction(
+          senderRole:"${role}",
+          receiverRole:"${receiverRole}",
+          senderId:"${activityId}",
+          receiverId:"${receiverId}",
+          transactionInput: {
+            date:"${date}",
+            time:"${timeString2}",
+            type:"${type}",
+            description:"${description}",
+            amount:${amount}
+          })
+        {_id,date,time,type,sender{role,username,ref},receiver{role,username,ref},amount,description}}
+      `};
+
+    fetch('http://localhost:9009/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Failed!');
+        }
+        return res.json();
+      })
+      .then(resData => {
+        console.log(resData);
+        const responseAlert = JSON.stringify(resData.data).slice(2,25);
+        this.setState({ userAlert: responseAlert});
+        this.context.userAlert = responseAlert;
+        // this.context.user = this.state.user;
+        this.context.receiver = null;
+        // this.getThisUser();
+      })
+      .catch(err => {
+        this.setState({userAlert: err});
+      });
   }
 
 
@@ -637,7 +1063,7 @@ class ModelProfile extends Component {
     const requestBody = {
       query: `
       query {getThisModel(activityId:"${activityId}")
-      {_id,name,role,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description},tokens,fans{_id,name,username,profileImages{name,type,path},bio},friends{_id,name},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time},transactions{_id,date,time}}}
+      {_id,name,role,dob,username,modelNames,contact{email,phone},address{number,street,town,city,country},bio,socialMedia{platform,handle},traits{key,value},profileImages{name,type,path},interests,perks{date,name,description,imageLink},tokens,fans{_id,name,username,profileImages{name,type,path},interests,bio,tags},friends{_id,name,username,profileImages{name,type,path},interests,bio,tags},tags,loggedIn,categories,shows{_id,scheduledDate,scheduledTime},content{_id,title},comments{_id,date,content{_id}},messages{_id,date,time,type,subject,message,sender{role,username,ref},receiver{role,username,ref}},transactions{_id,date,time,type,amount,description,sender{role,username,ref},receiver{role,username,ref}}}}
         `};
 
     fetch('http://localhost:9009/graphql', {
@@ -730,6 +1156,9 @@ class ModelProfile extends Component {
   startCreateMessage = () => {
     this.setState({adding: true, modelAddField: "message"})
   }
+  startCreateMessage = () => {
+    this.setState({adding: true, modelAddField: "transaction"})
+  }
 
 
   componentWillUnmount() {
@@ -739,7 +1168,6 @@ class ModelProfile extends Component {
   render() {
     return (
       <React.Fragment>
-
 
       {
       //   <AlertBox
@@ -774,28 +1202,17 @@ class ModelProfile extends Component {
       <Col md={this.state.mCol2Size} className="MasterCol2">
         <Container className="containerProfile">
 
-        <Tab.Container id="left-tabs-example" defaultActiveKey="Detail">
           <Row>
-            <Col sm={2}>
-              <Nav variant="pills" className="flex-column">
-                <Nav.Item>
-                  <Nav.Link eventKey="Detail">You</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="..." disabled>...</Nav.Link>
-                </Nav.Item>
-              </Nav>
-            </Col>
-            <Col sm={10}>
-              <Tab.Content>
-                <Tab.Pane eventKey="Detail">
+            <Col>
                   {this.state.model !== null && (
                       <ThisModelProfile
                         model={this.state.model}
                         authId={this.context.activityId}
                         canDelete={this.state.canDelete}
+
                         onEdit={this.modalConfirmUpdateHandler}
                         onEditField={this.modalConfirmUpdateFieldHandler}
+
                         addProfileImage={this.addModelProfileImageHandler}
                         addSocialMedia={this.addModelSocialMediaHandler}
                         addTrait={this.addModelTraitHandler}
@@ -805,8 +1222,11 @@ class ModelProfile extends Component {
                         addTags={this.addModelTagsHandler}
                         addModelName={this.addModelModelNameHandler}
                         addTokens={this.addModelTokensHandler}
+
                         createMessage={this.modelCreateMessage}
-                        addContent={this.CreateContentHandler}
+                        createTransaction={this.modelCreateTransaction}
+                        createContent={this.CreateContentHandler}
+
                         onProfileImageDelete={this.deleteModelProfileImage}
                         onSocialMediaDelete={this.deleteModelSocialMedia}
                         onTraitDelete={this.deleteModelTrait}
@@ -816,7 +1236,10 @@ class ModelProfile extends Component {
                         onInterestDelete={this.deleteModelInterests}
                         onCategoriesDelete={this.deleteModelCategories}
                         onMessageDelete={this.deleteModelMessage}
+                        onTransactionDelete={this.deleteModelTransaction}
+
                         onCancel={this.modalCancelHandler}
+
                         onStartUpdate={this.startUpdateModelHandler}
                         onStartUpdateField={this.startUpdateModelFieldHandler}
                         onStartAddProfileImage={this.addModelProfileImage}
@@ -830,24 +1253,21 @@ class ModelProfile extends Component {
                         onStartAddTokens={this.addModelTokens}
                         onStartAddContent={this.addModelContent}
                         onStartCreateMessage={this.startCreateMessage}
-                        messageReceiver={this.context.receiver}
+                        onStartCreateTransaction={this.startCreateTransaction}
+
                         updating={this.state.updating}
                         updatingField={this.state.updatingField}
                         modelAddField={this.state.modelAddField}
+
                         selectedUser={this.context.selectedUser}
+                        selectedModel={this.context.selectedModel}
+                        messageReceiver={this.context.receiver}
                       />
                     )}
 
-                </Tab.Pane>
-
-                <Tab.Pane eventKey="...">
-
-                </Tab.Pane>
-
-              </Tab.Content>
             </Col>
           </Row>
-        </Tab.Container>
+
         </Container>
       </Col>
       </Row>
