@@ -7,14 +7,6 @@ import './CreateUserForm.css';
 
 const CreateContentForm = (props) => {
 
-  date
-  type
-  title
-  fileName
-  fileType
-  fileSize
-  filePath
-
 return (
 <div className="CreateFormContainer">
 <Form onSubmit={props.onConfirm}>

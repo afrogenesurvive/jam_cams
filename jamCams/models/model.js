@@ -51,6 +51,11 @@ const modelSchema = new Schema({
   friends: [{type: Schema.Types.ObjectId,ref: 'Model'}],
   tags: [{type: String}],
   loggedin: {type: Boolean},
+  verfication:{
+    verified:{type: Boolean},
+    type:{type: String},
+    code:{type: String}
+  },
   categories: [{type: String}],
   shows: [{type: Schema.Types.ObjectId,ref: 'Show'}],
   content: [{type: Schema.Types.ObjectId,ref: 'Content'}],

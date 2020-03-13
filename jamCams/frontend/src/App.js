@@ -7,12 +7,9 @@ import SignupPage from './pages/auth/Signup';
 import UserProfile from './pages/user/UserProfile';
 import ModelProfile from './pages/model/ModelProfile';
 import UsersPage from './pages/user/Users';
-// import ModelsPage from './pages/user/Users';
-// import ContentPage from './pages/user/Users';
-// import ShowsPage from './pages/user/Users';
-
 import ModelsPage from './pages/model/Models';
-// import ContentPage from './pages/content/Content';
+import ContentPage from './pages/content/Content';
+
 // import ShowsPage from './pages/show/Shows';
 import MainNavigation from './components/Navigation/MainNavigation';
 import AuthContext from './context/auth-context';
@@ -161,14 +158,10 @@ class App extends Component {
 
                 {this.state.token && (<Route path="/users" component={UsersPage} />)}
                 {this.state.token && (<Route path="/models" component={ModelsPage} />)}
-                {
-                  // this.state.token && (<Route path="/content" component={ContentPage} />)
-                }
+                {this.state.token && (<Route path="/content" component={ContentPage} />)}
                 {
                   // this.state.token && (<Route path="/shows" component={ShowsPage} />)
                 }
-
-
 
                 { //if not logged in -> go to login page
                 !this.state.token && (<Route path="/auth" component={AuthPage} />)}

@@ -12,9 +12,8 @@ import Nav from 'react-bootstrap/Nav';
 import Card from 'react-bootstrap/Card';
 
 import AuthContext from '../../context/auth-context';
-import UserList from '../../components/Users/UserList/UserList';
-import SearchUserList from '../../components/Users/UserList/SearchUserList';
-import UserDetail from '../../components/Users/UserDetail';
+import ContentList from '../../components/Content/ContentList/ContentList';
+import ContentDetail from '../../components/Content/ContentDetail';
 
 import Spinner from '../../components/Spinner/Spinner';
 import SidebarPage from '../Sidebar';
@@ -22,7 +21,7 @@ import SidebarControl from '../../components/SidebarControl';
 import AlertBox from '../../components/AlertBox';
 import LoadingOverlay from '../../components/LoadingOverlay';
 import AttachmentViewer from '../../components/AttachmentViewer';
-import UserDetailViewer from '../../components/UserDetailViewer';
+import ContentDetailViewer from '../../components/ContentDetailViewer';
 
 import './Users.css';
 
@@ -32,17 +31,16 @@ class ContentPage extends Component {
     updating: false,
     deleting: false,
     searching: false,
-    user: null,
-    users: [],
-    searchUsers: [],
+    content: null,
+    contents: [],
+    searchContent: [],
     isLoading: false,
     isSorting: false,
-    selectedUser: null,
-    userUpdateField: null,
-    userSearchField: null,
-    userSearchQuery: null,
+    selectedContent: null,
+    contentUpdateField: null,
+    contentSearchField: null,
+    contentSearchQuery: null,
     canDelete: null,
-    canReport: null,
     userAlert: null,
     overlay: false,
     overlayStatus: "test",
@@ -64,18 +62,9 @@ class ContentPage extends Component {
     if (this.context.user.name === "Lord-of-the-Manor" || this.context.model.name === "Lady-of-the-Manor"){
       this.setState({canDelete: true})
     }
-    if (this.context.role === "Model"){
-      this.setState({canReport: true})
-    }
 
-    if (JSON.stringify(this.context.selectedUser) !== "{}") {
-      this.setState({ selectedUser: this.context.selectedUser })
-    }
-
-    this.fetchUsers();
+    this.fetchContent();
   }
-
-
 
   modalConfirmSearchHandler = (event) => {
 
@@ -140,14 +129,14 @@ class ContentPage extends Component {
     this.setState({ creating: false, updating: false, deleting: false, searching: false});
   };
 
-  fetchUsers() {
+  fetchContent() {
 
     const activityId = this.context.activityId;
     this.setState({ isLoading: true, userAlert: "Fetching Staff Master List..." });
     const requestBody = {
       query: `
-          query {users(activityId:"${activityId}")
-          {_id,name,dob,role,username,contact{email,phone},address{number,street,town,city,country,postalCode},bio,profileImages{name,type,path},interests,perks{date,name,description},models{_id,name,username,contact{email},modelNames,profileImages{name,type},bio,interests},tokens,tags,loggedin,viewedShows{_id},viewedContent{_id},likedContent{_id},searches{date,query},comments{_id,date,time,content{_id}},messages{_id,message,sender{role,ref},receiver{ref}},transactions{_id,date,time},billing{date,type,description,amount,paid,payment},complaints{date,type,description,complainant{_id,name}}}}
+          query {content(activityId:"${activityId}")
+          {_id,date,type,title,file{name,type,size,path},creator{_id,name},models{_id,name},viewCount,likes{date},likeCount,comments{_id},tags}}
         `};
 
     fetch('http://localhost:9009/graphql', {
@@ -167,8 +156,8 @@ class ContentPage extends Component {
       })
       .then(resData => {
         const responseAlert = JSON.stringify(resData.data).slice(0,8);
-        this.setState({userAlert: responseAlert, users: resData.data.users, isLoading: false});
-        this.context.users = this.state.users;
+        this.setState({userAlert: responseAlert, contents: resData.data.content, isLoading: false});
+        this.context.contents = this.state.contents;
       })
       .catch(err => {
         this.setState({userAlert: err});
@@ -178,56 +167,32 @@ class ContentPage extends Component {
       });
   }
 
-  deleteListUser = (userId) => {
-    console.log("delete listed user", userId);
+  deleteListUser = (contentId) => {
+    console.log("delete listed content", contentId);
   }
 
-  reportUser = (userId) => {
-    console.log("reporting user", userId);
-  }
-
-  selectUserMessageReceiver = (user) => {
-    console.log("selected user..",user._id,"..to message");
-    this.context.receiver = user;
-    this.context.selectedUser = user;
-  }
-
-showDetailHandler = userId => {
+showDetailHandler = contentId => {
 
   this.setState(prevState => {
-    const selectedUser = prevState.users.find(e => e._id === userId);
-    this.context.selectedUser = selectedUser;
-    this.setState({selectedUser: selectedUser, showDetail: true});
-    return { selectedUser: selectedUser };
+    const selectedContent = prevState.contents.find(e => e._id === contentId);
+    this.context.selectedContent = selectedContent;
+    this.setState({selectedContent: selectedContent, showDetail: true});
+    return { selectedContent: selectedContent };
   });
 };
 
-selectUserNoDetail = (user) => {
-  this.setState({selectedUser: user});
-  this.context.selectedUser = user;
+selectContentNoDetail = (content) => {
+  this.setState({selectedContent: content});
+  this.context.selectedContent = content;
 }
 
 hideDetailHandler = () => {
   this.setState({showDetail: false, overlay: false})
 }
 
-  onViewAttachment = (attachment) => {
-
-      this.setState({showAttachment: true})
-
-      const file = "https://ent-emr-bucket.s3-us-east-2.amazonaws.com/"+attachment.path+"/"+attachment.name;
-      const type = attachment.format;
-
-      this.setState({showThisAttachmentFile: file, showThisAttachmentType: type, })
-  }
-
-  closeAttachmentView = () => {
-
-      this.setState({showAttachment: false})
-  }
 
   userSearchClearlHandler () {
-    this.setState({searchUsers: [], userAlert: "clearing user search results"});
+    this.setState({searchContent: [], userAlert: "clearing user search results"});
   }
 
   showSidebar = () => {
@@ -266,13 +231,11 @@ hideDetailHandler = () => {
       }
 
       {this.state.showDetail === true && (
-        <UserDetailViewer
-          user={this.state.selectedUser}
-          onHideUserDetail={this.hideDetailHandler}
+        <ContentDetailViewer
+          content={this.state.selectedContent}
+          onHideContentDetail={this.hideDetailHandler}
           canDelete={this.state.canDelete}
-          onDelete={this.deleteListUser}
-          canReport={this.state.canReport}
-          onReport={this.reportUser}
+          onDelete={this.deleteListContent}
         />
       )}
       <SidebarControl
@@ -334,14 +297,11 @@ hideDetailHandler = () => {
                          {this.state.isLoading ? (
                            <Spinner />
                          ) : (
-                           <UserList
-                            canReport={this.state.canReport}
-                            onReport={this.reportUser}
-                             users={this.state.users}
+                           <ContentList
+                             contents={this.state.contents}
                              authId={this.context.activityId}
                              onViewDetail={this.showDetailHandler}
-                             onSelectNoDetail={this.selectUserNoDetail}
-                             onSelectMessageReceiver={this.selectUserMessageReceiver}
+                             onSelectNoDetail={this.selectContentNoDetail}
                            />
                          )}
                         </Row>
@@ -355,7 +315,7 @@ hideDetailHandler = () => {
                         <Tabs defaultActiveKey="Field" id="uncontrolled-tab-example">
 
                         <Tab eventKey="Field" title="Search by Field:">
-                        
+
                         </Tab>
                         </Tabs>
                         </Col>

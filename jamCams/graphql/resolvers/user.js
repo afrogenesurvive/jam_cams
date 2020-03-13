@@ -1272,6 +1272,11 @@ module.exports = {
         models: [],
         tokens: 0,
         tags: [""],
+        verification: {
+          verified: false,
+          type: "email",
+          code: null
+        },
         viewedShows: [],
         viewedContent: [],
         likedContent: [],

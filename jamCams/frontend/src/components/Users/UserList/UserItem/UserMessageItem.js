@@ -29,9 +29,21 @@ const userMessgeItem = props => (
           </p>
           </li>
           <li>
+          <p className="userItemHeading"> senderName:</p>
+          <p className="userItemText">
+          {props.sender.username}
+          </p>
+          </li>
+          <li>
           <p className="userItemHeading"> receiver:</p>
           <p className="userItemText">
           {props.receiver.role}: {props.receiver.ref}
+          </p>
+          </li>
+          <li>
+          <p className="userItemHeading"> receiverName:</p>
+          <p className="userItemText">
+          {props.receiver.username}
           </p>
           </li>
           <li>

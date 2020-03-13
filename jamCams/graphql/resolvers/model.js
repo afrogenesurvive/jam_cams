@@ -1263,6 +1263,11 @@ module.exports = {
           type: "",
           path: "",
         }],
+        verification: {
+          verified: false,
+          type: "email",
+          code: null
+        },
         interests: [""],
         perks: [{
           date: "",

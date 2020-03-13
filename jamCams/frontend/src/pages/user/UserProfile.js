@@ -1124,6 +1124,7 @@ class UserProfile extends Component {
           if (thisUser.name === "Lord-of-the-Manor"){
             this.setState({canDelete: true, userAlert: "Mi'Lord!!"})
         }
+
       })
       .catch(err => {
         this.setState({userAlert: err});

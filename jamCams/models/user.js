@@ -37,6 +37,11 @@ const userSchema = new Schema({
   tokens: {type: Number},
   tags: [{type: String}],
   loggedin: {type: Boolean},
+  verfication:{
+    verified:{type: Boolean},
+    type:{type: String},
+    code:{type: String}
+  },
   activity:[{type: String}],
   viewedShows: [{type: Schema.Types.ObjectId,ref: 'Show'}],
   viewedContent: [{type: Schema.Types.ObjectId,ref: 'Content'}],
