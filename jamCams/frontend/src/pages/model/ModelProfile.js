@@ -924,7 +924,6 @@ class ModelProfile extends Component {
         console.log(resData);
         const responseAlert = JSON.stringify(resData.data).slice(2,25);
         this.setState({ userAlert: responseAlert});
-        this.context.userAlert = responseAlert;
         this.context.receiver = null;
         this.getThisModel();
       })
@@ -985,7 +984,6 @@ class ModelProfile extends Component {
         console.log(resData);
         const responseAlert = JSON.stringify(resData.data).slice(2,25);
         this.setState({ userAlert: responseAlert});
-        this.context.userAlert = responseAlert;
         this.context.receiver = null;
         this.getThisModel();
       })
@@ -1046,7 +1044,6 @@ class ModelProfile extends Component {
         console.log(resData);
         const responseAlert = JSON.stringify(resData.data).slice(2,25);
         this.setState({ userAlert: responseAlert});
-        this.context.userAlert = responseAlert;
         // this.context.user = this.state.user;
         this.context.receiver = null;
         // this.getThisUser();
@@ -1168,13 +1165,10 @@ class ModelProfile extends Component {
   render() {
     return (
       <React.Fragment>
-
-      {
-      //   <AlertBox
-      //   authId={this.context.activityId}
-      //   alert={this.state.userAlert}
-      // />
-      }
+      <AlertBox
+        authId={this.context.activityId}
+        alert={this.state.userAlert}
+      />
 
       {this.state.overlay === true && (
         <LoadingOverlay
@@ -1193,7 +1187,6 @@ class ModelProfile extends Component {
         <Col md={2} className="MasterCol1">
         <SidebarPage
           you={this.state.model}
-          alert={this.state.userAlert}
           authId={this.context.activityId}
         />
         </Col>

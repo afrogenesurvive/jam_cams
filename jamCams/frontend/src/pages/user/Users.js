@@ -162,7 +162,7 @@ class UsersPage extends Component {
     })
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
-          this.context.userAlert = 'Failed!';
+          this.setState({userAlert: 'Failed!'});
           throw new Error('Failed!');
         }
         return res.json();
@@ -260,12 +260,10 @@ hideDetailHandler = () => {
           attachmentType={this.state.showThisAttachmentType}
         />
       )}
-      {
-      //   <AlertBox
-      //   authId={this.context.activityId}
-      //   alert={this.state.userAlert}
-      // />
-      }
+      <AlertBox
+        authId={this.context.activityId}
+        alert={this.state.userAlert}
+      />
 
       {this.state.showDetail === true && (
         <UserDetailViewer
@@ -296,7 +294,6 @@ hideDetailHandler = () => {
           <Col md={2} className="MasterCol1">
           <SidebarPage
             you={this.state.user}
-            alert={this.state.userAlert}
             authId={this.context.activityId}
           />
           </Col>
@@ -306,7 +303,6 @@ hideDetailHandler = () => {
           <Col md={2} className="MasterCol1">
           <SidebarPage
             you={this.state.model}
-            alert={this.state.userAlert}
             authId={this.context.activityId}
           />
           </Col>

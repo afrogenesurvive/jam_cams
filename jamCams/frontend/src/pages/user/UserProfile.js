@@ -50,7 +50,7 @@ class UserProfile extends Component {
   constructor(props){
       super(props);
 
-      // this.socket = io('http://localhost:9007');
+      this.socket = io('http://localhost:9007');
       // // this.socket.on('anyone out there?', function (data) {
       // //   console.log(data);
       // // });
@@ -73,18 +73,26 @@ class UserProfile extends Component {
 
     this.getThisUser();
 
-    this.socket = io('http://localhost:9007');
-    this.socket.on('RECEIVE_MESSAGE', function(data){
-        console.log(data);
-          addMessage(data);
-      });
-    this.socket.on('MESSAGE_SENT', function(data){
-        console.log(data);
-          addMessage(data);
-      });
-      
+    // const socket = io('http://localhost:9007');
+    const conversationId = this.context.activityId;
+    this.socket.emit('subscribe', conversationId);
+    console.log("listening for pms...");
+    this.socket.on('conversation private post', function(data) {
+      console.log(data);
+      addMessage(data);
+    });
+    // socket.on('RECEIVE_MESSAGE', function(data){
+    //     console.log(data);
+    //       addMessage(data);
+    //   });
+    // socket.on('MESSAGE_SENT', function(data){
+    //     console.log(data);
+    //       addMessage(data);
+    //   });
+
       const addMessage = data => {
-        this.setState({socketMsg: data})
+        console.log("patching you through...");
+        this.setState({socketMsg: data, userAlert: data})
       };
 
   }
@@ -218,7 +226,6 @@ class UserProfile extends Component {
         const responseAlert = JSON.stringify(resData.data).slice(2,25);
 
         this.setState({ userAlert: responseAlert, user: updatedUser})
-        this.context.userAlert = responseAlert;
         this.getThisUser();
       })
       .catch(err => {
@@ -257,6 +264,7 @@ class UserProfile extends Component {
       })
         .then(res => {
           if (res.status !== 200 && res.status !== 201) {
+            this.setState({userAlert: 'Failed!'});
             throw new Error('Failed!');
           }
           return res.json();
@@ -265,7 +273,7 @@ class UserProfile extends Component {
 
           const responseAlert = JSON.stringify(resData.data).slice(2,25);
           this.setState({ userAlert: responseAlert, user: resData.data.updateUserField})
-          this.context.userAlert = responseAlert;
+
           this.context.user = this.state.user;
           this.getThisUser();
         })
@@ -299,14 +307,16 @@ class UserProfile extends Component {
           .then(res => {
             if (res.status !== 200 && res.status !== 201) {
               throw new Error('Failed!');
+              this.setState({userAlert: 'Failed!'});
             }
             return res.json();
           })
           .then(resData => {
-            this.context.user = resData.data.addUserTokens;
+
             const responseAlert = JSON.stringify(resData.data).slice(2,25);
-            this.context.userAlert = responseAlert;
-            this.getThisUser();
+            this.setState({userAlert: responseAlert, user: resData.data.addUserTokens})
+            this.context.user = this.state.user;
+            // this.getThisUser();
           })
           .catch(err => {
             this.setState({userAlert: err});
@@ -350,13 +360,13 @@ class UserProfile extends Component {
         .then(res => {
           if (res.status !== 200 && res.status !== 201) {
             throw new Error('Failed!');
+            this.setState({userAlert: 'Failed!'});
           }
           return res.json();
         })
         .then(resData => {
           const responseAlert = JSON.stringify(resData.data).slice(2,25);
           this.setState({ userAlert: responseAlert, user: resData.data.addUserProfileImage})
-          this.context.userAlert = responseAlert;
           this.context.user = this.state.user;
           // this.getThisUser();
         })
@@ -399,10 +409,8 @@ class UserProfile extends Component {
         return res.json();
       })
       .then(resData => {
-        console.log("here",resData);
         const responseAlert = JSON.stringify(resData.data).slice(2,25);
         this.setState({ userAlert: responseAlert, user: resData.data.deleteUserProfileImage})
-        this.context.userAlert = responseAlert;
         this.context.user = this.state.user;
         // this.getThisUser();
       })
@@ -445,14 +453,13 @@ class UserProfile extends Component {
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
           throw new Error('Failed!');
+          this.setState({userAlert: 'Failed!'});
         }
         return res.json();
       })
       .then(resData => {
-        console.log(resData.data);
         const responseAlert = JSON.stringify(resData.data).slice(2,25);
-        this.setState({ userAlert: responseAlert, user: resData.data.addUserPerk})
-        this.context.userAlert = responseAlert;
+        this.setState({ userAlert: responseAlert, user: resData.data.addUserPerk});
         this.context.user = this.state.user;
         // this.getThisUser();
       })
@@ -494,11 +501,11 @@ class UserProfile extends Component {
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
           throw new Error('Failed!');
+          this.setState({userAlert: 'Failed!'});
         }
         return res.json();
       })
       .then(resData => {
-        console.log("here",resData.data.deleteUserProfileImage);
         const responseAlert = JSON.stringify(resData.data).slice(2,25);
         this.setState({ userAlert: responseAlert, user: resData.data.deleteUserProfileImage})
         this.context.user = this.state.user;
@@ -533,13 +540,13 @@ class UserProfile extends Component {
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
           throw new Error('Failed!');
+          this.setState({userAlert: 'Failed!'});
         }
         return res.json();
       })
       .then(resData => {
         const responseAlert = JSON.stringify(resData.data).slice(2,25);
-        this.setState({ userAlert: responseAlert, user: resData.data.addUserInterests})
-        this.context.userAlert = responseAlert;
+        this.setState({ userAlert: responseAlert, user: resData.data.addUserInterests});
         this.context.user = this.state.user;
         // this.getThisUser();
       })
@@ -572,13 +579,13 @@ class UserProfile extends Component {
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
           throw new Error('Failed!');
+          this.setState({userAlert: 'Failed!'});
         }
         return res.json();
       })
       .then(resData => {
         const responseAlert = JSON.stringify(resData.data).slice(2,25);
-        this.setState({ userAlert: responseAlert, user: resData.data.deleteUserInterests})
-        this.context.userAlert = responseAlert;
+        this.setState({ userAlert: responseAlert, user: resData.data.deleteUserInterests});
         this.context.user = this.state.user;
         // this.getThisUser();
       })
@@ -611,14 +618,13 @@ class UserProfile extends Component {
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
           throw new Error('Failed!');
+          this.setState({userAlert: 'Failed!'});
         }
         return res.json();
       })
       .then(resData => {
-        console.log(resData);
         const responseAlert = JSON.stringify(resData.data).slice(2,25);
-        this.setState({ userAlert: responseAlert, user: resData.data.addUserTags})
-        this.context.user = this.state.user;
+        this.setState({ userAlert: responseAlert, user: resData.data.addUserTags});
         this.context.userAlert = responseAlert;
         // this.getThisUser();
       })
@@ -650,13 +656,13 @@ class UserProfile extends Component {
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
           throw new Error('Failed!');
+          this.setState({userAlert: 'Failed!'});
         }
         return res.json();
       })
       .then(resData => {
         const responseAlert = JSON.stringify(resData.data).slice(2,25);
-        this.setState({ userAlert: responseAlert, user: resData.data.deleteUserTags})
-        this.context.userAlert = responseAlert;
+        this.setState({ userAlert: responseAlert, user: resData.data.deleteUserTags});
         this.context.user = this.state.user;
         // this.getThisUser();
       })
@@ -706,14 +712,13 @@ class UserProfile extends Component {
         .then(res => {
           if (res.status !== 200 && res.status !== 201) {
             throw new Error('Failed!');
+            this.setState({userAlert: 'Failed!'});
           }
           return res.json();
         })
         .then(resData => {
 
-          const responseAlert = JSON.stringify(resData.data).slice(2,25);
-          this.setState({ userAlert: responseAlert, user: resData.data.addUserBilling})
-          this.context.userAlert = responseAlert;
+          const responseAlert = JSON.stringify(resData.data).slice(2,25);;
           this.context.user = this.state.user;
           // this.getThisUser();
         })
@@ -762,8 +767,7 @@ class UserProfile extends Component {
       })
       .then(resData => {
         const responseAlert = JSON.stringify(resData.data).slice(2,25);
-        this.setState({ userAlert: responseAlert, user: resData.data.deleteUserBilling})
-        this.context.userAlert = responseAlert;
+        this.setState({ userAlert: responseAlert, user: resData.data.deleteUserBilling});
         this.context.user = this.state.user;
         // this.getThisUser();
       })
@@ -788,13 +792,11 @@ class UserProfile extends Component {
       if (complainantId === undefined ||
           complainantId.trim().length === 0) {
         this.setState({userAlert: "Please select a Model and try again"});
-        this.context.userAlert = "Please select a Model and try again";
         return
       }
       if (offenderId === undefined ||
           offenderId.trim().length === 0) {
         this.setState({userAlert: "Please select a User and try again"});
-        this.context.userAlert = "Please select a User and try again";
         return
       }
 
@@ -823,6 +825,7 @@ class UserProfile extends Component {
         .then(res => {
           if (res.status !== 200 && res.status !== 201) {
             throw new Error('Failed!');
+            this.setState({userAlert: 'Failed!'});
           }
           return res.json();
         })
@@ -830,7 +833,6 @@ class UserProfile extends Component {
           console.log(resData);
           const responseAlert = JSON.stringify(resData.data).slice(2,25);
           this.setState({ userAlert: responseAlert, user: resData.data.addUserComplaint});
-          this.context.userAlert = responseAlert;
           this.context.user = this.state.user;
           // this.getThisUser();
         })
@@ -866,13 +868,13 @@ class UserProfile extends Component {
     //   .then(res => {
     //     if (res.status !== 200 && res.status !== 201) {
     //       throw new Error('Failed!');
+    // this.setState({userAlert: 'Failed!'});
     //     }
     //     return res.json();
     //   })
     //   .then(resData => {
     //     const responseAlert = JSON.stringify(resData.data).slice(2,25);
     //     this.setState({ userAlert: responseAlert, user: resData.data.deleteUserComplaint})
-    //     this.context.user = this.state.user;
     //     // this.getThisUser();
     //   })
     //   .catch(err => {
@@ -966,6 +968,7 @@ class UserProfile extends Component {
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
           throw new Error('Failed!');
+          this.setState({userAlert: 'Failed!'});
         }
         return res.json();
       })
@@ -973,7 +976,6 @@ class UserProfile extends Component {
         console.log(resData);
         const responseAlert = JSON.stringify(resData.data).slice(2,25);
         this.setState({ userAlert: responseAlert});
-        this.context.userAlert = responseAlert;
         this.context.receiver = null;
         this.getThisUser();
       })
@@ -1068,6 +1070,7 @@ class UserProfile extends Component {
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
           throw new Error('Failed!');
+          this.setState({userAlert: 'Failed!'});
         }
         return res.json();
       })
@@ -1075,10 +1078,9 @@ class UserProfile extends Component {
         console.log(resData);
         const responseAlert = JSON.stringify(resData.data).slice(2,25);
         this.setState({ userAlert: responseAlert});
-        this.context.userAlert = responseAlert;
         // this.context.user = this.state.user;
         this.context.receiver = null;
-        // this.getThisUser();
+        this.getThisUser();
       })
       .catch(err => {
         this.setState({userAlert: err});
@@ -1218,8 +1220,32 @@ class UserProfile extends Component {
   }
 
   callOut = () => {
-    const username = this.state.user.username;
-     this.socket.emit('SEND_MESSAGE', {msg: 'testing 123...'+username+'..here'});
+    // const username = this.state.user.username;
+    // this.socket.emit('SEND_MESSAGE', {msg: 'testing 123...'+username+'..here'});
+
+    let conversationId = null;
+    if (this.context.receiver === null || this.context.receiver === undefined) {
+      console.log("select someone to msg 1st...");
+      this.setState({userAlert: "select someone to msg 1st..."});
+      return
+    }
+    else {
+      console.log(this.context.receiver._id);
+      conversationId = this.context.receiver._id;
+    }
+
+    this.socket.emit('send message', {
+      room: conversationId,
+      message: "Some message"
+    });
+    this.socket.on("MESSAGE_SENT", function(data) {
+      console.log(data);
+      addMessage(data)
+    })
+    const addMessage = data => {
+      console.log("patching you through...");
+      this.setState({socketMsg: data, userAlert: data})
+    };
   }
 
   componentWillUnmount() {
@@ -1230,12 +1256,10 @@ class UserProfile extends Component {
     return (
       <React.Fragment>
 
-      {
-      //   <AlertBox
-      //   authId={this.context.activityId}
-      //   alert={this.state.userAlert}
-      // />
-      }
+        <AlertBox
+          authId={this.context.activityId}
+          alert={this.state.userAlert}
+        />
 
       {this.state.overlay === true && (
         <LoadingOverlay
@@ -1254,7 +1278,6 @@ class UserProfile extends Component {
         <Col md={2} className="MasterCol1">
         <SidebarPage
           you={this.state.user}
-          alert={this.state.userAlert}
           authId={this.context.activityId}
 
         />

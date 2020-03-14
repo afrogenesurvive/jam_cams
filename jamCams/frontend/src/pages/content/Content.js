@@ -149,13 +149,12 @@ class ContentPage extends Component {
     })
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
-          this.context.userAlert = 'Failed!';
+          this.setState({userAlert: 'Failed!'});
           throw new Error('Failed!');
         }
         return res.json();
       })
       .then(resData => {
-        console.log(resData);
         const responseAlert = JSON.stringify(resData.data).slice(0,8);
         this.setState({userAlert: responseAlert, contents: resData.data.content, isLoading: false});
         this.context.contents = this.state.contents;
@@ -224,12 +223,10 @@ hideDetailHandler = () => {
           attachmentType={this.state.showThisAttachmentType}
         />
       )}
-      {
-      //   <AlertBox
-      //   authId={this.context.activityId}
-      //   alert={this.state.userAlert}
-      // />
-      }
+      <AlertBox
+        authId={this.context.activityId}
+        alert={this.state.userAlert}
+      />
 
       {this.state.showDetail === true && (
         <ContentDetailViewer
@@ -258,7 +255,6 @@ hideDetailHandler = () => {
           <Col md={2} className="MasterCol1">
           <SidebarPage
             you={this.state.user}
-            alert={this.state.userAlert}
             authId={this.context.activityId}
           />
           </Col>
@@ -268,7 +264,6 @@ hideDetailHandler = () => {
           <Col md={2} className="MasterCol1">
           <SidebarPage
             you={this.state.model}
-            alert={this.state.userAlert}
             authId={this.context.activityId}
           />
           </Col>

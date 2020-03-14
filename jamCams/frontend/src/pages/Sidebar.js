@@ -7,7 +7,6 @@ import Card from 'react-bootstrap/Card';
 
 import AuthContext from '../context/auth-context';
 import LoadingOverlay from '../components/LoadingOverlay';
-import AlertBox from '../components/AlertBox';
 
 import './Sidebar.css';
 
@@ -97,22 +96,12 @@ class SidebarPage extends Component {
         <Card.Text>
           {this.context.selectedContent.title}
         </Card.Text>
-        
+
 
       </Card.Body>
       </Card>
-      <AlertBox
-        authId={this.context.activityId}
-        alert={this.context.userAlert}
-      />
       </Col>
       </Row>
-      {
-        // <AlertBox
-        //   authId={props.authId}
-        //   alert={props.alert}
-        // />
-      }
       </Container>
       </React.Fragment>
     );
