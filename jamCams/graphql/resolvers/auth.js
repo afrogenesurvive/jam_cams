@@ -18,8 +18,7 @@ module.exports = {
     }
     const token = jwt.sign({ userId: user.id },'JammaCammaDingDong',{expiresIn: '4h'});
 
-    const userLoggedIn = await User.findById({_id: user.id},{loggedIn: true})
-
+    const userLoggedIn = await User.findOneAndUpdate({_id: user.id},{loggedIn: true},{new: true, useFindAndModify: false})
     // pocketVariables.token = token;
     // pocketVariables.userId = user.id;
 
@@ -27,7 +26,7 @@ module.exports = {
   },
   userLogout: async ({ args }) => {
 
-    const userLogout = await User.findOneAndUpdate({ _id: args.userId },{loggedIn: false});
+    const userLogout = await User.findOneAndUpdate({ _id: args.userId },{loggedIn: false},{new: true, useFindAndModify: false});
 
     return {
       ...user._doc,
@@ -49,13 +48,13 @@ module.exports = {
     }
     const token = jwt.sign({ modelId: model.id },'JammaCammaDingDong',{expiresIn: '4h'});
 
-    const modelLoggedIn = await Model.findById({_id: model.id},{loggedIn: true});
+    const modelLoggedIn = await Model.findOneAndUpdate({_id: model._id},{loggedIn: true},{new: true, useFindAndModify: false});
 
     return { activityId: model.id, role: "Model", token: token, tokenExpiration: 4 };
   },
   modelLogout: async ({ args }) => {
 
-    const modelLogout = await Model.findOneAndUpdate({ _id: args.modelId },{loggedIn: false});
+    const modelLogout = await Model.findOneAndUpdate({ _id: args.modelId },{loggedIn: false},{new: true, useFindAndModify: false});
 
     return {
       ...model._doc,

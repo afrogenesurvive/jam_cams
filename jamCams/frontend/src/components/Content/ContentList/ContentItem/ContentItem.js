@@ -16,13 +16,15 @@ const contentItem = props => (
       <Card.Title>{props.file.name}</Card.Title>
       <Card.Img variant="top" src={props.file.path} />
 
-      <Card.Text>
-        Creator: {props.creator.username}
-      </Card.Text>
+      {props.creator !== null && (
+        <Card.Text>
+          Creator: {props.creator.username}
+        </Card.Text>
+      )}
       <Button variant="primary" onClick={props.onDetail.bind(this, props._id)}>
         Details
       </Button>
-      <Button variant="secondary" onClick={props.onSelectNoDetail.bind(this, props.user)}>
+      <Button variant="secondary" onClick={props.onSelectNoDetail.bind(this, props.content)}>
         Select
       </Button>
 

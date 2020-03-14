@@ -29,6 +29,9 @@ return (
     <option>address.postalCode</option>
     <option>bio</option>
     <option>tokens</option>
+    <option>verification.type</option>
+    <option>verification.verified</option>
+    <option>verification.code</option>
   </Form.Control>
   </Form.Group>
   </Form.Row>

@@ -5,32 +5,32 @@ import './UserList.css';
 
 const userMessageList = props => {
 
-  function compare( a, b ) {
-    if ( a.sender.username < b.sender.username ){
-      return -1;
-    }
-    if ( a.sender.username > b.sender.username ){
-      return 1;
-    }
-    return 0;
-  }
-
-  const test = props.userMessages.sort( compare );
+  // function compare( a, b ) {
+  //   if ( a.sender.username < b.sender.username ){
+  //     return -1;
+  //   }
+  //   if ( a.sender.username > b.sender.username ){
+  //     return 1;
+  //   }
+  //   return 0;
+  // }
+  // const test = props.userMessages.sort( compare );
   let test1 = [];
   const test2 = props.userMessages.map(e=> e = e.sender.ref);
   const test3 = props.userMessages.map(e=> e = e.receiver.ref);
   const test4 = [...test2,...test3];
   const test4_1 = [...new Set(test4)];
   // const test4_2 = test4_1.filter(y=> y !== props.authId);
-  console.log("total messages..",props.userMessages.length,"list of senders/receivers:"+test4_1);
+
+  // console.log("total messages..",props.userMessages.length,"list of senders/receivers:"+test4_1);
   test4_1.forEach(function (element, index){
     let test5 = props.userMessages.filter(x=> x.sender.ref === element || x.receiver.ref === element);
-    console.log(`
-      sender/receiver name:${element},
-      index: ${index},
-      messages to/from sender/receiver: ${JSON.stringify(test5)},
-      no of msgs from sender/receiver: ${test5.length}
-      `);
+    // console.log(`
+    //   sender/receiver name:${element},
+    //   index: ${index},
+    //   messages to/from sender/receiver: ${JSON.stringify(test5)},
+    //   no of msgs from sender/receiver: ${test5.length}
+    //   `);
     test1.push(
       {username: element, messages: test5}
     )
@@ -44,8 +44,8 @@ const userMessageList = props => {
   //   test4: ${test4},
   //   `);
 
-  console.log("final nested array...",JSON.stringify(test1));
-  const userMessages = test.map(message => {
+  // console.log("final nested array...",JSON.stringify(test1));
+  const userMessages = props.userMessages.map(message => {
 
     return (
       <UserMessageItem

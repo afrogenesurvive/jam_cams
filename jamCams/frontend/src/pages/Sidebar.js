@@ -90,6 +90,15 @@ class SidebarPage extends Component {
           {this.context.selectedModel.name}
         </Card.Text>
 
+        <Card.Subtitle className="mb-2">Content:</Card.Subtitle>
+        <Card.Text>
+          {this.context.selectedContent._id}
+        </Card.Text>
+        <Card.Text>
+          {this.context.selectedContent.title}
+        </Card.Text>
+        
+
       </Card.Body>
       </Card>
       <AlertBox

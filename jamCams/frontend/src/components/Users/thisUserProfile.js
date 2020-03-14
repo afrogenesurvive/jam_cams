@@ -96,6 +96,15 @@ const thisUserProfile = (props) => {
         </Col>
       </Row>
 
+      <Col className="detailCardCol">
+        <Card.Text>
+        socket msg: {props.socketMsg}
+        </Card.Text>
+        <Button variant="secondary" className="confirmEditButton" onClick={props.onCallOut}>
+        IO Call Out
+        </Button>
+      </Col>
+
       <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartUpdate}>Edit</Button>
       <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartUpdateField}>Edit 1 Field</Button>
       <Button variant="outline-primary" size="lg" className="confirmEditButton" onClick={props.onStartAddTokens}>+ Tokens</Button>

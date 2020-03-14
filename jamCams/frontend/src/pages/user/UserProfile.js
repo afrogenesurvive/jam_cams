@@ -16,6 +16,7 @@ import SidebarControl from '../../components/SidebarControl';
 import ThisUserProfile from '../../components/Users/thisUserProfile';
 
 import './Users.css';
+import io from 'socket.io-client';
 
 class UserProfile extends Component {
   state = {
@@ -40,11 +41,52 @@ class UserProfile extends Component {
     messagesLoaded: false,
     userMessages: null,
     finalConfirmation: false,
+    socketMsg: ""
   };
+
   isActive = true;
   static contextType = AuthContext;
+
+  constructor(props){
+      super(props);
+
+      // this.socket = io('http://localhost:9007');
+      // // this.socket.on('anyone out there?', function (data) {
+      // //   console.log(data);
+      // // });
+      // // this.socket.on('here i am', function (data) {
+      // //   console.log(data);
+      // // });
+      // this.socket.on('RECEIVE_MESSAGE', function(data){
+      //     console.log(data);
+      //       addMessage(data);
+      //   });
+      //   const addMessage = data => {
+      //     console.log("you got msg");
+      //       this.context
+      //   };
+
+    }
+
+
   componentDidMount() {
+
     this.getThisUser();
+
+    this.socket = io('http://localhost:9007');
+    this.socket.on('RECEIVE_MESSAGE', function(data){
+        console.log(data);
+          addMessage(data);
+      });
+    this.socket.on('MESSAGE_SENT', function(data){
+        console.log(data);
+          addMessage(data);
+      });
+      
+      const addMessage = data => {
+        this.setState({socketMsg: data})
+      };
+
   }
 
   startUpdateUserHandler = () => {
@@ -879,11 +921,6 @@ class UserProfile extends Component {
     //   });
   }
 
-  loadUserMessages = () => {
-    console.log("loading user messages... get ids from state user and run them through gql query: getUserMessages");
-
-  }
-
   userCreateMessage = (event) => {
 
     this.setState({ adding: false });
@@ -1112,19 +1149,18 @@ class UserProfile extends Component {
         return res.json();
       })
       .then(resData => {
-        const thisUser = resData.data.getThisUser;
-        this.context.user = thisUser;
-        if (this.isActive) {
+          const thisUser = resData.data.getThisUser;
+          this.context.user = thisUser;
+          if (this.isActive) {
           this.setState({ user: thisUser, isLoading: false });
           }
-
           if (sessionStorage.getItem('token')) {
             this.setState({userAlert: "Welcome Back..."})
           }
           if (thisUser.name === "Lord-of-the-Manor"){
             this.setState({canDelete: true, userAlert: "Mi'Lord!!"})
-        }
-
+          }
+          // this.listenToBase();
       })
       .catch(err => {
         this.setState({userAlert: err});
@@ -1181,6 +1217,11 @@ class UserProfile extends Component {
     this.setState({adding: true, userAddField: "transaction"})
   }
 
+  callOut = () => {
+    const username = this.state.user.username;
+     this.socket.emit('SEND_MESSAGE', {msg: 'testing 123...'+username+'..here'});
+  }
+
   componentWillUnmount() {
     this.isActive = false;
   }
@@ -1215,6 +1256,7 @@ class UserProfile extends Component {
           you={this.state.user}
           alert={this.state.userAlert}
           authId={this.context.activityId}
+
         />
         </Col>
       )}
@@ -1280,6 +1322,9 @@ class UserProfile extends Component {
                         selectedUser={this.context.selectedUser}
                         selectedModel={this.context.selectedModel}
                         messageReceiver={this.context.receiver}
+
+                        onCallOut={this.callOut}
+                        socketMsg={this.state.socketMsg.msg}
                       />
                     )}
 

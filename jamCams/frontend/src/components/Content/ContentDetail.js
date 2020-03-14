@@ -41,7 +41,7 @@ const ContentDetail = (props) => {
         <Row className="detailCardRow">
           <Col className="detailCardCol">
             { props.canDelete === true && (
-              <Button variant="danger" onClick={props.onDelete.bind(this, content._id)}>
+              <Button variant="danger" onClick={props.onDelete.bind(this, props.content._id)}>
                 Delete !!??
               </Button>
             )}

@@ -136,7 +136,7 @@ class ContentPage extends Component {
     const requestBody = {
       query: `
           query {content(activityId:"${activityId}")
-          {_id,date,type,title,file{name,type,size,path},creator{_id,name},models{_id,name},viewCount,likes{date},likeCount,comments{_id},tags}}
+          {_id,date,type,title,file{name,type,size,path},creator{_id,name,username,profileImages{name,type,path}},models{_id,name,username,profileImages{name,type,path}},viewCount,likes{date},likeCount,comments{_id},tags}}
         `};
 
     fetch('http://localhost:9009/graphql', {
@@ -155,6 +155,7 @@ class ContentPage extends Component {
         return res.json();
       })
       .then(resData => {
+        console.log(resData);
         const responseAlert = JSON.stringify(resData.data).slice(0,8);
         this.setState({userAlert: responseAlert, contents: resData.data.content, isLoading: false});
         this.context.contents = this.state.contents;
@@ -167,7 +168,7 @@ class ContentPage extends Component {
       });
   }
 
-  deleteListUser = (contentId) => {
+  deleteListContent = (contentId) => {
     console.log("delete listed content", contentId);
   }
 

@@ -13,8 +13,12 @@ import ContentPage from './pages/content/Content';
 // import ShowsPage from './pages/show/Shows';
 import MainNavigation from './components/Navigation/MainNavigation';
 import AuthContext from './context/auth-context';
+import io from 'socket.io-client';
+
 
 import './App.css';
+
+
 
 class App extends Component {
   state = {
@@ -95,6 +99,12 @@ class App extends Component {
         token: seshStore.token,
         });
     }
+
+    // const socket = io('http://localhost:9007');
+    //   socket.on('news1', function (data) {
+    //     console.log("it's aliiiive!!",data);
+    //     // socket.emit('my other event', { my: 'data' });
+    //   });
   }
 
   render() {

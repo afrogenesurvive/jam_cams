@@ -214,6 +214,7 @@ class AuthPage extends Component {
         .then(resData => {
           const thisUser = resData.data.getThisUser;
           this.context.user = thisUser;
+          // check verification herre
           this.retrieveLogin();
         })
         .catch(err => {
