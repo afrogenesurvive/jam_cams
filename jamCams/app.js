@@ -50,21 +50,6 @@ mongoose.connect('mongodb://localhost:27017/jam_cams_dev',{useNewUrlParser: true
     console.log(err);
 });
 
-
-// io.on('connection', function (socket) {
-//   console.log("a wild client appered..", socket.id);
-//   // console.log(socket.client.conn);
-//   // socket.emit('anyone out there?', { request: "identify yourself!!" });
-//   socket.on('here i am', function (data) {
-//     console.log(data);
-//   });
-//   socket.on('anyone out there?', function (data) {
-//     console.log(data);
-//     socket.emit('here i am', { response: "Home base reporting" });
-//   });
-//
-// });
-
 io.on('connection', (socket) => {
     console.log("a wild client appered..", socket.id);
 
@@ -80,13 +65,8 @@ io.on('connection', (socket) => {
       });
       socket.emit("MESSAGE_SENT", {msg: "message sent!!"});
     });
-
-    // socket.on('SEND_MESSAGE', function(data){
-    //   console.log(data);
-    //   io.emit('RECEIVE_MESSAGE', data);
-    //   socket.emit("MESSAGE_SENT", {msg: "message sent!!"});
-    // })
 });
+
 server.listen(9007, function (err) {
   if (err) throw err
   console.log(`

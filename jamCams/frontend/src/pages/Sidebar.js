@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -34,6 +35,9 @@ class SidebarPage extends Component {
       {this.context.role === "User" && (
       <Card border="primary" className="sidebarCard">
       <Card.Body>
+
+        <NavLink to="/userProfile">My Profile (User)</NavLink>
+
         <Card.Title className="cardTitle">You</Card.Title>
         <Card.Subtitle className="mb-2">ID:</Card.Subtitle>
         <Card.Text>
@@ -54,6 +58,7 @@ class SidebarPage extends Component {
       {this.context.role === "Model" && (
       <Card border="primary" className="sidebarCard">
       <Card.Body>
+        <NavLink to="/modelProfile">My Profile (Model)</NavLink>
         <Card.Title className="cardTitle">You</Card.Title>
         <Card.Subtitle className="mb-2">ID:</Card.Subtitle>
         <Card.Text>

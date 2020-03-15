@@ -8,6 +8,7 @@ import Nav from 'react-bootstrap/Nav';
 
 import AuthContext from '../../context/auth-context';
 import AlertBox from '../../components/AlertBox';
+import Spinner from '../../components/Spinner/Spinner';
 // import AttachmentViewer from '../../components/AttachmentViewer';
 import LoadingOverlay from '../../components/LoadingOverlay';
 import SidebarPage from '../Sidebar';
@@ -70,30 +71,18 @@ class UserProfile extends Component {
 
 
   componentDidMount() {
-
     this.getThisUser();
 
-    // const socket = io('http://localhost:9007');
     const conversationId = this.context.activityId;
     this.socket.emit('subscribe', conversationId);
     console.log("listening for pms...");
     this.socket.on('conversation private post', function(data) {
-      console.log(data);
+      console.log("you got a new message..",data);
       addMessage(data);
     });
-    // socket.on('RECEIVE_MESSAGE', function(data){
-    //     console.log(data);
-    //       addMessage(data);
-    //   });
-    // socket.on('MESSAGE_SENT', function(data){
-    //     console.log(data);
-    //       addMessage(data);
-    //   });
-
-      const addMessage = data => {
-        console.log("patching you through...");
-        this.setState({socketMsg: data, userAlert: data})
-      };
+    const addMessage = data => {
+      this.setState({socketMsg: data, userAlert: 'New Msg: '+data.message})
+    };
 
   }
 
@@ -324,11 +313,10 @@ class UserProfile extends Component {
       };
 
   addUserProfileImageHandler = (event) => {
-      const token = this.context.token;
-      const activityId = this.context.activityId;
-
       this.setState({ adding: false, userAddField: null, userAlert: "Updating selected Staff by Field..." });
 
+      const token = this.context.token;
+      const activityId = this.context.activityId;
       const profileImageName = event.target.formGridFilename.value;
       let profileImageType = null;
       if (
@@ -338,6 +326,10 @@ class UserProfile extends Component {
         profileImageType = "*";
       }
       const profileImagePath = event.target.formGridFilepath.value;
+      if (this.state.user.profileImages.length  >= 9) {
+        this.setState({userAlert: "Max no of profileImages 9 reached.."})
+        return
+      }
 
       const requestBody = {
         query:`
@@ -717,8 +709,8 @@ class UserProfile extends Component {
           return res.json();
         })
         .then(resData => {
-
           const responseAlert = JSON.stringify(resData.data).slice(2,25);;
+          this.setState({ userAlert: responseAlert, user: resData.data.addUserBilling});
           this.context.user = this.state.user;
           // this.getThisUser();
         })
@@ -830,7 +822,6 @@ class UserProfile extends Component {
           return res.json();
         })
         .then(resData => {
-          console.log(resData);
           const responseAlert = JSON.stringify(resData.data).slice(2,25);
           this.setState({ userAlert: responseAlert, user: resData.data.addUserComplaint});
           this.context.user = this.state.user;
@@ -939,6 +930,13 @@ class UserProfile extends Component {
     const type = event.target.formGridTypeSelect.value;
     const subject = event.target.formGridSubject.value;
     const message = event.target.formGridMessage.value;
+    const msgObject = {
+      date: date,
+      time: timeString2,
+      type: type,
+      subject: subject,
+      message: message,
+    };
 
     const requestBody = {
       query:`
@@ -973,8 +971,7 @@ class UserProfile extends Component {
         return res.json();
       })
       .then(resData => {
-        console.log(resData);
-        const responseAlert = JSON.stringify(resData.data).slice(2,25);
+        const responseAlert = JSON.stringify(resData.data).slice(2,25);;
         this.setState({ userAlert: responseAlert});
         this.context.receiver = null;
         this.getThisUser();
@@ -1042,6 +1039,14 @@ class UserProfile extends Component {
     const description = event.target.formGridDescription.value;
     const amount = event.target.formGridAmount.value;
 
+    const currentTokens = this.state.user.tokens;
+    if (currentTokens - amount < 0) {
+      this.setState({userAlert: "You don't have enough tokens for this transaction!!"});
+      return
+    } else {
+      this.setState({userAlert: "You have enough tokens yaay"});
+    }
+
     const requestBody = {
       query:`
         mutation {createTransaction(
@@ -1075,12 +1080,11 @@ class UserProfile extends Component {
         return res.json();
       })
       .then(resData => {
-        console.log(resData);
-        const responseAlert = JSON.stringify(resData.data).slice(2,25);
+        console.log("0",resData);
+        const responseAlert = JSON.stringify(resData.data).slice(2,40);
         this.setState({ userAlert: responseAlert});
-        // this.context.user = this.state.user;
         this.context.receiver = null;
-        this.getThisUser();
+        // this.getThisUser();
       })
       .catch(err => {
         this.setState({userAlert: err});
@@ -1213,15 +1217,20 @@ class UserProfile extends Component {
     this.setState({adding: true, userAddField: "billing"})
   }
   startCreateMessage = () => {
+    if (this.context.receiver === null) {
+      this.setState({userAlert: "select a receiver 1st..."});
+    }
     this.setState({adding: true, userAddField: "message"})
   }
   startCreateTransaction = () => {
+    if (this.context.receiver === null) {
+      this.setState({userAlert: "select a receiver 1st..."});
+    }
     this.setState({adding: true, userAddField: "transaction"})
   }
 
-  callOut = () => {
-    // const username = this.state.user.username;
-    // this.socket.emit('SEND_MESSAGE', {msg: 'testing 123...'+username+'..here'});
+  callOut = (args) => {
+    console.log("sending socket message  ",args);
 
     let conversationId = null;
     if (this.context.receiver === null || this.context.receiver === undefined) {
@@ -1239,12 +1248,10 @@ class UserProfile extends Component {
       message: "Some message"
     });
     this.socket.on("MESSAGE_SENT", function(data) {
-      console.log(data);
       addMessage(data)
     })
     const addMessage = data => {
-      console.log("patching you through...");
-      this.setState({socketMsg: data, userAlert: data})
+      this.setState({socketMsg: data, userAlert: data.msg})
     };
   }
 
@@ -1286,74 +1293,75 @@ class UserProfile extends Component {
 
       <Col md={this.state.mCol2Size} className="MasterCol2">
         <div className="containerProfile">
-
+        {this.state.isLoading ? (
+          <Spinner />
+        ) : (
           <Row>
             <Col>
+            {this.state.user !== null && (
+                <ThisUserProfile
+                  user={this.state.user}
+                  authId={this.context.activityId}
 
-                  {this.state.user !== null && (
-                      <ThisUserProfile
-                        user={this.state.user}
-                        authId={this.context.activityId}
+                  canDelete={this.state.canDelete}
 
-                        canDelete={this.state.canDelete}
+                  onEdit={this.modalConfirmUpdateHandler}
+                  onEditField={this.modalConfirmUpdateFieldHandler}
 
-                        onEdit={this.modalConfirmUpdateHandler}
-                        onEditField={this.modalConfirmUpdateFieldHandler}
+                  addProfileImage={this.addUserProfileImageHandler}
+                  addPerk={this.addUserPerkHandler}
+                  addInterests={this.addUserInterestsHandler}
+                  addTags={this.addUserTagsHandler}
+                  addTokens={this.addUserTokensHandler}
+                  addComplaint={this.addUserComplaintHandler}
+                  addBilling={this.addUserBillingHandler}
 
-                        addProfileImage={this.addUserProfileImageHandler}
-                        addPerk={this.addUserPerkHandler}
-                        addInterests={this.addUserInterestsHandler}
-                        addTags={this.addUserTagsHandler}
-                        addTokens={this.addUserTokensHandler}
-                        addComplaint={this.addUserComplaintHandler}
-                        addBilling={this.addUserBillingHandler}
+                  createMessage={this.userCreateMessage}
+                  createTransaction={this.userCreateTransaction}
 
-                        createMessage={this.userCreateMessage}
-                        createTransaction={this.userCreateTransaction}
+                  onProfileImageDelete={this.deleteUserProfileImage}
+                  onPerkDelete={this.deleteUserPerk}
+                  onTagsDelete={this.deleteUserTags}
+                  onInterestDelete={this.deleteUserInterests}
+                  onComplaintDelete={this.deleteUserComplaint}
+                  onBillingDelete={this.deleteUserBilling}
+                  onMessageDelete={this.deleteUserMessage}
+                  onTransactionDelete={this.deleteUserTransaction}
+                  onUserModelDelete={this.deleteUserModel}
 
-                        onProfileImageDelete={this.deleteUserProfileImage}
-                        onPerkDelete={this.deleteUserPerk}
-                        onTagsDelete={this.deleteUserTags}
-                        onInterestDelete={this.deleteUserInterests}
-                        onComplaintDelete={this.deleteUserComplaint}
-                        onBillingDelete={this.deleteUserBilling}
-                        onMessageDelete={this.deleteUserMessage}
-                        onTransactionDelete={this.deleteUserTransaction}
-                        onUserModelDelete={this.deleteUserModel}
+                  onCancel={this.modalCancelHandler}
 
-                        onCancel={this.modalCancelHandler}
+                  onStartUpdate={this.startUpdateUserHandler}
+                  onStartUpdateField={this.startUpdateUserFieldHandler}
+                  onStartAddProfileImage={this.addUserProfileImage}
+                  onStartAddPerk={this.addUserPerk}
+                  onStartAddInterests={this.addUserInterests}
+                  onStartAddTags={this.addUserTags}
+                  onStartAddTokens={this.addUserTokens}
+                  onStartAddComplaint={this.addUserComplaint}
+                  onStartAddBilling={this.addUserBilling}
+                  onStartCreateMessage={this.startCreateMessage}
+                  onStartCreateTransaction={this.startCreateTransaction}
 
-                        onStartUpdate={this.startUpdateUserHandler}
-                        onStartUpdateField={this.startUpdateUserFieldHandler}
-                        onStartAddProfileImage={this.addUserProfileImage}
-                        onStartAddPerk={this.addUserPerk}
-                        onStartAddInterests={this.addUserInterests}
-                        onStartAddTags={this.addUserTags}
-                        onStartAddTokens={this.addUserTokens}
-                        onStartAddComplaint={this.addUserComplaint}
-                        onStartAddBilling={this.addUserBilling}
-                        onStartCreateMessage={this.startCreateMessage}
-                        onStartCreateTransaction={this.startCreateTransaction}
+                  onStartLoadMessage={this.loadUserMessages}
+                  userMessagesLoaded={this.state.messagesLoaded}
+                  userMessages={this.state.userMessages}
+                  updating={this.state.updating}
+                  updatingField={this.state.updatingField}
+                  userAddField={this.state.userAddField}
 
-                        onStartLoadMessage={this.loadUserMessages}
-                        userMessagesLoaded={this.state.messagesLoaded}
-                        userMessages={this.state.userMessages}
-                        updating={this.state.updating}
-                        updatingField={this.state.updatingField}
-                        userAddField={this.state.userAddField}
+                  selectedUser={this.context.selectedUser}
+                  selectedModel={this.context.selectedModel}
+                  messageReceiver={this.context.receiver}
 
-                        selectedUser={this.context.selectedUser}
-                        selectedModel={this.context.selectedModel}
-                        messageReceiver={this.context.receiver}
-
-                        onCallOut={this.callOut}
-                        socketMsg={this.state.socketMsg.msg}
-                      />
-                    )}
+                  onCallOut={this.callOut}
+                  socketMsg={this.state.socketMsg.msg}
+                />
+              )}
 
             </Col>
           </Row>
-
+          )}
         </div>
       </Col>
       </Row>

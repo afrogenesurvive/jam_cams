@@ -129,7 +129,7 @@ class ModelsPage extends Component {
         return res.json();
       })
       .then(resData => {
-        const responseAlert = JSON.stringify(resData.data).slice(0,8);
+        const responseAlert = JSON.stringify(resData.data).slice(2,25);
         const searchUsers = resData.data.getUserField;
         this.setState({ searchUsers: searchUsers, userAlert: responseAlert})
         // this.fetchUsers();
@@ -164,7 +164,7 @@ class ModelsPage extends Component {
         return res.json();
       })
       .then(resData => {
-        const responseAlert = JSON.stringify(resData.data).slice(0,8);
+        const responseAlert = JSON.stringify(resData.data).slice(2,25);
         this.setState({userAlert: responseAlert});
         this.context.user = resData.data.addUserModel;
       })
@@ -203,7 +203,7 @@ class ModelsPage extends Component {
         return res.json();
       })
       .then(resData => {
-        const responseAlert = JSON.stringify(resData.data).slice(0,8);
+        const responseAlert = JSON.stringify(resData.data).slice(2,25);
         this.setState({userAlert: responseAlert, models: resData.data.models, isLoading: false});
         this.context.models = this.state.models;
       })
@@ -274,10 +274,6 @@ selectModelNoDetail = (model) => {
         sidebarShow: false,
         mCol2Size: 11
       })
-  }
-
-  onTest = (modelId) => {
-    console.log("this is a test id...", modelId);
   }
 
   componentWillUnmount() {
