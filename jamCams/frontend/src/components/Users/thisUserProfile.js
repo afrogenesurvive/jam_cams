@@ -97,11 +97,6 @@ const thisUserProfile = (props) => {
       </Row>
 
       <Col className="detailCardCol">
-        {
-          // <Card.Text>
-          // socket msg: {props.socketMsg}
-          // </Card.Text>
-        }
         <Button variant="secondary" className="confirmEditButton" onClick={props.onCallOut}>
         IO Call Out
         </Button>

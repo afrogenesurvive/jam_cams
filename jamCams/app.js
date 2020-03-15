@@ -53,17 +53,29 @@ mongoose.connect('mongodb://localhost:27017/jam_cams_dev',{useNewUrlParser: true
 io.on('connection', (socket) => {
     console.log("a wild client appered..", socket.id);
 
-    socket.on('subscribe', function(room) {
+    socket.on('msg_subscribe', function(room) {
       console.log('joining room', room);
       socket.join(room);
     });
-
     socket.on('send message', function(data) {
       console.log('sending room post', data.room);
       socket.broadcast.to(data.room).emit('conversation private post', {
           message: data.message
       });
       socket.emit("MESSAGE_SENT", {msg: "message sent!!"});
+    });
+
+
+    socket.on('trans_subscribe', function(room) {
+      console.log('joining room', room);
+      socket.join(room);
+    });
+    socket.on('send transaction', function(data) {
+      console.log('sending room trnsaction', data.room);
+      socket.broadcast.to(data.room).emit('conversation private transaction', {
+          transaction: data.transaction
+      });
+      socket.emit("TRANSACTION_SENT", {msg: "transaction sent!!"});
     });
 });
 
